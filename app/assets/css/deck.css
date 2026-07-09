@@ -133,8 +133,12 @@ html.deck-light .deck-root {
 .deck-root .controls > button svg, .deck-root .controls .menu-btn svg, .deck-root .controls > a svg { width: var(--ctrl-icon); height: var(--ctrl-icon); }
 .deck-root .controls .ctrl-sep { width: 1px; height: calc(18px * var(--ui-scale)); background: var(--ui-hairline); border-radius: 1px; }
 .deck-root .controls > button:disabled { opacity: .4; cursor: default; pointer-events: none; }
+/* Contador "07 / 26" — botão que abre o navegador de slides (DeckSlideNav). */
 .deck-root .counter { font-family: 'JetBrains Mono', monospace; font-size: calc(12px * var(--ui-scale)); font-variant-numeric: tabular-nums;
-  letter-spacing: .05em; min-width: calc(54px * var(--ui-scale)); text-align: center; white-space: nowrap; }
+  letter-spacing: .05em; min-width: calc(54px * var(--ui-scale)); text-align: center; white-space: nowrap;
+  background: transparent; border: 0; color: var(--ui-text); cursor: pointer; opacity: .85;
+  min-height: var(--ctrl-target); padding: 0 calc(8px * var(--ui-scale)); border-radius: 999px; }
+.deck-root .counter:hover { opacity: 1; background: var(--ui-hover); }
 .deck-root .topbar { position: fixed; top: 0; left: 0; height: 3px; background: var(--cyan); width: 0; z-index: 40; transition: width .5s var(--ease), opacity .22s ease; }
 .deck-root .topbar.hide { opacity: 0; }
 
@@ -157,6 +161,27 @@ html.deck-light .deck-root {
 .deck-root .menu-item-check { color: var(--cyan); }
 .deck-root .deck-menu-enter-active, .deck-root .deck-menu-leave-active { transition: opacity .15s ease, transform .15s ease; }
 .deck-root .deck-menu-enter-from, .deck-root .deck-menu-leave-to { opacity: 0; transform: translateY(6px); }
+
+/* ---------- navegador de slides (popover do contador — DeckSlideNav) ---------- */
+.deck-root .deck-slidenav { position: relative; display: flex; }
+.deck-root .slidenav-panel { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%);
+  min-width: 280px; max-width: calc(100vw - 20px); max-height: min(420px, 55vh); overflow-y: auto;
+  background: var(--ui-surface-solid); backdrop-filter: blur(10px);
+  border: 1px solid var(--ui-hairline); border-radius: 14px; padding: 6px;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .7); z-index: 42;
+  font-size: calc(13.5px * var(--ui-scale)); }
+.deck-root .slidenav-item { display: flex; align-items: center; gap: 12px; width: 100%;
+  min-height: var(--ctrl-target); padding: 0 12px;
+  border: 0; border-radius: 9px; background: transparent; color: var(--ui-text);
+  font-size: inherit; cursor: pointer; text-align: left; white-space: nowrap; }
+.deck-root .slidenav-item:hover, .deck-root .slidenav-item:focus-visible { background: var(--ui-hover); }
+.deck-root .slidenav-num { font-size: calc(11.5px * var(--ui-scale)); font-variant-numeric: tabular-nums;
+  letter-spacing: .05em; color: var(--ui-text-faint); flex: none; }
+.deck-root .slidenav-label { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.deck-root .slidenav-item.current { background: var(--ui-hover); }
+.deck-root .slidenav-item.current .slidenav-num,
+.deck-root .slidenav-item.current .slidenav-label { color: var(--cyan); }
+/* A transição reutiliza as classes .deck-menu-enter/leave (mesmo nome de Transition). */
 
 /* ---------- painel de ajuda (popover acima da toolbar) ---------- */
 .deck-root .help-panel { position: fixed; bottom: calc(var(--controls-bottom) + var(--ctrl-target) + 24px); left: 50%; transform: translateX(-50%);

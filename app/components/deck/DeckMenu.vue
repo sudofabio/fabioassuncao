@@ -75,8 +75,15 @@ function focusItem(index) {
 
 function toggle() {
   open.value = !open.value
-  if (open.value) nextTick(() => focusItem(0))
 }
+
+// Foco no primeiro item sempre que o menu abre — por qualquer caminho (clique
+// no ⋮, atalho M do DeckStage via v-model). Não decidir dentro de toggle():
+// com defineModel, ler open.value logo após atribuir devolve o valor antigo
+// até a prop voltar do pai.
+watch(open, v => {
+  if (v) nextTick(() => focusItem(0))
+})
 
 function close({ refocus = true } = {}) {
   open.value = false

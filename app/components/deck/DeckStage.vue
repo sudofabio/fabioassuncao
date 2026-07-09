@@ -19,7 +19,13 @@
       <button type="button" title="Anterior" aria-label="Slide anterior" @click.stop="prev">
         <ChevronLeft :size="20" />
       </button>
-      <span class="counter" aria-live="polite">{{ counterText }}</span>
+      <DeckSlideNav
+        v-model:open="slideNavOpen"
+        :metas="registry"
+        :total="total"
+        :current="slideIndex"
+        @select="onSlideNavSelect"
+      />
       <button type="button" title="Próximo" aria-label="Próximo slide" @click.stop="next">
         <ChevronRight :size="20" />
       </button>
@@ -69,6 +75,7 @@ import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, 
 import { DECK_KEY } from './context'
 import DeckNotes from './DeckNotes.vue'
 import DeckMenu from './DeckMenu.vue'
+import DeckSlideNav from './DeckSlideNav.vue'
 import { exportDeckToPdf } from '~/composables/useDeckPdf'
 
 const props = defineProps({
@@ -134,7 +141,14 @@ const pinned = ref(props.controlsPinned)
 const uiVisible = ref(false)
 const menuOpen = ref(false)
 const helpOpen = ref(false)
-const chromeVisible = computed(() => pinned.value || uiVisible.value || menuOpen.value || helpOpen.value)
+const slideNavOpen = ref(false)
+const chromeVisible = computed(() =>
+  pinned.value || uiVisible.value || menuOpen.value || helpOpen.value || slideNavOpen.value
+)
+
+// Popovers mutuamente exclusivos.
+watch(menuOpen, v => { if (v) { slideNavOpen.value = false; helpOpen.value = false } })
+watch(slideNavOpen, v => { if (v) { menuOpen.value = false; helpOpen.value = false } })
 const reducedMotion = ref(false)
 const exporting = ref(false)
 
@@ -152,6 +166,7 @@ const helpItems = computed(() => {
     return [
       'Deslize para o lado para trocar de slide',
       'Toque à direita da tela para avançar, à esquerda para voltar',
+      'Toque no contador (ex.: 07 / 26) para ir a um slide específico',
       'Menu ⋮: tela cheia, PDF, controles e sair',
       'Botão de sol/lua: alternar tema claro ou escuro',
     ]
@@ -160,6 +175,7 @@ const helpItems = computed(() => {
     autoplayOn.value
       ? '← → ou espaço: trocar de slide (o conteúdo aparece sozinho)'
       : '← → ou espaço: avançar etapas e slides',
+    'G ou clique no contador: ir para um slide específico',
     'F: entrar ou sair da tela cheia',
     'C: ocultar ou mostrar os controles',
     'M: abrir o menu de opções (tela cheia, PDF, sair)',
@@ -206,8 +222,13 @@ watch(exporting, v => {
   if (v) {
     menuOpen.value = false
     helpOpen.value = false
+    slideNavOpen.value = false
   }
 })
+
+function onSlideNavSelect(i) {
+  go(i)
+}
 
 // ---------- registro de slides, steps, timelines e gráficos ----------
 // Arrays não-reativos onde possível (evitam mutação reativa durante o render).
@@ -258,8 +279,6 @@ const stageStyle = computed(() => ({
   transform: `translate(-50%, -50%) scale(${scaleVal.value})`,
 }))
 
-const pad = n => String(n).padStart(2, '0')
-const counterText = computed(() => `${pad(slideIndex.value + 1)} / ${pad(total.value)}`)
 const progressWidth = computed(() =>
   total.value ? `${((slideIndex.value + 1) / total.value) * 100}%` : '0%'
 )
@@ -392,7 +411,7 @@ function restoreSlideFromUrl() {
 const { swipedRecently } = useDeckSwipe(viewportRef, {
   onNext: () => { next(); revealChromeTemporarily() },
   onPrev: () => { prev(); revealChromeTemporarily() },
-  enabled: () => !exporting.value && !menuOpen.value && !helpOpen.value,
+  enabled: () => !exporting.value && !menuOpen.value && !helpOpen.value && !slideNavOpen.value,
 })
 
 function onStageClick(e) {
@@ -489,10 +508,11 @@ function onNarrowChange(e) { isNarrow.value = e.matches }
 
 function onKeydown(e) {
   if (e.key.toLowerCase() === 'm' && !exporting.value) { e.preventDefault(); menuOpen.value = !menuOpen.value; return }
-  if (menuOpen.value) {
-    // O painel do menu trata as próprias teclas (com stopPropagation); aqui só
-    // garantimos que navegação/atalhos não disparem com o menu aberto.
-    if (e.key === 'Escape') menuOpen.value = false
+  if (e.key.toLowerCase() === 'g' && !exporting.value) { e.preventDefault(); slideNavOpen.value = !slideNavOpen.value; return }
+  if (menuOpen.value || slideNavOpen.value) {
+    // Os painéis tratam as próprias teclas (com stopPropagation); aqui só
+    // garantimos que navegação/atalhos não disparem com um popover aberto.
+    if (e.key === 'Escape') { menuOpen.value = false; slideNavOpen.value = false }
     return
   }
   if (e.key === 'Escape' && helpOpen.value) { e.preventDefault(); helpOpen.value = false; return }
