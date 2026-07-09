@@ -5,6 +5,7 @@ export default {
   content: [
     "./app/components/**/*.{vue,ts}",
     "./app/pages/**/*.vue",
+    "./app/layouts/**/*.vue",
     "./app/app.vue",
   ],
   theme: {

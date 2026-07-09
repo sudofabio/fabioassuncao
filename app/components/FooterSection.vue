@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { profile } from "~/data/profile";
 
+const { locale } = useLocale();
 const year = new Date().getFullYear();
 </script>
 
@@ -20,6 +21,13 @@ const year = new Date().getFullYear();
         </a>
       </div>
       <p class="font-mono text-xs text-ink-400/60 dark:text-ink-600">
+        <NuxtLink
+          to="/presentations"
+          class="hover:text-accent transition-colors duration-300"
+        >
+          {{ locale === "en" ? "talks" : "palestras" }}
+        </NuxtLink>
+        <span class="mx-1.5" aria-hidden="true">·</span>
         &copy; {{ year }} {{ profile.name }}
       </p>
     </div>
