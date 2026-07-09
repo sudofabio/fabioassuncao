@@ -42,8 +42,13 @@
 import { TrendingUp, TrendingDown, Crown, BrainCircuit, MapPin } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 import { ANOS, SERIES_SALARIAIS, ADOCAO_IA_2026, FONTE_SALARIOS } from '~/data/presentations/alem-do-codigo/salarios'
+import { alemDoCodigoTheme } from '~/themes/alem-do-codigo'
 
 const nota = NOTAS[17]
+
+// ECharts (SVG) não resolve var() — paleta absoluta escolhida pelo modo ativo.
+const { mode } = useDeckColorMode()
+const pal = computed(() => alemDoCodigoTheme.charts[mode.value])
 
 // Contexto do slide via template ref (este componente RENDERIZA o DeckSlide,
 // então não pode usar inject — ver DeckSlide.defineExpose).
@@ -62,16 +67,16 @@ const chartOption = computed(() => {
       type: 'category',
       data: [...ANOS],
       boundaryGap: false,
-      axisLabel: { color: '#8FA3BF', fontSize: 16 },
-      axisLine: { lineStyle: { color: '#233650' } },
+      axisLabel: { color: pal.value.axisLabel, fontSize: 16 },
+      axisLine: { lineStyle: { color: pal.value.axisLine } },
       axisTick: { show: false },
     },
     yAxis: {
       type: 'value',
       min: 0,
       max: 22000,
-      axisLabel: { color: '#8FA3BF', fontSize: 13, formatter: (v) => `${v / 1000}k` },
-      splitLine: { lineStyle: { color: '#182c49' } },
+      axisLabel: { color: pal.value.axisLabel, fontSize: 13, formatter: (v) => `${v / 1000}k` },
+      splitLine: { lineStyle: { color: pal.value.splitLine } },
     },
     series: SERIES_SALARIAIS.slice(0, visiveis).map((s, i) => ({
       name: s.nivel,
@@ -79,13 +84,13 @@ const chartOption = computed(() => {
       data: s.valores,
       smooth: true,
       symbolSize: 7,
-      lineStyle: { color: s.cor, width: s.nivel.startsWith('Especialista') ? 4 : 3 },
-      itemStyle: { color: s.cor },
+      lineStyle: { color: pal.value.accents[s.cor], width: s.nivel.startsWith('Especialista') ? 4 : 3 },
+      itemStyle: { color: pal.value.accents[s.cor] },
       emphasis: { disabled: true },
       endLabel: {
         show: true,
         formatter: () => `${s.nivel.replace('/Tech Lead', '')}  ${fmtMil(s.valores[5])}  ${s.crescimento}`,
-        color: s.cor,
+        color: pal.value.accents[s.cor],
         fontSize: 14,
         fontWeight: 600,
         distance: 10,
@@ -105,8 +110,8 @@ const chartOption = computed(() => {
 .callout { display: flex; align-items: flex-start; gap: 9px; padding: 11px 13px; font-size: 12.5px; line-height: 1.4; color: var(--text2); }
 .callout b { color: var(--text); }
 .callout svg { flex: none; margin-top: 1px; }
-.destaque-callout { border-color: rgba(242, 118, 46, 0.45); }
-.ma { border-color: rgba(62, 207, 142, 0.35); }
+.destaque-callout { border-color: color-mix(in srgb, var(--coral) 45%, transparent); }
+.ma { border-color: color-mix(in srgb, var(--green) 35%, transparent); }
 .c-cyan { color: var(--cyan); }
 .c-red { color: var(--red); }
 .c-coral { color: var(--coral); }

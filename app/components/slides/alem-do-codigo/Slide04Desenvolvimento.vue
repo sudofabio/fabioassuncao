@@ -54,4 +54,5 @@ const categorias = [
 .cat-desc { font-size: 13.5px; color: var(--text2); }
 .cat-logos { position: absolute; top: 18px; right: 16px; display: flex; gap: 8px; }
 .cat-logo { height: 20px; width: auto; opacity: 0.55; filter: brightness(0) invert(0.85); }
+html.deck-light .cat-logo { filter: brightness(0) opacity(0.75); }
 </style>

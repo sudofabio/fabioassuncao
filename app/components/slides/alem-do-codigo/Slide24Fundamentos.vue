@@ -72,7 +72,7 @@ const fundamentos = [
 .topo-label { font-size: 14px; color: var(--text2); }
 .topo-label b { color: var(--text); }
 .base { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.base-shape { width: 640px; padding: 26px 40px; clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%); background: linear-gradient(180deg, var(--bg2), #17304f); border: 1px solid var(--border); display: flex; justify-content: center; gap: 46px; box-shadow: 0 0 60px -18px rgba(55, 198, 244, 0.35); }
+.base-shape { width: 640px; padding: 26px 40px; clip-path: polygon(7% 0, 93% 0, 100% 100%, 0 100%); background: linear-gradient(180deg, var(--bg2), color-mix(in srgb, var(--navy-soft) 70%, var(--bg2))); border: 1px solid var(--border); display: flex; justify-content: center; gap: 46px; box-shadow: 0 0 60px -18px color-mix(in srgb, var(--cyan) 35%, transparent); }
 .fund { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
 .fund-icon { color: var(--cyan); }
 .base-label { font-size: 14px; color: var(--text2); }

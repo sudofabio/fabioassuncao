@@ -94,7 +94,11 @@ useSlideTimeline((tl) => {
 <style scoped>
 .s-title { font-size: 42px; margin-top: 8px; }
 .terminals { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 34px; }
-.term { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #0a1220; }
+/* Terminais são escuros nos dois temas (decisão de design): as vars são
+   re-pinadas aos valores dark neste escopo, valendo para todo o conteúdo. */
+.term { --bg2: #122036; --text: #F2F5F9; --text2: #8FA3BF; --border: #233650;
+  --cyan: #37C6F4; --coral: #F2762E; --green: #3ECF8E; --red: #E85D4C;
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--terminal-bg, #0A1220); }
 .term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: var(--bg2); border-bottom: 1px solid var(--border); }
 .dot { width: 11px; height: 11px; border-radius: 50%; display: block; }
 .term-title { margin-left: 10px; font-size: 12.5px; letter-spacing: 0.12em; color: var(--text2); }

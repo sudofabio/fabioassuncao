@@ -71,7 +71,7 @@ useSlideTimeline((tl) => {
 .rain-line { position: absolute; font-size: 13px; color: var(--cyan); white-space: nowrap; transform: rotate(90deg); transform-origin: left top; }
 .center { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .phrase { font-size: 88px; line-height: 1.04; letter-spacing: -0.01em; opacity: 0; }
-.commodity { color: var(--cyan); text-shadow: 0 0 34px rgba(55, 198, 244, 0.4); }
+.commodity { color: var(--cyan); text-shadow: 0 0 34px color-mix(in srgb, var(--cyan) 40%, transparent); }
 .support { margin-top: 30px; font-size: 21px; opacity: 0; }
 .support-b { color: var(--text); font-weight: 600; }
 .price { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; }

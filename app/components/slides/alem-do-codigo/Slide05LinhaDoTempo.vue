@@ -49,10 +49,10 @@ const eras = [
 .era-col:first-child .axis-fill span { left: 10px; }
 .era { position: relative; padding-top: 34px; }
 .era-node { position: absolute; top: 0; left: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--bg2); border: 3px solid var(--text2); }
-.node-atual { border-color: var(--cyan); background: var(--cyan); box-shadow: 0 0 18px rgba(55, 198, 244, 0.75); }
+.node-atual { border-color: var(--cyan); background: var(--cyan); box-shadow: 0 0 18px color-mix(in srgb, var(--cyan) 75%, transparent); }
 .era-num { position: absolute; top: 30px; right: 6px; font-size: 40px; color: var(--border); font-weight: 500; }
 .era-icon { color: var(--text2); }
-.icon-atual { color: var(--cyan); filter: drop-shadow(0 0 10px rgba(55, 198, 244, 0.6)); }
+.icon-atual { color: var(--cyan); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--cyan) 60%, transparent)); }
 .era-title { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 21px; margin-top: 12px; }
 .era.atual .era-title { color: var(--cyan); }
 .era-bullets { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }

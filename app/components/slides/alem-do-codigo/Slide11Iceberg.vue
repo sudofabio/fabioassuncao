@@ -8,9 +8,9 @@
     <div ref="sceneRef" class="scene">
       <!-- iceberg SVG autoral -->
       <svg class="berg" viewBox="0 0 420 460" aria-hidden="true">
-        <polygon ref="topRef" points="210,10 300,150 120,150" fill="#F2F5F9" opacity="0" />
-        <polygon ref="bodyRef" points="120,150 300,150 356,320 210,450 64,320" fill="#1d3a5c" opacity="0" />
-        <line x1="0" y1="150" x2="420" y2="150" stroke="#37C6F4" stroke-width="2" stroke-dasharray="8 8" opacity="0.6" />
+        <polygon ref="topRef" class="berg-top" points="210,10 300,150 120,150" opacity="0" />
+        <polygon ref="bodyRef" class="berg-body" points="120,150 300,150 356,320 210,450 64,320" opacity="0" />
+        <line class="berg-water" x1="0" y1="150" x2="420" y2="150" stroke-width="2" stroke-dasharray="8 8" opacity="0.6" />
       </svg>
 
       <div ref="funcionaRef" class="funciona">
@@ -99,6 +99,9 @@ useSlideTimeline((tl) => {
 .s-title { font-size: 42px; margin-top: 8px; }
 .scene { position: relative; width: 640px; height: 400px; margin: 42px auto 0; }
 .berg { position: absolute; left: 50%; top: 0; transform: translateX(-50%); height: 100%; }
+.berg-top { fill: var(--text); }
+.berg-body { fill: var(--navy-soft); }
+.berg-water { stroke: var(--cyan); }
 .funciona { position: absolute; left: 50%; top: 30px; transform: translateX(-50%); text-align: center; display: flex; flex-direction: column; gap: 4px; opacity: 0; }
 .funciona b { font-size: 20px; letter-spacing: 0.2em; color: var(--bg); background: var(--text); padding: 4px 14px; border-radius: 6px; }
 .funciona span { font-size: 13.5px; color: var(--text2); }

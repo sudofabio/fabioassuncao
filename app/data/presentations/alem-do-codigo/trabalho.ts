@@ -3,10 +3,13 @@
  * NÃO alterar/arredondar além do especificado no APRESENTACAO_BASE.md (slide 19).
  */
 
-export const MODELOS_2026 = [
-  { nome: 'Remoto', valor: 60.08, cor: '#37C6F4' },
-  { nome: 'Híbrido', valor: 22.44, cor: '#3ECF8E' },
-  { nome: 'Presencial', valor: 17.48, cor: '#8FA3BF' },
+import type { DeckChartPalette } from '~/components/deck/context'
+
+/** `cor` é um token semântico resolvido pela paleta do tema (dark/light) no slide. */
+export const MODELOS_2026: { nome: string; valor: number; cor: keyof DeckChartPalette['accents'] }[] = [
+  { nome: 'Remoto', valor: 60.08, cor: 'cyan' },
+  { nome: 'Híbrido', valor: 22.44, cor: 'green' },
+  { nome: 'Presencial', valor: 17.48, cor: 'muted' },
 ]
 
 /** Tendência do remoto 2022→2026 (sparkline discreto). */

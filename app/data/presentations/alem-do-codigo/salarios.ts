@@ -8,11 +8,14 @@
 
 export const ANOS = ['2021', '2022', '2023', '2024', '2025', '2026'] as const
 
+import type { DeckChartPalette } from '~/components/deck/context'
+
 export interface SerieSalarial {
   nivel: string
   valores: number[]
   crescimento: string
-  cor: string
+  /** Token semântico resolvido pela paleta do tema (dark/light) no slide. */
+  cor: keyof DeckChartPalette['accents']
 }
 
 export const SERIES_SALARIAIS: SerieSalarial[] = [
@@ -20,25 +23,25 @@ export const SERIES_SALARIAIS: SerieSalarial[] = [
     nivel: 'Júnior',
     valores: [2955.93, 3658.92, 3987.43, 4079.01, 4154.21, 5060.34],
     crescimento: '+71%',
-    cor: '#8FA3BF',
+    cor: 'muted',
   },
   {
     nivel: 'Pleno',
     valores: [5594.11, 7387.42, 8023.44, 7850.47, 7840.74, 8466.52],
     crescimento: '+51%',
-    cor: '#3ECF8E',
+    cor: 'green',
   },
   {
     nivel: 'Sênior',
     valores: [10601.42, 14399.46, 15510.34, 15050.46, 15635.35, 14607.85],
     crescimento: '+38%',
-    cor: '#37C6F4',
+    cor: 'cyan',
   },
   {
     nivel: 'Especialista/Tech Lead',
     valores: [8745.12, 13012.34, 16339.29, 18202.92, 19290.08, 20601.64],
     crescimento: '+136%',
-    cor: '#F2762E',
+    cor: 'coral',
   },
 ]
 

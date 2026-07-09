@@ -57,14 +57,14 @@ const pilares = [
 .photo-card { width: 260px; height: 260px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); position: relative; }
 .photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
 /* Tratamento duotone navy/ciano */
-.photo-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(55, 198, 244, 0.28), rgba(11, 21, 38, 0.55)); mix-blend-mode: color; }
+.photo-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(160deg, color-mix(in srgb, var(--cyan) 28%, transparent), color-mix(in srgb, var(--bg) 55%, transparent)); mix-blend-mode: color; }
 .photo-caption { margin-top: 14px; font-size: 15px; line-height: 1.5; color: var(--text2); }
 .photo-caption b { color: var(--text); font-family: 'Space Grotesk', sans-serif; }
 .bio { font-size: 19px; max-width: 720px; }
 .timeline { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
 .track { position: absolute; top: 5px; left: 8px; right: 8px; height: 2px; background: var(--border); }
 .pillar { position: relative; padding-top: 26px; }
-.node { position: absolute; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px rgba(55, 198, 244, 0.6); }
+.node { position: absolute; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 60%, transparent); }
 .pillar-icon { color: var(--text2); }
 .pillar-title { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 17px; margin-top: 10px; }
 .pillar-desc { display: block; font-size: 13.5px; color: var(--text2); margin-top: 4px; }

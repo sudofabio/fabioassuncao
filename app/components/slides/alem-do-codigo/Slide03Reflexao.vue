@@ -63,7 +63,7 @@ useSlideTimeline((tl) => {
 .strike { position: absolute; left: -2%; right: -2%; top: 52%; height: 5px; background: var(--red); border-radius: 3px; transform: scaleX(0); transform-origin: left center; }
 .arrow { color: var(--text2); opacity: 0; }
 .new { font-size: 76px; opacity: 0; }
-.accent { color: var(--coral); text-shadow: 0 0 26px rgba(242, 118, 46, 0.35); }
+.accent { color: var(--coral); text-shadow: 0 0 26px color-mix(in srgb, var(--coral) 35%, transparent); }
 .foot { font-size: 20px; color: var(--text2); margin-top: 22px; opacity: 0; }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
 </style>

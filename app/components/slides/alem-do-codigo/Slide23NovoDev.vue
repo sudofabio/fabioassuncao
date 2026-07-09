@@ -53,7 +53,7 @@ const nota = NOTAS[22]
 .perfil { padding: 28px 26px; display: flex; flex-direction: column; gap: 12px; }
 .antes { opacity: 0.9; }
 .antes .p-title { color: var(--text2); }
-.depois { border-color: rgba(242, 118, 46, 0.45); box-shadow: 0 0 40px -18px rgba(242, 118, 46, 0.5); }
+.depois { border-color: color-mix(in srgb, var(--coral) 45%, transparent); box-shadow: 0 0 40px -18px color-mix(in srgb, var(--coral) 50%, transparent); }
 .p-icon { color: var(--text2); }
 .p-icon.coral { color: var(--coral); }
 .p-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; }

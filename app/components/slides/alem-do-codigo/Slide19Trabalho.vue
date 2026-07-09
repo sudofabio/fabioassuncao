@@ -26,9 +26,9 @@
       <div class="side">
         <div class="modelos">
           <DeckStep v-for="(m, i) in MODELOS_2026" :key="m.nome" :at="1" :delay="0.4 + 0.12 * i" class="modelo">
-            <component :is="[Home, Shuffle, Building][i]" :size="20" :style="{ color: m.cor }" />
+            <component :is="[Home, Shuffle, Building][i]" :size="20" :style="{ color: corDe(m.cor) }" />
             <span class="modelo-nome">{{ m.nome }}</span>
-            <b class="modelo-valor mono" :style="{ color: m.cor }">{{ m.valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }}%</b>
+            <b class="modelo-valor mono" :style="{ color: corDe(m.cor) }">{{ m.valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }}%</b>
           </DeckStep>
         </div>
 
@@ -56,14 +56,20 @@
 import { Home, Shuffle, Building, DoorOpen, Rocket } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 import { MODELOS_2026, TENDENCIA_REMOTO, FONTE_TRABALHO } from '~/data/presentations/alem-do-codigo/trabalho'
+import { alemDoCodigoTheme } from '~/themes/alem-do-codigo'
 
 const nota = NOTAS[18]
+
+// ECharts (SVG) não resolve var() — paleta absoluta escolhida pelo modo ativo.
+const { mode } = useDeckColorMode()
+const pal = computed(() => alemDoCodigoTheme.charts[mode.value])
+const corDe = (token) => pal.value.accents[token]
 
 const sparkPoints = TENDENCIA_REMOTO
   .map((p, i) => `${8 + i * 46},${40 - ((p.valor - 58) / 20) * 36}`)
   .join(' ')
 
-const donutOption = {
+const donutOption = computed(() => ({
   backgroundColor: 'transparent',
   textStyle: { fontFamily: 'Inter, sans-serif' },
   series: [
@@ -72,12 +78,13 @@ const donutOption = {
       radius: ['52%', '78%'],
       center: ['50%', '50%'],
       avoidLabelOverlap: true,
-      itemStyle: { borderColor: '#0B1526', borderWidth: 4 },
+      // Borda e label internos na cor do fundo do slide ("vão" entre as fatias).
+      itemStyle: { borderColor: pal.value.slideBg, borderWidth: 4 },
       label: {
         show: true,
         position: 'inside',
         formatter: (p) => `${p.value.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`,
-        color: '#0B1526',
+        color: pal.value.slideBg,
         fontSize: 16,
         fontWeight: 700,
         fontFamily: 'Space Grotesk, sans-serif',
@@ -86,13 +93,13 @@ const donutOption = {
       data: MODELOS_2026.map((m) => ({
         name: m.nome,
         value: m.valor,
-        itemStyle: { color: m.cor },
+        itemStyle: { color: corDe(m.cor) },
       })),
       animationType: 'scale',
       animationDuration: 1100,
     },
   ],
-}
+}))
 </script>
 
 <style scoped>

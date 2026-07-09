@@ -65,9 +65,9 @@ const nota = NOTAS[9]
 .bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px; height: 100%; }
 .bar { width: 92px; border-radius: 8px 8px 0 0; transform: scaleY(0); transform-origin: bottom; transition: transform 1.2s var(--ease) 0.15s; }
 .dstep.on .bar { transform: scaleY(1); }
-.b-empresa { height: 180px; background: linear-gradient(180deg, #8FA3BF, #46628a); }
-.b-freela { height: 76px; background: linear-gradient(180deg, #6d84a8, #3c517a); }
-.b-hoje { height: 14px; background: var(--coral); box-shadow: 0 0 20px rgba(242, 118, 46, 0.45); }
+.b-empresa { height: 180px; background: linear-gradient(180deg, var(--text2), color-mix(in srgb, var(--text2) 55%, var(--bg))); }
+.b-freela { height: 76px; background: linear-gradient(180deg, color-mix(in srgb, var(--text2) 78%, var(--bg)), color-mix(in srgb, var(--text2) 45%, var(--bg))); }
+.b-hoje { height: 14px; background: var(--coral); box-shadow: 0 0 20px color-mix(in srgb, var(--coral) 45%, transparent); }
 .bar-value { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; }
 .hoje-value { color: var(--coral); font-size: 30px; }
 .mes { font-size: 16px; color: var(--text2); font-weight: 500; }

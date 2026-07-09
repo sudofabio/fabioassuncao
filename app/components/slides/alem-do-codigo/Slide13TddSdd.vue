@@ -3,7 +3,7 @@
        ① morph tipográfico TDD→SDD  ② badge "#1 skill 2026" + frases -->
   <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep">
     <div class="center">
-      <div class="morph title" aria-hidden="false">
+      <div class="morph title" :class="{ lit: morphLit }" aria-hidden="false">
         <span class="letter-box">
           <span ref="tRef" class="letter t-letter">T</span>
           <span ref="sRef" class="letter s-letter">S</span>
@@ -34,6 +34,11 @@ const nota = NOTAS[12]
 
 const slideEl = ref(null)
 
+// Cor do morph via classe (não via tween GSAP): GSAP gravaria o hex resolvido
+// inline e a troca de tema não o alcançaria. `isStepOn` já cobre voltar de
+// slide, deep-link, reduced-motion e export.
+const morphLit = computed(() => slideEl.value?.ctx?.isStepOn(1) ?? false)
+
 const tRef = ref(null)
 const sRef = ref(null)
 const nameRef = ref(null)
@@ -53,7 +58,6 @@ useSlideTimeline((tl) => {
     { opacity: 1, y: 0, rotateX: 0, duration: 0.55, ease: 'power3.out' },
     '<0.32'
   )
-  tl.to('.morph .letter', { color: '#F2762E', textShadow: '0 0 44px rgba(242,118,46,.45)', duration: 0.6, ease: 'power2.out' }, '<0.1')
   tl.addLabel('step-1')
   tl.addPause()
   // step 2: badge + frases de apoio
@@ -67,7 +71,8 @@ useSlideTimeline((tl) => {
 <style scoped>
 .center { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .morph { font-size: 150px; font-weight: 700; letter-spacing: 0.02em; color: var(--text2); display: flex; align-items: baseline; perspective: 700px; }
-.letter { display: inline-block; }
+.letter { display: inline-block; transition: color 0.6s ease, text-shadow 0.6s ease; }
+.morph.lit .letter { color: var(--coral); text-shadow: 0 0 44px color-mix(in srgb, var(--coral) 45%, transparent); }
 .letter-box { position: relative; display: inline-block; }
 .s-letter { position: absolute; left: 0; top: 0; opacity: 0; }
 .sdd-name { margin-top: 26px; font-size: 24px; color: var(--text2); opacity: 0; }
@@ -75,6 +80,6 @@ useSlideTimeline((tl) => {
 .hash { color: var(--coral); }
 .line { margin-top: 22px; font-size: 20px; line-height: 1.55; color: var(--text2); opacity: 0; }
 .accent { color: var(--coral); font-weight: 600; }
-.badge { position: absolute; top: 90px; right: 130px; padding: 8px 18px; border: 1.5px solid var(--coral); color: var(--coral); border-radius: 40px; font-size: 14px; letter-spacing: 0.08em; transform: rotate(6deg); opacity: 0; background: rgba(242, 118, 46, 0.07); }
+.badge { position: absolute; top: 90px; right: 130px; padding: 8px 18px; border: 1.5px solid var(--coral); color: var(--coral); border-radius: 40px; font-size: 14px; letter-spacing: 0.08em; transform: rotate(6deg); opacity: 0; background: color-mix(in srgb, var(--coral) 7%, transparent); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
 </style>

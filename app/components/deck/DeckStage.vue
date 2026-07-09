@@ -16,81 +16,33 @@
     </div>
 
     <div class="controls" :class="{ hide: !chromeVisible }">
-      <template v-if="exitTo">
-        <NuxtLink :to="exitTo" class="ctrl-exit" title="Sair da apresentação" aria-label="Sair da apresentação">
-          <X :size="20" />
-        </NuxtLink>
-        <span class="ctrl-sep" aria-hidden="true"></span>
-      </template>
       <button type="button" title="Anterior" aria-label="Slide anterior" @click.stop="prev">
         <ChevronLeft :size="20" />
       </button>
-      <div class="dots-nav">
-        <i
-          v-for="i in total"
-          :key="i"
-          :class="{ on: i - 1 === slideIndex }"
-          role="button"
-          :aria-label="`Ir para o slide ${i}`"
-          @click.stop="go(i - 1)"
-        ></i>
-      </div>
-      <span class="counter">{{ counterText }}</span>
+      <span class="counter" aria-live="polite">{{ counterText }}</span>
       <button type="button" title="Próximo" aria-label="Próximo slide" @click.stop="next">
         <ChevronRight :size="20" />
-      </button>
-      <button
-        v-if="!isNarrow"
-        type="button"
-        :title="pinned ? 'Ocultar controles' : 'Fixar controles'"
-        :aria-label="pinned ? 'Ocultar controles' : 'Fixar controles'"
-        :aria-pressed="pinned"
-        @click.stop="pinned = !pinned"
-      >
-        <PinOff v-if="pinned" :size="20" />
-        <Pin v-else :size="20" />
-      </button>
-      <button
-        v-if="!isNarrow"
-        type="button"
-        :title="isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'"
-        :aria-label="isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'"
-        :aria-pressed="isFullscreen"
-        @click.stop="toggleFullscreen"
-      >
-        <Minimize v-if="isFullscreen" :size="20" />
-        <Maximize v-else :size="20" />
       </button>
       <span class="ctrl-sep" aria-hidden="true"></span>
       <button
         type="button"
-        title="Baixar apresentação em PDF"
-        aria-label="Baixar apresentação em PDF"
-        :disabled="exporting"
-        @click.stop="onDownload"
+        :title="isLight ? 'Tema escuro' : 'Tema claro'"
+        :aria-label="isLight ? 'Mudar para tema escuro' : 'Mudar para tema claro'"
+        :aria-pressed="isLight"
+        @click.stop="toggleColorMode"
       >
-        <Download :size="20" />
+        <Moon v-if="isLight" :size="20" />
+        <Sun v-else :size="20" />
       </button>
+      <DeckMenu v-model:open="menuOpen" :items="menuItems" @select="onMenuSelect" />
     </div>
 
-    <div ref="helpRef" class="help" :class="{ hide: !chromeVisible }">
-      <button
-        type="button"
-        class="help-btn"
-        title="Ajuda e atalhos"
-        aria-label="Ajuda e atalhos"
-        :aria-expanded="helpOpen"
-        @click.stop="helpOpen = !helpOpen"
-      >
-        <Info :size="20" />
-      </button>
-      <div v-if="helpOpen" class="help-panel" role="dialog" aria-label="Como navegar na apresentação">
-        <p class="help-title">Como navegar</p>
-        <ul>
-          <li v-for="(item, i) in helpItems" :key="i">{{ item }}</li>
-        </ul>
-        <p v-if="helpNote" class="help-note">{{ helpNote }}</p>
-      </div>
+    <div v-if="helpOpen" ref="helpRef" class="help-panel" role="dialog" aria-label="Como navegar na apresentação">
+      <p class="help-title">Como navegar</p>
+      <ul>
+        <li v-for="(item, i) in helpItems" :key="i">{{ item }}</li>
+      </ul>
+      <p v-if="helpNote" class="help-note">{{ helpNote }}</p>
     </div>
 
     <DeckNotes
@@ -113,13 +65,14 @@
 </template>
 
 <script setup>
-import { X, ChevronLeft, ChevronRight, Pin, PinOff, Minimize, Maximize, Download, Info } from 'lucide-vue-next'
+import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon } from 'lucide-vue-next'
 import { DECK_KEY } from './context'
 import DeckNotes from './DeckNotes.vue'
+import DeckMenu from './DeckMenu.vue'
 import { exportDeckToPdf } from '~/composables/useDeckPdf'
 
 const props = defineProps({
-  /** Objeto de tema (DeckTheme) — define as CSS custom properties do palco. */
+  /** Objeto de tema (DeckTheme) — define as CSS custom properties do deck. */
   theme: { type: Object, required: true },
   /** Rótulo acessível da apresentação. */
   ariaLabel: { type: String, default: 'Apresentação' },
@@ -147,6 +100,30 @@ const viewportRef = ref(null)
 const stageRef = ref(null)
 const helpRef = ref(null)
 
+// ---------- tema (CSS custom properties + modo claro/escuro) ----------
+// As vars vão numa <style> renderizada no SSR (não inline no .stage): style
+// inline venceria a classe `html.deck-light`, e o chrome (.controls, .help-*,
+// .presenter) vive fora do .stage — por isso o alvo é o .deck-root.
+const { isLight, mode: colorMode, toggle: toggleColorMode } = useDeckColorMode()
+
+const cssVars = vars => Object.entries(vars).map(([k, v]) => `${k}:${v}`).join(';')
+useHead({
+  style: [
+    {
+      innerHTML:
+        `.deck-root{${cssVars(props.theme.vars)}}` +
+        (props.theme.lightVars ? `html.deck-light .deck-root{${cssVars(props.theme.lightVars)}}` : ''),
+    },
+  ],
+})
+
+/** Vars efetivas do modo ativo (export PDF usa o --bg correto). */
+const activeVars = computed(() =>
+  colorMode.value === 'light' && props.theme.lightVars
+    ? { ...props.theme.vars, ...props.theme.lightVars }
+    : props.theme.vars
+)
+
 // ---------- estado central: slide + step ----------
 const slideIndex = ref(0)
 const stepIndex = ref(0)
@@ -155,7 +132,9 @@ const total = ref(0)
 const scaleVal = ref(1)
 const pinned = ref(props.controlsPinned)
 const uiVisible = ref(false)
-const chromeVisible = computed(() => pinned.value || uiVisible.value)
+const menuOpen = ref(false)
+const helpOpen = ref(false)
+const chromeVisible = computed(() => pinned.value || uiVisible.value || menuOpen.value || helpOpen.value)
 const reducedMotion = ref(false)
 const exporting = ref(false)
 
@@ -165,22 +144,17 @@ const isMounted = ref(false)
 const presenterOn = computed(() => isMounted.value && route.query.presenter === '1')
 
 // Painel de ajuda adaptado ao dispositivo.
-const helpOpen = ref(false)
 const isTouch = ref(false)
 const isFullscreen = ref(false)
 const isNarrow = ref(false)
 const helpItems = computed(() => {
   if (isTouch.value) {
-    const items = [
-      'Toque à direita da tela para avançar',
-      'Toque à esquerda para voltar',
+    return [
+      'Deslize para o lado para trocar de slide',
+      'Toque à direita da tela para avançar, à esquerda para voltar',
+      'Menu ⋮: tela cheia, PDF, controles e sair',
+      'Botão de sol/lua: alternar tema claro ou escuro',
     ]
-    if (!isNarrow.value) {
-      items.push('Botão de tela cheia para expandir')
-      items.push('Botão de fixar para ocultar ou mostrar a barra')
-    }
-    items.push('Botão de download para baixar em PDF')
-    return items
   }
   return [
     autoplayOn.value
@@ -188,7 +162,8 @@ const helpItems = computed(() => {
       : '← → ou espaço: avançar etapas e slides',
     'F: entrar ou sair da tela cheia',
     'C: ocultar ou mostrar os controles',
-    'Botão de download: baixar em PDF',
+    'M: abrir o menu de opções (tela cheia, PDF, sair)',
+    'Botão de sol/lua: alternar tema claro ou escuro',
   ]
 })
 const helpNote = computed(() =>
@@ -196,6 +171,43 @@ const helpNote = computed(() =>
     ? 'Esta apresentação foi pensada para telas maiores (desktop, notebook e tablet). Em celulares ela funciona, mas a leitura e o desempenho são melhores em telas maiores.'
     : ''
 )
+
+// ---------- menu overflow (⋮) ----------
+const menuItems = computed(() => {
+  const items = [
+    {
+      id: 'fullscreen',
+      label: isFullscreen.value ? 'Sair da tela cheia' : 'Tela cheia',
+      icon: isFullscreen.value ? Minimize : Maximize,
+    },
+    {
+      id: 'pdf',
+      label: exporting.value ? 'Gerando PDF…' : 'Baixar PDF',
+      icon: Download,
+      disabled: exporting.value,
+    },
+    { id: 'pin', label: 'Controles sempre visíveis', icon: Pin, checked: pinned.value },
+    { id: 'help', label: 'Atalhos e ajuda', icon: Info },
+  ]
+  if (props.exitTo) items.push({ id: 'exit', label: 'Sair da apresentação', icon: X })
+  return items
+})
+
+function onMenuSelect(id) {
+  if (id === 'fullscreen') toggleFullscreen()
+  else if (id === 'pdf') onDownload()
+  else if (id === 'pin') pinned.value = !pinned.value
+  else if (id === 'help') helpOpen.value = true
+  else if (id === 'exit') router.push(props.exitTo)
+}
+
+// Export em andamento: popovers fechados (o overlay cobre tudo).
+watch(exporting, v => {
+  if (v) {
+    menuOpen.value = false
+    helpOpen.value = false
+  }
+})
 
 // ---------- registro de slides, steps, timelines e gráficos ----------
 // Arrays não-reativos onde possível (evitam mutação reativa durante o render).
@@ -243,7 +255,6 @@ provide(DECK_KEY, {
 })
 
 const stageStyle = computed(() => ({
-  ...props.theme.vars,
   transform: `translate(-50%, -50%) scale(${scaleVal.value})`,
 }))
 
@@ -377,10 +388,28 @@ function restoreSlideFromUrl() {
   syncSlideToUrl()
 }
 
+// ---------- interação com o palco: tap zones + swipe ----------
+const { swipedRecently } = useDeckSwipe(viewportRef, {
+  onNext: () => { next(); revealChromeTemporarily() },
+  onPrev: () => { prev(); revealChromeTemporarily() },
+  enabled: () => !exporting.value && !menuOpen.value && !helpOpen.value,
+})
+
 function onStageClick(e) {
-  if (exporting.value) return
+  if (exporting.value || swipedRecently()) return
+  if (isTouch.value) revealChromeTemporarily()
   if (e.clientX < window.innerWidth * 0.32) prev()
   else next()
+}
+
+// Em touch não há mousemove: após tap/swipe a chrome aparece por alguns
+// segundos (se despinada), senão a barra ficaria inacessível.
+let chromeTimer = null
+function revealChromeTemporarily(ms = 3000) {
+  if (pinned.value) return
+  uiVisible.value = true
+  clearTimeout(chromeTimer)
+  chromeTimer = setTimeout(() => { uiVisible.value = false }, ms)
 }
 
 // ---------- exportação em PDF ----------
@@ -423,7 +452,7 @@ async function onDownload() {
       },
       total: total.value,
       filename: props.downloadName,
-      backgroundColor: props.theme.vars['--bg'] || '#0B1526',
+      backgroundColor: activeVars.value['--bg'] || '#0B1526',
       onProgress: (done, tot) => { exportProgress.value = { done, total: tot } },
     })
   } catch (err) {
@@ -459,6 +488,13 @@ let narrowMq = null
 function onNarrowChange(e) { isNarrow.value = e.matches }
 
 function onKeydown(e) {
+  if (e.key.toLowerCase() === 'm' && !exporting.value) { e.preventDefault(); menuOpen.value = !menuOpen.value; return }
+  if (menuOpen.value) {
+    // O painel do menu trata as próprias teclas (com stopPropagation); aqui só
+    // garantimos que navegação/atalhos não disparem com o menu aberto.
+    if (e.key === 'Escape') menuOpen.value = false
+    return
+  }
   if (e.key === 'Escape' && helpOpen.value) { e.preventDefault(); helpOpen.value = false; return }
   if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); next() }
   else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev() }
@@ -499,6 +535,9 @@ watch(presenterOn, () => nextTick(applyScale))
 
 onBeforeUnmount(() => {
   stopAutoplay()
+  clearTimeout(chromeTimer)
+  // Não vazar o tema do deck para o resto do site.
+  document.documentElement.classList.remove('deck-light')
   window.removeEventListener('resize', applyScale)
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('mousemove', onMouseMove)

@@ -11,7 +11,7 @@ useHead({
       content:
         "Software engineer with 15+ years of experience specializing in backend, distributed systems, and cloud computing.",
     },
-    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
     { property: "og:title", content: "Fábio Assunção — Software Engineer" },
     {
       property: "og:description",

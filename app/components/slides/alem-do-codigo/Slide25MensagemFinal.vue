@@ -5,11 +5,11 @@
   <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep">
     <!-- eco da malha da capa -->
     <svg class="mesh" viewBox="0 0 1280 720" aria-hidden="true">
-      <g stroke="#37C6F4" stroke-width="1" fill="none">
+      <g class="mesh-lines" stroke-width="1" fill="none">
         <path d="M80 640 h180 v-120 h220 v-80 h160" />
         <path d="M1200 90 h-160 v100 h-200 v90 h-140" />
       </g>
-      <g fill="#37C6F4">
+      <g class="mesh-dots">
         <circle cx="260" cy="640" r="4" /><circle cx="480" cy="520" r="4" />
         <circle cx="1040" cy="90" r="4" /><circle cx="840" cy="190" r="4" />
       </g>
@@ -57,9 +57,11 @@ useSlideTimeline((tl) => {
 
 <style scoped>
 .mesh { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.06; }
+.mesh-lines { stroke: var(--cyan); }
+.mesh-dots { fill: var(--cyan); }
 .center { position: relative; height: 100%; display: flex; align-items: center; justify-content: center; padding: 0 120px; }
 .frase { font-size: 66px; line-height: 1.28; text-align: center; max-width: 1000px; }
 .word { display: inline-block; opacity: 0; }
-.governa { color: var(--coral); text-shadow: 0 0 30px rgba(242, 118, 46, 0.4); }
+.governa { color: var(--coral); text-shadow: 0 0 30px color-mix(in srgb, var(--coral) 40%, transparent); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
 </style>

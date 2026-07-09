@@ -30,7 +30,7 @@
         <div class="cycle" aria-hidden="true">
           <svg viewBox="0 0 160 160" class="cycle-svg">
             <circle cx="80" cy="80" r="62" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="5 8" class="ring" />
-            <polygon points="80,10 87,22 73,22" fill="#37C6F4" class="ring-arrow" />
+            <polygon points="80,10 87,22 73,22" class="ring-arrow" />
           </svg>
           <span v-for="(fase, i) in ciclo" :key="fase" class="fase mono" :class="`f${i}`">{{ fase }}</span>
         </div>
@@ -58,7 +58,8 @@ const ciclo = ['objetivo', 'ação', 'observação', 'correção']
 .degrau { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 22px; }
 .d1 { min-height: 190px; }
 .d2 { min-height: 240px; }
-.d3 { min-height: 300px; border-color: rgba(55, 198, 244, 0.4); }
+.d3 { min-height: 300px; border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
+.ring-arrow { fill: var(--cyan); }
 .nivel { font-size: 12px; letter-spacing: 0.2em; color: var(--text2); }
 .icon { margin-top: 2px; }
 .i1 { color: var(--coral); }

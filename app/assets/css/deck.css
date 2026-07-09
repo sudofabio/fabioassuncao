@@ -9,27 +9,69 @@
 /* =========================================================================
    Deck Engine v2 — estilos estruturais da engine de apresentações.
    Portado do presentations.css do lms-landing-page e adaptado:
-   - paleta escura (deep navy) via CSS custom properties (tema plugável)
+   - paleta via CSS custom properties (tema plugável, modos dark/light —
+     o modo claro é ativado pela classe `deck-light` no <html>)
    - tipografia Space Grotesk / Inter / JetBrains Mono (self-hosted)
    - primitivas `.dstep` (build steps por clique) além dos reveals `.r`
    Tudo namespaced sob `.deck-root`. Nada específico de uma apresentação aqui.
    ========================================================================= */
 
 .deck-root {
-  /* Fallbacks — os valores reais vêm do tema aplicado pela engine no .stage */
+  /* Fallbacks — os valores reais vêm do tema (style gerado pela engine) */
   --bg: #0B1526; --bg2: #122036; --bg-deep: #070D18;
   --text: #F2F5F9; --text2: #8FA3BF;
   --cyan: #37C6F4; --coral: #F2762E; --green: #3ECF8E; --red: #E85D4C;
   --border: #233650;
   --ease: cubic-bezier(.2, .75, .2, 1);
+
+  /* Chrome da engine (toolbar, menu, ajuda, presenter) — independente do tema
+     do conteúdo, com variante clara via html.deck-light. */
+  --ui-surface: rgba(11, 21, 38, .78);
+  --ui-surface-solid: rgba(11, 21, 38, .94);
+  --ui-text: #fff;
+  --ui-text-dim: rgba(255, 255, 255, .82);
+  --ui-text-faint: rgba(255, 255, 255, .6);
+  --ui-hover: rgba(255, 255, 255, .12);
+  --ui-hairline: rgba(143, 163, 191, .18);
+  --stage-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+
+  /* Escala da interface externa (não do palco): 1 até full HD, cresce em
+     degraus até 1.5× em TVs/4K para manter legibilidade a distância. */
+  --ui-scale: 1;
+  --ctrl-icon: calc(20px * var(--ui-scale));
+  --ctrl-target: max(44px, calc(40px * var(--ui-scale)));
+  --controls-bottom: calc(22px * var(--ui-scale) + env(safe-area-inset-bottom, 0px));
+
   font-family: 'Inter', system-ui, sans-serif;
   color: var(--text);
 }
+
+html.deck-light .deck-root {
+  --ui-surface: rgba(255, 255, 255, .82);
+  --ui-surface-solid: rgba(255, 255, 255, .96);
+  --ui-text: #16283E;
+  --ui-text-dim: rgba(22, 40, 62, .82);
+  --ui-text-faint: rgba(22, 40, 62, .58);
+  --ui-hover: rgba(14, 27, 46, .08);
+  --ui-hairline: rgba(20, 40, 70, .14);
+  --stage-shadow: 0 30px 80px rgba(30, 50, 80, .25);
+}
+
+/* Alvos de clique menores quando há ponteiro fino (desktop). */
+@media (pointer: fine) {
+  .deck-root { --ctrl-target: max(36px, calc(36px * var(--ui-scale))); }
+}
+
+/* TVs, projetores e monitores grandes: interface maior, palco intacto. */
+@media (min-width: 2200px) { .deck-root { --ui-scale: 1.25; } }
+@media (min-width: 3200px) { .deck-root { --ui-scale: 1.5; } }
+
 .deck-root *, .deck-root *::before, .deck-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.deck-root .viewport { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+.deck-root .viewport { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-deep, #070D18); touch-action: pan-y pinch-zoom; }
 .deck-root .stage { position: absolute; top: 50%; left: 50%; width: 1280px; height: 720px; transform-origin: center;
-  background: var(--bg); overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .55); border-radius: 4px; }
+  background: var(--bg); overflow: hidden; box-shadow: var(--stage-shadow); border-radius: 4px; }
 
 /* ---------- slides ---------- */
 .deck-root .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transform: scale(1.012); isolation: isolate;
@@ -68,84 +110,116 @@
 
 /* Palavra-chave com acento (frases de impacto) */
 .deck-root .kw { transition: color .8s ease var(--kd, 0s), text-shadow .8s ease var(--kd, 0s); }
-.deck-root .slide.active .kw.kw-cyan { color: var(--cyan); text-shadow: 0 0 22px rgba(55, 198, 244, .35); }
-.deck-root .slide.active .kw.kw-coral { color: var(--coral); text-shadow: 0 0 22px rgba(242, 118, 46, .35); }
+.deck-root .slide.active .kw.kw-cyan { color: var(--cyan); text-shadow: 0 0 22px color-mix(in srgb, var(--cyan) 35%, transparent); }
+.deck-root .slide.active .kw.kw-coral { color: var(--coral); text-shadow: 0 0 22px color-mix(in srgb, var(--coral) 35%, transparent); }
 
 /* ---------- card base ---------- */
 .deck-root .deck-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
 
-/* ---------- controls ---------- */
-.deck-root .controls { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px;
-  background: rgba(11, 21, 38, .78); backdrop-filter: blur(8px); padding: 9px 16px; border-radius: 50px; z-index: 40;
-  border: 1px solid rgba(143, 163, 191, .18); transition: opacity .22s ease; color: #fff; }
+/* ---------- controls (toolbar) ---------- */
+.deck-root .controls { position: fixed; left: 50%; bottom: var(--controls-bottom); transform: translateX(-50%);
+  display: flex; align-items: center; gap: calc(6px * var(--ui-scale));
+  background: var(--ui-surface); backdrop-filter: blur(8px);
+  padding: calc(6px * var(--ui-scale)) calc(10px * var(--ui-scale)); border-radius: 999px; z-index: 40;
+  max-width: calc(100vw - 16px);
+  border: 1px solid var(--ui-hairline); transition: opacity .22s ease; color: var(--ui-text); }
 .deck-root .controls.hide { opacity: 0; pointer-events: none; }
-.deck-root .controls button, .deck-root .controls a { background: transparent; border: 0; color: #fff; cursor: pointer; display: flex; padding: 4px; border-radius: 50%; opacity: .85; text-decoration: none; }
-.deck-root .controls button:hover, .deck-root .controls a:hover { opacity: 1; background: rgba(255, 255, 255, .12); }
-.deck-root .controls button svg, .deck-root .controls a svg { width: 20px; height: 20px; }
-.deck-root .controls .ctrl-sep { width: 1px; height: 18px; background: rgba(255, 255, 255, .2); border-radius: 1px; }
-.deck-root .controls button:disabled { opacity: .4; cursor: default; pointer-events: none; }
-.deck-root .counter { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: .05em; min-width: 54px; text-align: center; white-space: nowrap; }
-.deck-root .dots-nav { display: flex; gap: 7px; }
-.deck-root .dots-nav i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, .3); cursor: pointer; transition: .3s; }
-.deck-root .dots-nav i.on { background: var(--cyan); width: 22px; border-radius: 50px; }
+/* Botões da pill (escopados com `>` e `.menu-btn` para NÃO vazarem para os
+   itens do painel do menu, que têm estilo próprio em .menu-item). */
+.deck-root .controls > button, .deck-root .controls .menu-btn, .deck-root .controls > a { background: transparent; border: 0; color: var(--ui-text); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; min-width: var(--ctrl-target); min-height: var(--ctrl-target);
+  border-radius: 50%; opacity: .85; text-decoration: none; }
+.deck-root .controls > button:hover, .deck-root .controls .menu-btn:hover, .deck-root .controls > a:hover { opacity: 1; background: var(--ui-hover); }
+.deck-root .controls > button svg, .deck-root .controls .menu-btn svg, .deck-root .controls > a svg { width: var(--ctrl-icon); height: var(--ctrl-icon); }
+.deck-root .controls .ctrl-sep { width: 1px; height: calc(18px * var(--ui-scale)); background: var(--ui-hairline); border-radius: 1px; }
+.deck-root .controls > button:disabled { opacity: .4; cursor: default; pointer-events: none; }
+.deck-root .counter { font-family: 'JetBrains Mono', monospace; font-size: calc(12px * var(--ui-scale)); font-variant-numeric: tabular-nums;
+  letter-spacing: .05em; min-width: calc(54px * var(--ui-scale)); text-align: center; white-space: nowrap; }
 .deck-root .topbar { position: fixed; top: 0; left: 0; height: 3px; background: var(--cyan); width: 0; z-index: 40; transition: width .5s var(--ease), opacity .22s ease; }
 .deck-root .topbar.hide { opacity: 0; }
 
-/* ---------- botão de ajuda + painel ---------- */
-.deck-root .help { position: fixed; top: 18px; right: 18px; z-index: 41; transition: opacity .22s ease; }
-.deck-root .help.hide { opacity: 0; pointer-events: none; }
-.deck-root .help-btn { display: flex; padding: 8px; border: 0; border-radius: 50%; cursor: pointer; color: #fff; opacity: .85;
-  background: rgba(11, 21, 38, .78); backdrop-filter: blur(8px); transition: opacity .2s ease, background .2s ease; }
-.deck-root .help-btn:hover { opacity: 1; background: rgba(11, 21, 38, .95); }
-.deck-root .help-btn svg { width: 20px; height: 20px; }
-.deck-root .help-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(300px, calc(100vw - 32px));
-  background: rgba(11, 21, 38, .94); backdrop-filter: blur(10px); border: 1px solid rgba(143, 163, 191, .2); border-radius: 14px;
-  padding: 16px 18px; color: #fff; box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .7); }
-.deck-root .help-panel .help-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; margin: 0 0 10px; }
-.deck-root .help-panel ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.deck-root .help-panel li { font-size: 13px; line-height: 1.35; color: rgba(255, 255, 255, .82); padding-left: 14px; position: relative; }
-.deck-root .help-panel li::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); }
-.deck-root .help-panel .help-note { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .12);
-  font-size: 12px; line-height: 1.45; color: rgba(255, 255, 255, .6); }
+/* ---------- menu overflow (⋮ — DeckMenu) ---------- */
+.deck-root .deck-menu { position: relative; display: flex; }
+.deck-root .menu-panel { position: absolute; bottom: calc(100% + 12px); right: 0; min-width: 240px;
+  max-width: calc(100vw - 20px);
+  background: var(--ui-surface-solid); backdrop-filter: blur(10px);
+  border: 1px solid var(--ui-hairline); border-radius: 14px; padding: 6px;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .7); z-index: 42;
+  font-size: calc(14px * var(--ui-scale)); }
+.deck-root .menu-item { display: flex; align-items: center; gap: 12px; width: 100%;
+  min-height: var(--ctrl-target); padding: 0 12px;
+  border: 0; border-radius: 9px; background: transparent; color: var(--ui-text);
+  font-size: inherit; cursor: pointer; text-align: left; white-space: nowrap; }
+.deck-root .menu-item:hover, .deck-root .menu-item:focus-visible { background: var(--ui-hover); }
+.deck-root .menu-item:disabled { opacity: .4; cursor: default; }
+.deck-root .menu-item svg { flex: none; }
+.deck-root .menu-item-label { flex: 1; }
+.deck-root .menu-item-check { color: var(--cyan); }
+.deck-root .deck-menu-enter-active, .deck-root .deck-menu-leave-active { transition: opacity .15s ease, transform .15s ease; }
+.deck-root .deck-menu-enter-from, .deck-root .deck-menu-leave-to { opacity: 0; transform: translateY(6px); }
 
-/* ---------- responsividade da barra ---------- */
-@media (max-width: 640px) {
-  .deck-root .controls { gap: 8px; padding: 7px 12px; bottom: 14px; max-width: calc(100vw - 20px); }
-  .deck-root .controls .dots-nav { display: none; }
-  .deck-root .controls button, .deck-root .controls a { padding: 3px; }
-  .deck-root .controls button svg, .deck-root .controls a svg { width: 22px; height: 22px; }
-  .deck-root .counter { font-size: 11px; min-width: 50px; }
-  .deck-root .help { top: 12px; right: 12px; }
-  .deck-root .help-btn svg { width: 22px; height: 22px; }
+/* ---------- painel de ajuda (popover acima da toolbar) ---------- */
+.deck-root .help-panel { position: fixed; bottom: calc(var(--controls-bottom) + var(--ctrl-target) + 24px); left: 50%; transform: translateX(-50%);
+  width: min(340px, calc(100vw - 24px)); max-height: calc(100vh - 140px); overflow-y: auto; z-index: 41;
+  background: var(--ui-surface-solid); backdrop-filter: blur(10px); border: 1px solid var(--ui-hairline); border-radius: 14px;
+  padding: 16px 18px; color: var(--ui-text); box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .7);
+  font-size: calc(13px * var(--ui-scale)); }
+.deck-root .help-panel .help-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: calc(14px * var(--ui-scale)); margin: 0 0 10px; }
+.deck-root .help-panel ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.deck-root .help-panel li { font-size: inherit; line-height: 1.35; color: var(--ui-text-dim); padding-left: 14px; position: relative; }
+.deck-root .help-panel li::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); }
+.deck-root .help-panel .help-note { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--ui-hairline);
+  font-size: calc(12px * var(--ui-scale)); line-height: 1.45; color: var(--ui-text-faint); }
+
+/* ---------- responsividade da interface (só chrome; o palco não muda) ---------- */
+@media (max-width: 480px) {
+  .deck-root { --controls-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .deck-root .controls { gap: 2px; padding: 4px 8px; }
+  .deck-root .counter { font-size: 11px; min-width: 46px; }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .deck-root { --controls-bottom: calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .deck-root .help-panel { max-height: calc(100vh - 90px); }
 }
 
 /* ---------- overlay de exportação em PDF ---------- */
 .deck-root .deck-export-overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
   background: var(--bg-deep, #070D18); }
 .deck-root .deck-export-card { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 30px 40px;
-  border-radius: 16px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .6); }
-.deck-root .deck-export-spinner { width: 38px; height: 38px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .2);
+  margin: 16px; max-width: calc(100vw - 32px);
+  border-radius: 16px; background: var(--ui-hover); border: 1px solid var(--ui-hairline); box-shadow: 0 20px 60px -20px rgba(0, 0, 0, .6); }
+.deck-root .deck-export-spinner { width: 38px; height: 38px; border-radius: 50%; border: 3px solid var(--ui-hairline);
   border-top-color: var(--cyan); animation: deck-export-spin .8s linear infinite; }
-.deck-root .deck-export-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
-.deck-root .deck-export-progress { font-size: 13px; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, .7); }
+.deck-root .deck-export-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: var(--text); }
+.deck-root .deck-export-progress { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text2); }
 @keyframes deck-export-spin { to { transform: rotate(360deg); } }
 
 /* ---------- presenter mode (DeckNotes) ---------- */
 .deck-root .presenter { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; gap: 20px; align-items: flex-start;
-  background: rgba(7, 13, 24, .96); backdrop-filter: blur(10px); border-top: 1px solid rgba(143, 163, 191, .25);
-  padding: 14px 22px 16px; color: #fff; max-height: 34vh; overflow: hidden; }
+  background: var(--ui-surface-solid); backdrop-filter: blur(10px); border-top: 1px solid var(--ui-hairline);
+  padding: 14px 22px 16px; color: var(--ui-text); max-height: 34vh; overflow: hidden; }
 .deck-root .presenter .pr-main { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(34vh - 30px); }
 .deck-root .presenter .pr-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
 .deck-root .presenter .pr-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: var(--cyan); }
 .deck-root .presenter .pr-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2); }
-.deck-root .presenter .pr-notes { font-size: 13.5px; line-height: 1.5; color: rgba(255, 255, 255, .88); white-space: pre-wrap; }
-.deck-root .presenter .pr-side { width: 240px; flex: none; border-left: 1px solid rgba(143, 163, 191, .2); padding-left: 18px; }
+.deck-root .presenter .pr-notes { font-size: 13.5px; line-height: 1.5; color: var(--ui-text-dim); white-space: pre-wrap; }
+.deck-root .presenter .pr-side { width: 240px; flex: none; border-left: 1px solid var(--ui-hairline); padding-left: 18px; }
 .deck-root .presenter .pr-next-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text2); margin-bottom: 5px; }
-.deck-root .presenter .pr-next { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: rgba(255, 255, 255, .85); line-height: 1.3; }
+.deck-root .presenter .pr-next { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: var(--ui-text-dim); line-height: 1.3; }
 .deck-root .presenter .pr-timer { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--coral); margin-top: 12px; font-variant-numeric: tabular-nums; }
+
+/* Presenter em telas pequenas: empilha notas e coluna lateral. */
+@media (max-width: 640px) {
+  .deck-root .presenter { flex-direction: column; gap: 8px; padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .deck-root .presenter .pr-side { width: 100%; border-left: 0; padding-left: 0;
+    border-top: 1px solid var(--ui-hairline); padding-top: 8px;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .deck-root .presenter .pr-timer { margin-top: 0; font-size: 18px; }
+}
 
 /* ---------- acessibilidade: respeitar redução de movimento ---------- */
 @media (prefers-reduced-motion: reduce) {
   .deck-root .slide, .deck-root .slide.active,
-  .deck-root .r, .deck-root .dstep, .deck-root .kw { transition-duration: .001s !important; }
+  .deck-root .r, .deck-root .dstep, .deck-root .kw,
+  .deck-root .deck-menu-enter-active, .deck-root .deck-menu-leave-active { transition-duration: .001s !important; }
 }

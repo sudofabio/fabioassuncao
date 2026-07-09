@@ -44,7 +44,7 @@ const cenas = [
 <style scoped>
 .s-title { font-size: 42px; margin-top: 10px; }
 .coral-eyebrow { color: var(--coral); }
-.destaque { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 10px 18px; border-radius: 40px; background: rgba(242, 118, 46, 0.08); border: 1px solid rgba(242, 118, 46, 0.3); color: var(--coral); font-size: 16px; white-space: nowrap; width: fit-content; }
+.destaque { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 10px 18px; border-radius: 40px; background: color-mix(in srgb, var(--coral) 8%, transparent); border: 1px solid color-mix(in srgb, var(--coral) 30%, transparent); color: var(--coral); font-size: 16px; white-space: nowrap; width: fit-content; }
 .destaque b { font-family: 'Space Grotesk', sans-serif; font-size: 19px; }
 .cenas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 44px; }
 .cena { position: relative; display: flex; flex-direction: column; gap: 9px; padding: 26px 20px; }

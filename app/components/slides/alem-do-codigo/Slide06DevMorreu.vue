@@ -44,7 +44,7 @@ const lapides = ['Low-code', 'No-code', 'CMS', 'Website builders', 'Frameworks']
 .grave { position: relative; width: 190px; padding: 30px 18px 22px; text-align: center; background: var(--bg2); border: 1px solid var(--border); border-radius: 60px 60px 10px 10px; }
 .rip { display: block; font-size: 13px; letter-spacing: 0.3em; color: var(--text2); }
 .grave-name { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 19px; margin-top: 10px; }
-.stamp { position: absolute; top: 8px; right: -14px; padding: 3px 10px; border: 2px solid var(--red); color: var(--red); font-size: 11px; letter-spacing: 0.12em; border-radius: 4px; transform: rotate(12deg); background: rgba(232, 93, 76, 0.08); }
+.stamp { position: absolute; top: 8px; right: -14px; padding: 3px 10px; border: 2px solid var(--red); color: var(--red); font-size: 11px; letter-spacing: 0.12em; border-radius: 4px; transform: rotate(12deg); background: color-mix(in srgb, var(--red) 8%, transparent); }
 .synth { margin-top: 64px; text-align: center; }
 .synth-text { font-size: 36px; line-height: 1.3; font-weight: 500; }
 </style>

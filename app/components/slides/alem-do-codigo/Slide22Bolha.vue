@@ -5,8 +5,8 @@
   <DeckSlide :title="nota.title" :notes="nota.notes">
     <!-- bolha que cresce devagar e NÃO estoura -->
     <svg class="bolha" viewBox="0 0 300 300" aria-hidden="true">
-      <circle cx="150" cy="150" r="120" fill="none" stroke="#E8B44C" stroke-width="1.5" opacity="0.35" class="b-ring" />
-      <circle cx="150" cy="150" r="120" fill="#E8B44C" opacity="0.05" class="b-ring" />
+      <circle cx="150" cy="150" r="120" fill="none" stroke-width="1.5" opacity="0.35" class="b-ring b-ring-stroke" />
+      <circle cx="150" cy="150" r="120" opacity="0.05" class="b-ring b-ring-fill" />
     </svg>
 
     <DeckReveal :delay="0.05" class="eyebrow amber">a bolha e o modelo econômico delicado</DeckReveal>
@@ -53,16 +53,18 @@ const nota = NOTAS[21]
 
 <style scoped>
 .s-title { font-size: 42px; margin-top: 10px; }
-.amber { color: #E8B44C; }
+.amber { color: var(--amber); }
 .bolha { position: absolute; right: -50px; top: -70px; width: 300px; pointer-events: none; z-index: -1; opacity: 0.65; }
 .b-ring { transform-origin: center; transform: scale(0.85); transition: transform 6s ease-out; }
+.b-ring-stroke { stroke: var(--amber); }
+.b-ring-fill { fill: var(--amber); }
 .slide.active .b-ring { transform: scale(1); }
 .sinais { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 18px; margin-top: 34px; }
 .sinal { display: flex; flex-direction: column; gap: 9px; padding: 22px; }
 .s-icon { margin-bottom: 2px; }
-.amber-i { color: #E8B44C; }
+.amber-i { color: var(--amber); }
 .sinal-quote { font-family: 'Space Grotesk', sans-serif; font-size: 19px; line-height: 1.35; font-weight: 500; }
-.sinal-num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; color: #E8B44C; }
+.sinal-num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 46px; line-height: 1; color: var(--amber); }
 .mes { font-size: 18px; color: var(--text2); font-weight: 500; }
 .sinal-sub { font-size: 13.5px; line-height: 1.45; color: var(--text2); flex: 1; }
 .sinal-sub b { color: var(--text); }

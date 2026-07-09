@@ -54,8 +54,8 @@ const pares = [
 .col-head.hype { color: var(--red); }
 .col-head.real { color: var(--green); }
 .item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 10px; font-size: 17px; line-height: 1.4; }
-.hype-item { background: rgba(232, 93, 76, 0.07); border: 1px solid rgba(232, 93, 76, 0.25); color: var(--text2); font-style: italic; }
-.real-item { background: rgba(62, 207, 142, 0.06); border: 1px solid rgba(62, 207, 142, 0.25); }
+.hype-item { background: color-mix(in srgb, var(--red) 7%, transparent); border: 1px solid color-mix(in srgb, var(--red) 25%, transparent); color: var(--text2); font-style: italic; }
+.real-item { background: color-mix(in srgb, var(--green) 6%, transparent); border: 1px solid color-mix(in srgb, var(--green) 25%, transparent); }
 .x { color: var(--red); flex: none; margin-top: 2px; }
 .check { color: var(--green); flex: none; margin-top: 2px; }
 </style>

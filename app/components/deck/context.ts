@@ -6,9 +6,38 @@ import type { InjectionKey, Ref, ComputedRef } from 'vue'
  * uma apresentação vive aqui (extraível como Nuxt Layer no futuro).
  */
 
-/** Tema de um deck: CSS custom properties aplicadas no palco (.stage). */
+/** Modo de cor do deck. `dark` é a base autoral; `light` é derivado por overrides. */
+export type DeckColorMode = 'dark' | 'light'
+
+/**
+ * Paleta para gráficos ECharts (renderer SVG não resolve `var()` — os valores
+ * precisam ser cores absolutas, escolhidas pelo modo ativo).
+ */
+export interface DeckChartPalette {
+  axisLabel: string
+  axisLine: string
+  splitLine: string
+  /** Cor do fundo do slide (borda/label interno de donuts etc.). */
+  slideBg: string
+  /** Acentos semânticos usados pelas séries. */
+  accents: {
+    muted: string
+    green: string
+    cyan: string
+    coral: string
+    red: string
+    amber: string
+  }
+}
+
+/** Tema de um deck: CSS custom properties aplicadas na raiz (.deck-root). */
 export interface DeckTheme {
+  /** Modo escuro — base e default. */
   vars: Record<string, string>
+  /** Overrides do modo claro (mesclados sobre `vars`). Ausente = deck sem light mode. */
+  lightVars?: Record<string, string>
+  /** Paletas de gráficos por modo. */
+  charts?: Record<DeckColorMode, DeckChartPalette>
 }
 
 /** Metadados que um slide registra na engine (usados pelo presenter mode e autoplay). */

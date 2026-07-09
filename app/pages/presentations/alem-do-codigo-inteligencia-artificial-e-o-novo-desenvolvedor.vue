@@ -2,6 +2,7 @@
   <DeckStage
     ref="deckRef"
     :theme="theme"
+    exit-to="/presentations"
     download-name="alem-do-codigo-ia-e-o-novo-desenvolvedor.pdf"
     aria-label="Além do código: Inteligência artificial e o novo desenvolvedor"
   >
