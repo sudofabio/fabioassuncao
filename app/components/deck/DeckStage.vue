@@ -7,7 +7,7 @@
     aria-roledescription="carousel"
     :aria-label="ariaLabel"
   >
-    <div class="topbar" :class="{ hide: !chromeVisible }" :style="{ width: progressWidth }"></div>
+    <div class="topbar" :class="{ hide: !progressVisible }" :style="{ width: progressWidth }"></div>
 
     <div ref="viewportRef" class="viewport">
       <div ref="stageRef" class="stage" :style="stageStyle" @click="onStageClick">
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles } from 'lucide-vue-next'
+import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles, PanelTop } from 'lucide-vue-next'
 import { DECK_KEY } from './context'
 import DeckNotes from './DeckNotes.vue'
 import DeckMenu from './DeckMenu.vue'
@@ -167,6 +167,8 @@ const presenterOn = computed(() => isMounted.value && route.query.presenter === 
 // nunca a tem (sem mismatch/flash) e removê-la devolve os elementos ao estado
 // base determinístico — exatamente o que o export PDF precisa capturar.
 const { enabled: ambientEnabled, toggle: toggleAmbient } = useDeckAmbient()
+// Visibilidade da barra de progresso — independente dos controles de navegação.
+const { visible: progressVisible, toggle: toggleProgress } = useDeckProgress()
 const ambientOn = computed(() =>
   isMounted.value && ambientEnabled.value && !exporting.value && !reducedMotion.value
 )
@@ -218,6 +220,7 @@ const menuItems = computed(() => {
     },
     { id: 'ambient', label: 'Animações contínuas', icon: Sparkles, checked: ambientEnabled.value },
     { id: 'pin', label: 'Controles sempre visíveis', icon: Pin, checked: pinned.value },
+    { id: 'progress', label: 'Barra de progresso', icon: PanelTop, checked: progressVisible.value },
     { id: 'help', label: 'Atalhos e ajuda', icon: Info },
   ]
   if (props.exitTo) items.push({ id: 'exit', label: 'Sair da apresentação', icon: X })
@@ -229,6 +232,7 @@ function onMenuSelect(id) {
   else if (id === 'pdf') onDownload()
   else if (id === 'ambient') toggleAmbient()
   else if (id === 'pin') pinned.value = !pinned.value
+  else if (id === 'progress') toggleProgress()
   else if (id === 'help') helpOpen.value = true
   else if (id === 'exit') router.push(props.exitTo)
 }
