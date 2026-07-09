@@ -151,6 +151,10 @@ watch(menuOpen, v => { if (v) { slideNavOpen.value = false; helpOpen.value = fal
 watch(slideNavOpen, v => { if (v) { menuOpen.value = false; helpOpen.value = false } })
 const reducedMotion = ref(false)
 const exporting = ref(false)
+// Sinaliza "completar o slide atual agora": revela todos os steps ao estado
+// final. Só o GSAP o honra (salta a sequência longa em vez de tweenar); CSS,
+// contadores e gráficos reagem ao stepIndex com sua entrada rápida normal.
+const snapSteps = ref(false)
 
 // Presenter mode via ?presenter=1 (client-only: o painel tem timer e não
 // deve entrar no HTML prerenderizado — evita hydration mismatch).
@@ -284,6 +288,7 @@ provide(DECK_KEY, {
   reducedMotion,
   exporting,
   ambientOn,
+  snapSteps,
   registerTimeline,
   registerChart,
 })
@@ -316,14 +321,36 @@ function go(n, step = 0) {
   syncSlideToUrl()
 }
 
+// Autoplay: se o slide ainda não revelou todos os steps, o 1º avanço completa
+// o slide (revela tudo agora, cancelando a espera dos timers) em vez de pular;
+// só um novo avanço, com o slide já cheio, troca de slide. Evita pular
+// conteúdo por acidente. GSAP longo salta ao fim; CSS/contadores/gráficos
+// fazem sua entrada rápida.
+function completeCurrentSlide() {
+  stopAutoplay()
+  navDirection.value = 1
+  snapSteps.value = true
+  stepIndex.value = stepsOf(slideIndex.value)
+  syncSlideToUrl()
+  nextTick(() => { snapSteps.value = false })
+}
+
 function next() {
-  if (!autoplayOn.value && stepIndex.value < stepsOf(slideIndex.value)) {
-    navDirection.value = 1
-    stepIndex.value++
-    syncSlideToUrl()
-  } else if (slideIndex.value < total.value - 1) {
-    go(slideIndex.value + 1)
+  const pending = stepIndex.value < stepsOf(slideIndex.value)
+  // Modo manual (?manual=1 / :autoplay="false"): um step por avanço (inalterado).
+  if (!autoplayOn.value) {
+    if (pending) {
+      navDirection.value = 1
+      stepIndex.value++
+      syncSlideToUrl()
+    } else if (slideIndex.value < total.value - 1) {
+      go(slideIndex.value + 1)
+    }
+    return
   }
+  // Modo autoplay (padrão): 1º avanço completa o slide; 2º troca de slide.
+  if (pending) { completeCurrentSlide(); return }
+  if (slideIndex.value < total.value - 1) go(slideIndex.value + 1)
 }
 
 function prev() {

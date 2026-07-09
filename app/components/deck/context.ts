@@ -92,6 +92,13 @@ export interface DeckContext {
    * `.deck-root`; este computed existe para loops dirigidos por JS/GSAP.
    */
   ambientOn: ComputedRef<boolean>
+  /**
+   * Pedido transiente de "revelar os steps do slide atual ao estado final sem
+   * animar", disparado ao completar o slide via avanço. Só o GSAP o honra
+   * (salto instantâneo em vez de tween); contadores/gráficos/CSS mantêm sua
+   * animação de entrada rápida normal.
+   */
+  snapSteps: Ref<boolean>
   /** Registra uma timeline GSAP; devolve a função de desregistro. */
   registerTimeline: (handle: DeckTimelineHandle) => () => void
   /** Registra um gráfico ECharts; devolve a função de desregistro. */

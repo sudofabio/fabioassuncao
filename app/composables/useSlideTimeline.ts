@@ -50,7 +50,7 @@ export function useSlideTimeline(
     build(tl)
     tlRef.value = tl
 
-    const still = () => deck.reducedMotion.value || deck.exporting.value
+    const still = () => deck.reducedMotion.value || deck.exporting.value || deck.snapSteps.value
 
     const enter = () => {
       if (still() || deck.navDirection.value === -1) { tl.progress(1).pause(); return }
