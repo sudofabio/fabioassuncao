@@ -23,7 +23,7 @@
     <DeckStep :at="4" class="motivos deck-card">
       <b class="motivos-title">Por que recontrataram?</b>
       <div v-for="m in MOTIVOS_RECONTRATACAO" :key="m.rotulo" class="motivo">
-        <span class="motivo-valor mono">{{ m.valor }}%</span>
+        <span class="motivo-valor mono"><DeckCounter :to="m.valor" suffix="%" :at="4" :duration="1000" /></span>
         <span class="motivo-track"><i :style="{ width: `${m.valor}%` }"></i></span>
         <span class="motivo-label">{{ m.rotulo }}</span>
       </div>
@@ -60,7 +60,10 @@ const nota = NOTAS[19]
 .motivo { display: grid; grid-template-columns: 52px 180px 1fr; gap: 12px; align-items: center; }
 .motivo-valor { font-size: 15px; color: var(--coral); font-weight: 500; }
 .motivo-track { height: 8px; background: var(--bg); border-radius: 6px; overflow: hidden; }
-.motivo-track i { display: block; height: 100%; background: var(--coral); border-radius: 6px; opacity: 0.85; }
+/* barra cresce de scaleX(0)→scaleX(1) quando o step 4 revela (width inline = tamanho final;
+   o scale anima por cima, sem tocar layout). Mesmo easeOutCubic do DeckCounter que acompanha. */
+.motivo-track i { display: block; height: 100%; background: var(--coral); border-radius: 6px; opacity: 0.85; transform: scaleX(0); transform-origin: left; transition: transform 1s cubic-bezier(0.33, 1, 0.68, 1); }
+.dstep.on .motivo-track i { transform: scaleX(1); }
 .motivo-label { font-size: 13.5px; color: var(--text2); }
-@media (prefers-reduced-motion: reduce) { .dstep.on .boomerang { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .dstep.on .boomerang { animation: none; } .motivo-track i { transition-duration: .001s; } }
 </style>

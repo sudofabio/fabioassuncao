@@ -2,7 +2,7 @@
   <div
     ref="rootRef"
     class="deck-root"
-    :class="{ 'with-presenter': presenterOn }"
+    :class="{ 'with-presenter': presenterOn, 'ambient-on': ambientOn }"
     role="region"
     aria-roledescription="carousel"
     :aria-label="ariaLabel"
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon } from 'lucide-vue-next'
+import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles } from 'lucide-vue-next'
 import { DECK_KEY } from './context'
 import DeckNotes from './DeckNotes.vue'
 import DeckMenu from './DeckMenu.vue'
@@ -157,6 +157,16 @@ const exporting = ref(false)
 const isMounted = ref(false)
 const presenterOn = computed(() => isMounted.value && route.query.presenter === '1')
 
+// ---------- animações ambient (loops contínuos dos slides) ----------
+// A classe `.ambient-on` no .deck-root é o gate CSS de todo loop infinito dos
+// slides (convenção em deck.css). Aditiva e só pós-mount: o HTML prerenderizado
+// nunca a tem (sem mismatch/flash) e removê-la devolve os elementos ao estado
+// base determinístico — exatamente o que o export PDF precisa capturar.
+const { enabled: ambientEnabled, toggle: toggleAmbient } = useDeckAmbient()
+const ambientOn = computed(() =>
+  isMounted.value && ambientEnabled.value && !exporting.value && !reducedMotion.value
+)
+
 // Painel de ajuda adaptado ao dispositivo.
 const isTouch = ref(false)
 const isFullscreen = ref(false)
@@ -202,6 +212,7 @@ const menuItems = computed(() => {
       icon: Download,
       disabled: exporting.value,
     },
+    { id: 'ambient', label: 'Animações contínuas', icon: Sparkles, checked: ambientEnabled.value },
     { id: 'pin', label: 'Controles sempre visíveis', icon: Pin, checked: pinned.value },
     { id: 'help', label: 'Atalhos e ajuda', icon: Info },
   ]
@@ -212,6 +223,7 @@ const menuItems = computed(() => {
 function onMenuSelect(id) {
   if (id === 'fullscreen') toggleFullscreen()
   else if (id === 'pdf') onDownload()
+  else if (id === 'ambient') toggleAmbient()
   else if (id === 'pin') pinned.value = !pinned.value
   else if (id === 'help') helpOpen.value = true
   else if (id === 'exit') router.push(props.exitTo)
@@ -271,6 +283,7 @@ provide(DECK_KEY, {
   navDirection,
   reducedMotion,
   exporting,
+  ambientOn,
   registerTimeline,
   registerChart,
 })
@@ -506,6 +519,10 @@ function onFullscreenChange() { isFullscreen.value = !!document.fullscreenElemen
 let narrowMq = null
 function onNarrowChange(e) { isNarrow.value = e.matches }
 
+let motionMq = null
+// Não sobrescrever durante o export (ele força reducedMotion=true e restaura depois).
+function onMotionChange(e) { if (!exporting.value) reducedMotion.value = e.matches }
+
 function onKeydown(e) {
   if (e.key.toLowerCase() === 'm' && !exporting.value) { e.preventDefault(); menuOpen.value = !menuOpen.value; return }
   if (e.key.toLowerCase() === 'g' && !exporting.value) { e.preventDefault(); slideNavOpen.value = !slideNavOpen.value; return }
@@ -535,7 +552,9 @@ onMounted(() => {
   isMounted.value = true
   total.value = registry.length
   restoreSlideFromUrl()
-  reducedMotion.value = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  motionMq = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null
+  reducedMotion.value = motionMq?.matches ?? false
+  motionMq?.addEventListener('change', onMotionChange)
   startAutoplay()
   isTouch.value = window.matchMedia?.('(hover: none) and (pointer: coarse)').matches ?? false
   isFullscreen.value = !!document.fullscreenElement
@@ -565,6 +584,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('pointerdown', onDocPointerDown)
   document.removeEventListener('fullscreenchange', onFullscreenChange)
   narrowMq?.removeEventListener('change', onNarrowChange)
+  motionMq?.removeEventListener('change', onMotionChange)
 })
 </script>
 

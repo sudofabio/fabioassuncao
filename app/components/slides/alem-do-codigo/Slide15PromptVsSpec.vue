@@ -15,7 +15,7 @@
           <XCircle :size="15" class="term-mark bad" />
         </div>
         <div class="term-body mono">
-          <p class="cmd-line">&gt; <span ref="typedCruRef"></span><span class="caret" aria-hidden="true">▌</span></p>
+          <p class="cmd-line">&gt; <span ref="typedCruRef"></span><span class="caret" :class="{ typing }" aria-hidden="true">▌</span></p>
           <div ref="outCruRef" class="out">
             <p v-for="r in PROMPT_CRU.resultado" :key="r" class="out-line bad-line">✗ {{ r }}</p>
             <p class="veredito bad-v">{{ PROMPT_CRU.veredito }}</p>
@@ -39,6 +39,7 @@
           <div ref="outSpecRef" class="out">
             <p v-for="r in SPEC_ESTRUTURADA.resultado" :key="r" class="out-line good-line">✓ {{ r }}</p>
             <p class="veredito good-v">{{ SPEC_ESTRUTURADA.veredito }}</p>
+            <p class="cmd-line">&gt; <span class="caret" aria-hidden="true">▌</span></p>
           </div>
         </div>
       </DeckReveal>
@@ -62,6 +63,9 @@ const outCruRef = ref(null)
 const outSpecRef = ref(null)
 const specRefs = []
 
+// Caret sólido enquanto o typewriter digita; volta a piscar (ambient) ao terminar.
+const typing = ref(false)
+
 useSlideTimeline((tl) => {
   tl.addLabel('step-0')
   // pausa deslocada de t=0: GSAP pula addPause exatamente na origem do play
@@ -73,7 +77,9 @@ useSlideTimeline((tl) => {
     n: texto.length,
     duration: 1.1,
     ease: 'none',
+    onStart() { typing.value = true },
     onUpdate() { if (typedCruRef.value) typedCruRef.value.textContent = texto.slice(0, Math.round(typed.n)) },
+    onComplete() { typing.value = false },
   })
   tl.addLabel('step-1')
   tl.addPause()
@@ -119,4 +125,9 @@ useSlideTimeline((tl) => {
 .spec-line { opacity: 0; font-size: 13px; color: var(--text); }
 .spec-key { color: var(--cyan); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Ambient: carets piscando nos dois terminais (estado base = sólido p/ export). */
+.deck-root.ambient-on .slide.active .caret { animation: amb-blink 1.1s linear infinite; }
+/* Enquanto o typewriter digita, o caret do prompt cru fica sólido (terminal real). */
+.deck-root.ambient-on .slide.active .caret.typing { animation: none; }
 </style>

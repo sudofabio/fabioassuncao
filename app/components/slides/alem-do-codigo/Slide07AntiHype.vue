@@ -58,4 +58,7 @@ const pares = [
 .real-item { background: color-mix(in srgb, var(--green) 6%, transparent); border: 1px solid color-mix(in srgb, var(--green) 25%, transparent); }
 .x { color: var(--red); flex: none; margin-top: 2px; }
 .check { color: var(--green); flex: none; margin-top: 2px; }
+
+/* ambient: sheen sutil no divisor diagonal (respiração de opacity, sem repaint). */
+.deck-root.ambient-on .slide.active .divider { --amb-o2: 0.45; animation: amb-pulse 5s ease-in-out infinite; }
 </style>

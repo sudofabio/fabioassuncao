@@ -64,4 +64,16 @@ useSlideTimeline((tl) => {
 .word { display: inline-block; opacity: 0; }
 .governa { color: var(--coral); text-shadow: 0 0 30px color-mix(in srgb, var(--coral) 40%, transparent); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ---- ambient (só no slide ativo, ambient ON) ---- */
+/* pulso escalonado dos pontos da malha (eco da capa) */
+.deck-root.ambient-on .slide.active .mesh-dots circle { animation: amb-pulse 6s ease-in-out infinite; --amb-o1: 1; --amb-o2: .35; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(2) { animation-delay: 1.5s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(3) { animation-delay: 3s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(4) { animation-delay: 4.5s; }
+/* glow respirante nas palavras coral do fecho — filter não conflita com opacity/y inline do GSAP;
+   delays escalonados entre as 3 palavras (que / a / governa). */
+.deck-root.ambient-on .slide.active .word.governa { animation: amb-glow 5s ease-in-out infinite; --amb-bright: 1.4; }
+.deck-root.ambient-on .slide.active .word.governa:nth-last-of-type(2) { animation-delay: .5s; }
+.deck-root.ambient-on .slide.active .word.governa:nth-last-of-type(1) { animation-delay: 1s; }
 </style>

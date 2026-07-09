@@ -116,6 +116,30 @@ html.deck-light .deck-root {
 /* ---------- card base ---------- */
 .deck-root .deck-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
 
+/* ---------- ambient (animações contínuas pós-carregamento) ----------
+   CONVENÇÃO: o estado base de um elemento NUNCA declara animation de loop.
+   Todo loop infinito vive atrás do guard duplo
+
+     .deck-root.ambient-on .slide.active .minha-anim { animation: ... infinite; }
+
+   A engine (DeckStage) remove `.ambient-on` em export PDF, reduced motion e
+   quando o usuário desliga "Animações contínuas" no menu ⋮ — o elemento volta
+   ao estado base determinístico (snapdom captura o base, nunca frame aleatório).
+   O guard `.slide.active` evita 26 slides animando ao mesmo tempo (slides
+   inativos ficam montados com visibility:hidden, mas animações rodariam).
+   Regra de ouro: `infinite` só pode aparecer numa regra que começa com
+   `.deck-root.ambient-on .slide.active` (única exceção: o spinner do overlay
+   de export, que é chrome fora do palco).
+   Keyframes utilitários (parametrizáveis por CSS vars no elemento): */
+@keyframes amb-glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(var(--amb-bright, 1.25)); } }
+@keyframes amb-pulse { 0%, 100% { opacity: var(--amb-o1, 1); } 50% { opacity: var(--amb-o2, .55); } }
+@keyframes amb-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(var(--amb-y, -4px)); } }
+@keyframes amb-dash { to { stroke-dashoffset: var(--amb-dash-to, -64); } }
+@keyframes amb-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+/* Palavra-chave acesa que continua "respirando" (brilho sobe e desce). */
+.deck-root.ambient-on .slide.active .kw-live { animation: amb-glow 4.5s ease-in-out infinite; }
+
 /* ---------- controls (toolbar) ---------- */
 .deck-root .controls { position: fixed; left: 50%; bottom: var(--controls-bottom); transform: translateX(-50%);
   display: flex; align-items: center; gap: calc(6px * var(--ui-scale));

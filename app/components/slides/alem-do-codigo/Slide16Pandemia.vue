@@ -61,4 +61,15 @@ const nota = NOTAS[15]
 .stat-label b { color: var(--text); }
 .foot { margin-top: 44px; font-size: 19px; color: var(--text2); text-align: center; }
 .foot b { color: var(--coral); }
+
+/* Ambient: a linha ascendente respira e o ícone Flame tremeluz ("mercado ferveu"). */
+.deck-root.ambient-on .slide.active .spark path { --amb-o1: .15; --amb-o2: .08; animation: amb-pulse 6s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .stat-icon.coral { animation: flame-flicker 3s ease-in-out infinite; }
+@keyframes flame-flicker {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  20% { opacity: 0.85; filter: brightness(1.15); }
+  45% { opacity: 1; filter: brightness(0.95); }
+  60% { opacity: 0.9; filter: brightness(1.2); }
+  80% { opacity: 0.95; filter: brightness(1.05); }
+}
 </style>

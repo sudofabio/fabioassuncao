@@ -86,6 +86,12 @@ export interface DeckContext {
   reducedMotion: Ref<boolean>
   /** Export PDF em andamento — steps todos revelados, animações no estado final. */
   exporting: Ref<boolean>
+  /**
+   * Loops ambient (animações contínuas) permitidos — ligado pelo usuário e
+   * sem export/reduced-motion. Em CSS o gate é a classe `.ambient-on` no
+   * `.deck-root`; este computed existe para loops dirigidos por JS/GSAP.
+   */
+  ambientOn: ComputedRef<boolean>
   /** Registra uma timeline GSAP; devolve a função de desregistro. */
   registerTimeline: (handle: DeckTimelineHandle) => () => void
   /** Registra um gráfico ECharts; devolve a função de desregistro. */

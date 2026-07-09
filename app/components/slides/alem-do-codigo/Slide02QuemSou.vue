@@ -68,4 +68,11 @@ const pilares = [
 .pillar-icon { color: var(--text2); }
 .pillar-title { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 17px; margin-top: 10px; }
 .pillar-desc { display: block; font-size: 13.5px; color: var(--text2); margin-top: 4px; }
+
+/* ambient: os nós ciano respiram (brilho escalonado). O glow é box-shadow —
+   animado via filter brightness (amb-glow), não via box-shadow. */
+.deck-root.ambient-on .slide.active .node { --amb-bright: 1.5; animation: amb-glow 5s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .pillar:nth-child(3) .node { animation-delay: -1.25s; }
+.deck-root.ambient-on .slide.active .pillar:nth-child(4) .node { animation-delay: -2.5s; }
+.deck-root.ambient-on .slide.active .pillar:nth-child(5) .node { animation-delay: -3.75s; }
 </style>

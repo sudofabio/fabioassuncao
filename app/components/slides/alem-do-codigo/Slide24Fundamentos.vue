@@ -17,7 +17,7 @@
               :alt="f.nome"
               class="cycle-logo"
               :class="{ last: i === LOGOS_FERRAMENTAS_PIRAMIDE.length - 1 }"
-              :style="{ animationDelay: `${i * 1.4}s` }"
+              :style="{ animationDelay: `${(i - LOGOS_FERRAMENTAS_PIRAMIDE.length) * 1.4}s` }"
             />
           </div>
         </div>
@@ -62,13 +62,16 @@ const fundamentos = [
 .topo { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .topo-shape { width: 300px; height: 110px; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: var(--bg2); border: 1px dashed var(--border); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px; }
 .logo-cycle { position: relative; width: 46px; height: 46px; }
-/* ciclo FINITO de logos: cada um aparece 1,4s e cede lugar; o último permanece.
-   A animação só dispara quando o step revela o topo (.dstep.on). */
+/* Estado base (export / ambient-off / reduced): só o último logo visível, estático —
+   é o mesmo frame final do ciclo antigo. */
 .cycle-logo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
-.dstep.on .cycle-logo { animation: cameo 1.4s ease forwards; /* delay via style inline */ }
-.dstep.on .cycle-logo.last { animation-name: cameo-final; }
-@keyframes cameo { 0% { opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes cameo-final { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 1; } }
+.cycle-logo.last { opacity: 1; }
+/* Com ambient ON: ciclo CONTÍNUO — um logo por vez, loop infinito (N=5 logos → 7s,
+   janela de visibilidade de 1/5 do ciclo). Os delays NEGATIVOS inline ((i-N)*1,4s)
+   deixam todas as animações já em andamento desde t=0: nunca há um intervalo sem
+   animação ativa, então o estado base (.last visível) jamais vaza durante o loop. */
+.deck-root.ambient-on .slide.active .dstep.on .cycle-logo { animation: cameo-loop 7s linear infinite; }
+@keyframes cameo-loop { 0% { opacity: 0; } 3% { opacity: 1; } 17% { opacity: 1; } 20% { opacity: 0; } 100% { opacity: 0; } }
 .topo-label { font-size: 14px; color: var(--text2); }
 .topo-label b { color: var(--text); }
 .base { display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -79,5 +82,6 @@ const fundamentos = [
 .base-label b { color: var(--cyan); }
 .foot { margin-top: 30px; text-align: center; font-size: 18px; color: var(--text2); max-width: 860px; margin-left: auto; margin-right: auto; }
 .foot b { color: var(--text); }
-@media (prefers-reduced-motion: reduce) { .cycle-logo { animation: none; opacity: 0; } .cycle-logo.last { opacity: 1; } }
+/* reduced-motion não precisa de regra própria: o gate ambient já desliga o loop e o
+   estado base (.cycle-logo opacity:0 / .last opacity:1) é exatamente o alvo. */
 </style>

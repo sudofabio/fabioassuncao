@@ -67,4 +67,7 @@ const nota = NOTAS[8]
 .logo-name { font-size: 15.5px; font-weight: 600; }
 .foot { margin-top: 40px; text-align: center; font-size: 19px; color: var(--text2); }
 .foot b { color: var(--coral); }
+
+/* ambient: mesmo sheen do slide 07 no divisor diagonal. */
+.deck-root.ambient-on .slide.active .divider { --amb-o2: 0.45; animation: amb-pulse 5s ease-in-out infinite; }
 </style>

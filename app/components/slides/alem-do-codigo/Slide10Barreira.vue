@@ -78,4 +78,8 @@ const nota = NOTAS[9]
 .drop { color: var(--red); padding-bottom: 110px; }
 .foot { margin-top: 34px; font-size: 19px; color: var(--text2); text-align: center; }
 .foot b { color: var(--text); }
+
+/* ambient: pulso de glow na barra "HOJE" (o punchline coral). filter brightness
+   pulsa o box-shadow junto; não toca no scaleY das barras. */
+.deck-root.ambient-on .slide.active .b-hoje { --amb-bright: 1.4; animation: amb-glow 4s ease-in-out infinite; }
 </style>

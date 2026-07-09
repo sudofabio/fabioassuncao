@@ -24,7 +24,7 @@
     <DeckStep :at="2" class="synth">
       <p class="title synth-text">
         A tecnologia não elimina a profissão.<br />
-        Ela <span class="kw kw-cyan" style="--kd: .3s">eleva o nível de abstração</span>.
+        Ela <span class="kw kw-cyan kw-live" style="--kd: .3s">eleva o nível de abstração</span>.
       </p>
     </DeckStep>
   </DeckSlide>

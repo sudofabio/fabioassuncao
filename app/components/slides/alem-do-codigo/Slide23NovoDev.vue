@@ -54,6 +54,8 @@ const nota = NOTAS[22]
 .antes { opacity: 0.9; }
 .antes .p-title { color: var(--text2); }
 .depois { border-color: color-mix(in srgb, var(--coral) 45%, transparent); box-shadow: 0 0 40px -18px color-mix(in srgb, var(--coral) 50%, transparent); }
+/* card-destino respira um glow coral suave (brightness sobe leve — inclui o box-shadow) */
+.deck-root.ambient-on .slide.active .depois { animation: amb-glow 6s ease-in-out infinite; --amb-bright: 1.12; }
 .p-icon { color: var(--text2); }
 .p-icon.coral { color: var(--coral); }
 .p-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; }
@@ -64,6 +66,9 @@ const nota = NOTAS[22]
 .depois li b { color: var(--text); }
 .transform { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--coral); }
 .transform .mono { font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text2); }
+/* seta MoveRight ganha um nudge horizontal sutil, apontando para o card-destino */
+.deck-root.ambient-on .slide.active .transform svg { animation: arrow-nudge 2.8s ease-in-out infinite; }
+@keyframes arrow-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
 .foot { margin-top: 38px; text-align: center; font-size: 18.5px; color: var(--text2); }
 .foot b { color: var(--coral); }
 </style>

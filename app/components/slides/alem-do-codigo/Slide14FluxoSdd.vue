@@ -59,6 +59,17 @@ const etapas = [
 .connector { display: flex; align-items: center; padding: 0 4px; }
 .conn-line { display: block; width: 22px; height: 2px; background: var(--cyan); opacity: 0.55; position: relative; }
 .conn-line::after { content: ''; position: absolute; right: -1px; top: -3.5px; border-left: 7px solid var(--cyan); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; opacity: 0.8; }
+/* Pulso de fluxo que corre pela linha no sentido do pipeline (ambient). */
+.conn-line::before { content: ''; position: absolute; left: 0; top: 0; width: 8px; height: 100%; background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: 0; will-change: transform; }
 .foot { margin-top: 42px; text-align: center; font-size: 20px; color: var(--text2); }
 .foot b { color: var(--coral); }
+
+/* Ambient: o fluxo "corre" pelos conectores do pipeline (só no slide ativo). */
+.deck-root.ambient-on .slide.active .conn-line::before { animation: conn-flow 2.5s linear infinite; }
+@keyframes conn-flow {
+  0% { transform: translateX(-8px); opacity: 0; }
+  30% { opacity: 0.9; }
+  70% { opacity: 0.9; }
+  100% { transform: translateX(22px); opacity: 0; }
+}
 </style>

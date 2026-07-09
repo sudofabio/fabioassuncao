@@ -59,6 +59,10 @@ const nota = NOTAS[21]
 .b-ring-stroke { stroke: var(--amber); }
 .b-ring-fill { fill: var(--amber); }
 .slide.active .b-ring { transform: scale(1); }
+/* pulso respirante contínuo — a bolha "infla" sem estourar. animation-delay: 6s espera
+   a transition de entrada (scale .85→1, 6s) terminar; parte de scale(1), preserva a entrada. */
+.deck-root.ambient-on .slide.active .b-ring { animation: b-breathe 7s ease-in-out 6s infinite; }
+@keyframes b-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
 .sinais { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 18px; margin-top: 34px; }
 .sinal { display: flex; flex-direction: column; gap: 9px; padding: 22px; }
 .s-icon { margin-bottom: 2px; }

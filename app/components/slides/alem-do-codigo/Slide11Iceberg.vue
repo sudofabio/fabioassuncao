@@ -112,4 +112,13 @@ useSlideTimeline((tl) => {
 .foot { text-align: center; font-size: 20px; color: var(--text2); margin-top: 18px; opacity: 0; }
 .foot b { color: var(--coral); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ambient: o iceberg flutua suavemente. O GSAP move a .scene (pai), nunca o
+   .berg — mas o .berg tem transform próprio (translateX(-50%)); por isso os
+   keyframes o preservam em todos os frames (amb-float sobrescreveria o centro).
+   A linha d'água (tracejado 8 8, período 16) corre com amb-dash: -64 é múltiplo
+   do período → loop perfeito. */
+@keyframes berg-float { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-4px); } }
+.deck-root.ambient-on .slide.active .berg { animation: berg-float 7s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .berg-water { animation: amb-dash 6s linear infinite; }
 </style>

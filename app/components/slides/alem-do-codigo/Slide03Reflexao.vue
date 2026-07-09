@@ -66,4 +66,9 @@ useSlideTimeline((tl) => {
 .accent { color: var(--coral); text-shadow: 0 0 26px color-mix(in srgb, var(--coral) 35%, transparent); }
 .foot { font-size: 20px; color: var(--text2); margin-top: 22px; opacity: 0; }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ambient: glow respirante no coral aceso; seta com bob vertical sutil.
+   O GSAP entrega a seta em y=0 (transform base coincide) — amb-float é seguro. */
+.deck-root.ambient-on .slide.active .accent { animation: amb-glow 4.5s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .arrow { --amb-y: -3px; animation: amb-float 4s ease-in-out infinite; }
 </style>

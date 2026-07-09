@@ -84,8 +84,19 @@ html.deck-light .ifma { filter: brightness(0) opacity(0.8); }
 .contato-icon { color: var(--cyan); }
 .qr-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 /* Fundo/foreground do QR são fixos (contraste de leitura inegociável nos dois temas). */
-.qr-card { background: #F2F5F9; padding: 18px; border-radius: 16px; box-shadow: 0 0 60px -12px color-mix(in srgb, var(--cyan) 45%, transparent); }
+.qr-card { position: relative; background: #F2F5F9; padding: 18px; border-radius: 16px; box-shadow: 0 0 60px -12px color-mix(in srgb, var(--cyan) 45%, transparent); }
 html.deck-light .qr-card { border: 1px solid var(--border); }
+/* halo ciano respirante ATRÁS do card (z-index:-1): só o box-shadow extravasa como brilho.
+   Anima opacity de um pseudo — nunca brightness — para o QR ficar 100% legível. */
+.qr-card::after { content: ''; position: absolute; inset: 0; border-radius: 16px; box-shadow: 0 0 72px -8px color-mix(in srgb, var(--cyan) 55%, transparent); opacity: 0; pointer-events: none; z-index: -1; }
+.deck-root.ambient-on .slide.active .qr-card::after { animation: amb-pulse 6s ease-in-out infinite; --amb-o1: .85; --amb-o2: .25; }
 .qr-label { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; margin-top: 6px; }
 .qr-sub { font-size: 12px; color: var(--text2); letter-spacing: 0.1em; }
+/* pulso escalonado dos pontos da malha (eco da capa) */
+.deck-root.ambient-on .slide.active .mesh-dots circle { animation: amb-pulse 6s ease-in-out infinite; --amb-o1: 1; --amb-o2: .35; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(2) { animation-delay: 1s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(3) { animation-delay: 2s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(4) { animation-delay: 3s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(5) { animation-delay: 4s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(6) { animation-delay: 5s; }
 </style>

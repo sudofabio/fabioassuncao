@@ -79,4 +79,14 @@ useSlideTimeline((tl) => {
 .price-value { font-size: 54px; font-weight: 500; color: var(--coral); white-space: nowrap; }
 .price-per { font-size: 22px; color: var(--text2); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ambient: chuva de código estilo Matrix — as linhas (rotacionadas 90deg)
+   deslizam devagar em velocidades diferentes. Os keyframes MANTÊM o rotate(90deg)
+   em todos os frames; `alternate` faz o deslocamento retornar sem salto.
+   Glow respirante no "COMMODITY" (o GSAP entrega brightness(1); baseline coincide). */
+@keyframes rain-drift { to { transform: rotate(90deg) translateX(-34px); } }
+.deck-root.ambient-on .slide.active .rain-line { animation: rain-drift 22s ease-in-out infinite alternate; }
+.deck-root.ambient-on .slide.active .rain-line:nth-child(2n) { animation-duration: 27s; }
+.deck-root.ambient-on .slide.active .rain-line:nth-child(3n) { animation-duration: 31s; }
+.deck-root.ambient-on .slide.active .commodity { --amb-bright: 1.4; animation: amb-glow 5s ease-in-out infinite; }
 </style>

@@ -70,5 +70,14 @@ html.deck-light .ifma { filter: brightness(0) opacity(0.8); }
 .speaker-sep { width: 1.5px; height: 18px; background: var(--border); }
 .speaker-role { font-size: 15px; color: var(--text2); }
 .terminal-egg { position: absolute; right: 56px; bottom: 104px; font-size: 14px; color: var(--text2); opacity: 0.8; }
-.cursor { color: var(--cyan); animation: none; margin-left: 2px; }
+.cursor { color: var(--cyan); margin-left: 2px; }
+
+/* ambient: cursor volta a piscar; pontos e traços da malha respiram */
+.deck-root.ambient-on .slide.active .cursor { animation: amb-blink 1.1s linear infinite; }
+.deck-root.ambient-on .slide.active .mesh-dots circle { animation: amb-pulse 6s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(2n) { animation-delay: -3s; }
+.deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(3n) { animation-delay: -1.5s; }
+/* dasharray só na regra ambient: o estado base/export fica idêntico ao atual.
+   Período do traço 6+14=20; --amb-dash-to -60 é múltiplo → loop sem salto. */
+.deck-root.ambient-on .slide.active .mesh-lines path { stroke-dasharray: 6 14; --amb-dash-to: -60; animation: amb-dash 9s linear infinite; }
 </style>

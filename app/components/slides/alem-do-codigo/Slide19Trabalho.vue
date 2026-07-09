@@ -28,22 +28,22 @@
           <DeckStep v-for="(m, i) in MODELOS_2026" :key="m.nome" :at="1" :delay="0.4 + 0.12 * i" class="modelo">
             <component :is="[Home, Shuffle, Building][i]" :size="20" :style="{ color: corDe(m.cor) }" />
             <span class="modelo-nome">{{ m.nome }}</span>
-            <b class="modelo-valor mono" :style="{ color: corDe(m.cor) }">{{ m.valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) }}%</b>
+            <b class="modelo-valor mono" :style="{ color: corDe(m.cor) }"><DeckCounter :to="m.valor" :decimals="1" suffix="%" :at="1" :delay="400 + 120 * i" :duration="1100" /></b>
           </DeckStep>
         </div>
 
         <DeckStep :at="2" class="callout deck-card">
           <DoorOpen :size="18" class="c-red" />
-          <span><b>39,5%</b> sentem pressão para voltar ao escritório</span>
+          <span><b><DeckCounter :to="CALLOUTS_TRABALHO.pressaoRetorno" :decimals="1" suffix="%" :at="2" /></b> sentem pressão para voltar ao escritório</span>
         </DeckStep>
         <DeckStep :at="2" :delay="0.15" class="callout deck-card">
           <Rocket :size="18" class="c-green" />
-          <span><b>76,7%</b> se dizem mais produtivos no remoto</span>
+          <span><b><DeckCounter :to="CALLOUTS_TRABALHO.produtividadeRemoto" :decimals="1" suffix="%" :at="2" /></b> se dizem mais produtivos no remoto</span>
         </DeckStep>
 
         <DeckStep :at="3" class="mundo">
-          <p class="mundo-frase title">De <span class="kw kw-coral" style="--kd: .3s">Santa Inês</span> para o mundo</p>
-          <p class="mundo-apoio"><b>14%</b> já trabalham para o exterior · <b>22,5%</b> têm mais de um contrato</p>
+          <p class="mundo-frase title">De <span class="kw kw-coral kw-live" style="--kd: .3s">Santa Inês</span> para o mundo</p>
+          <p class="mundo-apoio"><b><DeckCounter :to="CALLOUTS_TRABALHO.atuamExterior" :decimals="0" suffix="%" :at="3" /></b> já trabalham para o exterior · <b><DeckCounter :to="CALLOUTS_TRABALHO.maisDeUmContrato" :decimals="1" suffix="%" :at="3" /></b> têm mais de um contrato</p>
         </DeckStep>
       </div>
     </div>
@@ -55,7 +55,7 @@
 <script setup>
 import { Home, Shuffle, Building, DoorOpen, Rocket } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
-import { MODELOS_2026, TENDENCIA_REMOTO, FONTE_TRABALHO } from '~/data/presentations/alem-do-codigo/trabalho'
+import { MODELOS_2026, TENDENCIA_REMOTO, CALLOUTS_TRABALHO, FONTE_TRABALHO } from '~/data/presentations/alem-do-codigo/trabalho'
 import { alemDoCodigoTheme } from '~/themes/alem-do-codigo'
 
 const nota = NOTAS[18]
@@ -122,4 +122,12 @@ const donutOption = computed(() => ({
 .mundo-frase { font-size: 34px; }
 .mundo-apoio { margin-top: 8px; font-size: 14.5px; color: var(--text2); }
 .mundo-apoio b { color: var(--text); }
+
+/* Ambient: a tendência "escorre" pela sparkline (dasharray só na regra gated —
+   estado base fica sem tracejado, preservando a linha sólida atual). */
+.deck-root.ambient-on .slide.active .spark polyline {
+  stroke-dasharray: 6 6;
+  --amb-dash-to: -24;
+  animation: amb-dash 3s linear infinite;
+}
 </style>

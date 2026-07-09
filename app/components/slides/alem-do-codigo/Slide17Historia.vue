@@ -7,7 +7,7 @@
 
     <DeckReveal :delay="0.35" class="destaque">
       <MailPlus :size="18" />
-      <span><b>20+</b> mensagens de recrutadores por semana</span>
+      <span><b><DeckCounter :to="20" suffix="+" :duration="900" :delay="450" /></b> mensagens de recrutadores por semana</span>
     </DeckReveal>
 
     <div class="cenas">
@@ -54,4 +54,7 @@ const cenas = [
 .cena-sub { font-size: 13.5px; color: var(--text2); }
 .foot { margin-top: 46px; text-align: center; font-size: 20px; color: var(--text2); }
 .foot b { color: var(--text); }
+
+/* Ambient: respiração MUITO sutil da borda do pill (o slide é deliberadamente sóbrio). */
+.deck-root.ambient-on .slide.active .destaque { --amb-bright: 1.12; animation: amb-glow 6s ease-in-out infinite; }
 </style>

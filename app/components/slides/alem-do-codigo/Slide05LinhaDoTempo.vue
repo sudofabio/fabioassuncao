@@ -59,4 +59,9 @@ const eras = [
 .era-bullets li { font-size: 14.5px; color: var(--text2); padding-left: 14px; position: relative; }
 .era-bullets li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--border); }
 .era.atual .era-bullets li::before { background: var(--cyan); }
+
+/* ambient: o nó da era atual vira farol — pulso de glow ciano mais perceptível;
+   o ícone da era atual (drop-shadow) respira junto. */
+.deck-root.ambient-on .slide.active .node-atual { --amb-bright: 1.7; animation: amb-glow 3.5s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .icon-atual { --amb-bright: 1.4; animation: amb-glow 3.5s ease-in-out infinite; }
 </style>

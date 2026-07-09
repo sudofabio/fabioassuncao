@@ -8,6 +8,8 @@ import { SLIDE_KEY, DECK_KEY } from './context'
 const props = defineProps({
   /** Valor final a ser atingido. */
   to: { type: Number, required: true },
+  /** Valor inicial da contagem (ex.: salário de 2021 → 2026). */
+  from: { type: Number, default: 0 },
   /** Casas decimais. */
   decimals: { type: Number, default: 0 },
   /** Prefixo (ex.: 'R$ '). */
@@ -25,7 +27,7 @@ const props = defineProps({
 const slide = inject(SLIDE_KEY, null)
 const deck = inject(DECK_KEY, null)
 
-const current = ref(0)
+const current = ref(props.from)
 
 function fmt(v) {
   const s = v.toLocaleString('pt-BR', {
@@ -50,12 +52,12 @@ function clearTimers() {
 function animate() {
   clearTimers()
   if (deck?.reducedMotion.value || deck?.exporting.value) { current.value = props.to; return }
-  current.value = 0
+  current.value = props.from
   const run = () => {
     const t0 = performance.now()
     const step = (now) => {
       const p = Math.min(1, (now - t0) / props.duration)
-      current.value = props.to * easeOutCubic(p)
+      current.value = props.from + (props.to - props.from) * easeOutCubic(p)
       if (p < 1) raf = requestAnimationFrame(step)
       else current.value = props.to
     }
@@ -76,7 +78,7 @@ onMounted(() => {
   if (shouldRun.value) animate()
   watch(shouldRun, (on) => {
     if (on) animate()
-    else { clearTimers(); current.value = 0 }
+    else { clearTimers(); current.value = props.from }
   })
 })
 

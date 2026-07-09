@@ -82,4 +82,9 @@ useSlideTimeline((tl) => {
 .accent { color: var(--coral); font-weight: 600; }
 .badge { position: absolute; top: 90px; right: 130px; padding: 8px 18px; border: 1.5px solid var(--coral); color: var(--coral); border-radius: 40px; font-size: 14px; letter-spacing: 0.08em; transform: rotate(6deg); opacity: 0; background: color-mix(in srgb, var(--coral) 7%, transparent); }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ambient: o clímax continua pulsando — glow respirante no morph aceso. O glow
+   vai no CONTAINER .morph.lit (filter não conflita com os transforms que o GSAP
+   aplica nos spans t-letter/s-letter). */
+.deck-root.ambient-on .slide.active .morph.lit { --amb-bright: 1.35; animation: amb-glow 4.5s ease-in-out infinite; }
 </style>

@@ -27,13 +27,36 @@ export const FERRAMENTAS_ENGENHARIA: Ferramenta[] = [
   { nome: 'GitHub Copilot', logo: `${LOGOS}/github-copilot.svg` },
 ]
 
-/** Logos de plataformas (slide 4). */
+/** Logos de plataformas / sistemas operacionais (slide 4). */
 export const LOGOS_PLATAFORMAS = {
   android: `${LOGOS}/android.svg`,
   ios: `${LOGOS}/ios.svg`,
+  windows: `${LOGOS}/windows.svg`,
   linux: `${LOGOS}/linux.svg`,
   macos: `${LOGOS}/macos.svg`,
   microsoft: `${LOGOS}/microsoft.svg`,
+}
+
+/** Logos de navegadores — card "Websites" (slide 4). */
+export const LOGOS_NAVEGADORES = {
+  chrome: `${LOGOS}/chrome.svg`,
+  firefox: `${LOGOS}/firefox.svg`,
+  edge: `${LOGOS}/edge.svg`,
+  safari: `${LOGOS}/safari.svg`,
+}
+
+/** Logos de infraestrutura — card "Infraestrutura" (slide 4). */
+export const LOGOS_INFRA = {
+  docker: `${LOGOS}/docker.svg`,
+  kubernetes: `${LOGOS}/kubernetes.svg`,
+  linux: `${LOGOS}/linux.svg`,
+}
+
+/** Logos de automação / DevOps — card "Automações" (slide 4). */
+export const LOGOS_AUTOMACAO = {
+  linux: `${LOGOS}/linux.svg`,
+  bash: `${LOGOS}/bash.svg`,
+  git: `${LOGOS}/git.svg`,
 }
 
 /** Logos que alternam no topo da pirâmide (slide 24). */

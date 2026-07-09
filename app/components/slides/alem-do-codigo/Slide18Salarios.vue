@@ -1,14 +1,27 @@
 <template>
   <!-- Slide 18 — Salários 2021–2026 · ⭐⭐⭐ (âncora, único slide de dados pesados)
        Steps: 5 — ① Júnior ② Pleno ③ Sênior ④ Especialista (crescendo) ⑤ callouts -->
-  <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes">
+  <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" :step-dwell="[1200, 2600, 2600, 2600, 2600]">
     <DeckReveal :delay="0.05" class="eyebrow">o termômetro do mercado</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">Salários de devs: 2021 → 2026</DeckReveal>
 
     <div class="chart-row">
-      <DeckReveal :delay="0.3">
-        <DeckChart :option="chartOption" :width="860" :height="470" />
-      </DeckReveal>
+      <div class="chart-col">
+        <DeckReveal :delay="0.3">
+          <DeckChart :option="chartOption" :width="860" :height="440" />
+        </DeckReveal>
+
+        <!-- Faixa de valores: cada nível conta do salário de 2021 → 2026. -->
+        <div class="valores-row">
+          <DeckStep v-for="(s, i) in SERIES_SALARIAIS" :key="s.nivel" :at="i + 1" class="valor-item">
+            <span class="valor-dot" :style="{ background: pal.accents[s.cor] }"></span>
+            <span class="valor-nome">{{ s.nivel.replace('/Tech Lead', '') }}</span>
+            <span class="valor-num mono" :style="{ color: pal.accents[s.cor] }">
+              <DeckCounter :from="s.valores[0] / 1000" :to="s.valores[5] / 1000" :decimals="1" prefix="R$ " suffix="k" :duration="1400" :at="i + 1" />
+            </span>
+          </DeckStep>
+        </div>
+      </div>
 
       <div class="callouts">
         <DeckStep :at="5" class="callout deck-card">
@@ -89,7 +102,13 @@ const chartOption = computed(() => {
       emphasis: { disabled: true },
       endLabel: {
         show: true,
-        formatter: () => `${s.nivel.replace('/Tech Lead', '')}  ${fmtMil(s.valores[5])}  ${s.crescimento}`,
+        // valueAnimation: o label acompanha a ponta da linha durante o draw,
+        // interpolando o valor corrente (recurso nativo "line-race" do ECharts).
+        valueAnimation: true,
+        formatter: (p) => {
+          const v = Array.isArray(p.value) ? p.value[p.value.length - 1] : p.value
+          return `${s.nivel.replace('/Tech Lead', '')}  ${fmtMil(v)}  ${s.crescimento}`
+        },
         color: pal.value.accents[s.cor],
         fontSize: 14,
         fontWeight: 600,
@@ -116,4 +135,14 @@ const chartOption = computed(() => {
 .c-red { color: var(--red); }
 .c-coral { color: var(--coral); }
 .c-green { color: var(--green); }
+
+/* Faixa de valores sob o gráfico — mono compacto, discreto, sem competir com a linha. */
+.valores-row { display: flex; justify-content: space-between; gap: 12px; padding: 0 74px 0 74px; margin-top: 2px; }
+.valor-item { display: flex; align-items: center; gap: 7px; font-size: 13px; }
+.valor-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.valor-nome { color: var(--text2); }
+.valor-num { font-weight: 700; font-size: 14px; }
+
+/* Ambient: glow respirante no callout do Especialista (+136%, o destaque). */
+.deck-root.ambient-on .slide.active .destaque-callout { --amb-bright: 1.15; animation: amb-glow 5s ease-in-out infinite; }
 </style>

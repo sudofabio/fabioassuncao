@@ -25,6 +25,8 @@ const nota = NOTAS[20]
 <style scoped>
 .center { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 130px; }
 .aspas { position: absolute; top: 60px; left: 110px; font-size: 220px; line-height: 1; color: var(--cyan); opacity: 0.16; }
+/* aspas gigantes respiram muito devagar (loop atrás do guard ambient) */
+.deck-root.ambient-on .slide.active .aspas { animation: amb-pulse 9s ease-in-out infinite; --amb-o1: .16; --amb-o2: .09; }
 .quote-text { font-size: 46px; line-height: 1.32; font-weight: 500; }
 .attr { margin-top: 44px; display: flex; flex-direction: column; gap: 6px; }
 .attr b { font-family: 'Space Grotesk', sans-serif; font-size: 20px; color: var(--coral); }

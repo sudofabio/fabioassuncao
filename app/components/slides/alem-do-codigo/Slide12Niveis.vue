@@ -69,7 +69,10 @@ const ciclo = ['objetivo', 'ação', 'observação', 'correção']
 .d-desc { font-size: 14.5px; line-height: 1.45; color: var(--text2); }
 .d-risco { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--red); margin-top: auto; }
 .cycle { position: relative; width: 160px; height: 160px; margin: 10px auto 0; }
-.cycle-svg { position: absolute; inset: 0; animation: spin 14s linear infinite; transform-origin: center; }
+.cycle-svg { position: absolute; inset: 0; transform-origin: center; }
+/* ambient: o ciclo do Loop Engineering gira só no slide ativo com animações ON
+   (congela no estado base em export/reduced-motion/toggle off). */
+.deck-root.ambient-on .slide.active .cycle-svg { animation: spin 14s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .fase { position: absolute; font-size: 11px; color: var(--cyan); background: var(--bg2); padding: 2px 7px; border-radius: 20px; border: 1px solid var(--border); }
 .f0 { top: -6px; left: 50%; transform: translateX(-50%); }
@@ -78,5 +81,4 @@ const ciclo = ['objetivo', 'ação', 'observação', 'correção']
 .f3 { left: -18px; top: 50%; transform: translateY(-50%); }
 .foot { margin-top: 30px; text-align: center; font-size: 19px; color: var(--text2); }
 .foot b { color: var(--cyan); }
-@media (prefers-reduced-motion: reduce) { .cycle-svg { animation: none; } }
 </style>
