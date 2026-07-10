@@ -150,9 +150,9 @@ Projetar apenas a citação 1. Ler em voz alta. Complementar verbalmente: "Como 
 → "E o que sustenta esse profissional quando tudo muda?"`,
   },
   {
-    title: '24 · Fundamentos permanecem',
-    notes: `[Steps: 2 — ① topo volátil (logos alternando) ② base sólida iluminada] (falar DIRETAMENTE com os estudantes do IFMA)
-"Cursor, Claude Code, v0 — os nomes vão mudar nos próximos meses. O que não muda: lógica, arquitetura, segurança, engenharia de software, entendimento da dor do negócio. Se você é estudante: aprenda os fundamentos USANDO as ferramentas — não use as ferramentas para pular os fundamentos. É isso que te protege de qualquer bolha."
+    title: '24 · Fundamentos concretos',
+    notes: `[Steps: 5 — ① camada volátil (logos trocando) ②③④⑤ os 4 grupos + roadmap.sh] (falar DIRETAMENTE com os estudantes do IFMA)
+"Cursor, Claude Code, v0 — os nomes vão mudar nos próximos meses (camada volátil). O que não muda são quatro grupos concretos, e cada um tem um 'por que a IA não dispensa'. ① Máquina e terminal: o agente roda comandos; se você não lê a saída, não sabe se ele acertou. ② Versionamento: o fluxo de IA é issue → branch → PR → review; sem git, você não participa. ③ Web e integração: a IA gera o endpoint, você confere status code, CORS, token. ④ Empacotamento e entrega: a IA escreve o app, mas não sabe por que o container não sobe nem lê o log das 2h por você." Fechar com o roadmap.sh: "Não sabe por onde começar? roadmap.sh é um mapa de estudos — recomendação, não conteúdo. Aprenda os fundamentos USANDO as ferramentas; não use as ferramentas para PULAR os fundamentos."
 → "Deixo vocês com uma última provocação."`,
   },
   {
@@ -215,5 +215,14 @@ Agradecer o evento, o IFMA e a plateia. Apontar o QR: "A apresentação completa
     notes: `[Steps: 9 — uma etapa por clique; a árvore de arquivos cresce junto]
 "O SDD, na prática, é uma sequência. ① Tenho um problema real — uma frase vaga de usuário. ② Transformo em intenção clara. ③ Gero uma especificação. ④ Refino requisitos e restrições — stack, regras, segurança. ⑤ Valido o escopo com critérios de aceite. ⑥ Quebro em tarefas atômicas. ⑦ Implemento com apoio da IA. ⑧ Reviso, testo e ajusto — e aqui mora o loop de correção. ⑨ Integro ao projeto num Pull Request." Amarrar às fases: problema/intenção = generate, spec/refino/validação = prd, tarefas = plan, implemento = execute, revisão = review, integração = pr.
 → "E não é teoria: deixa eu te mostrar isso rodando de verdade, com o Issue Flow."`,
+  },
+  // ————————————————————————————————————————————————————————————
+  // Bloco "Na prática" — Issue Flow rodando (só comandos confirmados).
+  // ————————————————————————————————————————————————————————————
+  {
+    title: 'Prática · Issue Flow rodando',
+    notes: `[Steps: 6 — ① issue+generate ② prd ③ plan ④ execute ⑤ review FAIL→PASS (half-loop) ⑥ pr]
+"Isto é o Issue Flow, uma ferramenta que eu mantenho — skills + agente + automação. ① Descrevo o problema numa frase e ele cria a issue #42. ② prd: ele gera a especificação. ③ plan: quebra em tarefas (tasks.json). ④ execute: o agente implementa, story a story. ⑤ E aqui está o pulo do gato: review. Ele testa e REPROVA — FAIL. Aí entra o loop de autocorreção: corrige e revalida, até 3 ciclos, até dar PASS. ⑥ pr: abre o Pull Request pronto para revisão humana." Enfatizar o momento FAIL→PASS: "Isto é o que eu chamo de half-loop — o valor não está só em rodar o loop, mas em ter dentro dele algo capaz de dizer NÃO: um teste, um review, um erro real. Um review-issue com loop, até 3 ciclos." (screencast pré-gravado; não rodar ao vivo. Só comandos confirmados.)
+→ "Isso tudo só funciona se você domina o que está por baixo. Os fundamentos."`,
   },
 ]

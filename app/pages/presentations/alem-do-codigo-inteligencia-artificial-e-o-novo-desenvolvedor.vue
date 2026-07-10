@@ -34,7 +34,10 @@
     <Slide14FluxoSdd />
     <Slide15PromptVsSpec />
     <SlideSddSequencia />
-    <!-- Bloco E — Mercado em números -->
+    <!-- Bloco F — Na prática -->
+    <SlideIssueFlow />
+    <Slide24Fundamentos />
+    <!-- Bloco G — Mercado em números -->
     <Slide16Pandemia />
     <Slide17Historia />
     <Slide18Salarios />
@@ -45,7 +48,6 @@
     <Slide22Bolha />
     <!-- Bloco G — Fechamento -->
     <Slide23NovoDev />
-    <Slide24Fundamentos />
     <Slide25MensagemFinal />
     <Slide26Encerramento />
   </DeckStage>
@@ -75,6 +77,7 @@ import Slide13TddSdd from '~/components/slides/alem-do-codigo/Slide13TddSdd.vue'
 import Slide14FluxoSdd from '~/components/slides/alem-do-codigo/Slide14FluxoSdd.vue'
 import Slide15PromptVsSpec from '~/components/slides/alem-do-codigo/Slide15PromptVsSpec.vue'
 import SlideSddSequencia from '~/components/slides/alem-do-codigo/SlideSddSequencia.vue'
+import SlideIssueFlow from '~/components/slides/alem-do-codigo/SlideIssueFlow.vue'
 import Slide16Pandemia from '~/components/slides/alem-do-codigo/Slide16Pandemia.vue'
 import Slide17Historia from '~/components/slides/alem-do-codigo/Slide17Historia.vue'
 import Slide18Salarios from '~/components/slides/alem-do-codigo/Slide18Salarios.vue'
