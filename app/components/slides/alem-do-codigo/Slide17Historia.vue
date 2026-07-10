@@ -2,8 +2,12 @@
   <!-- Slide 17 — Minha história · ⭐⭐⭐ (coração emocional) · Steps: 4
        Fade simples — a emoção está na voz, não na tela. -->
   <DeckSlide :title="nota.title" :notes="nota.notes">
-    <DeckReveal :delay="0.05" class="eyebrow coral-eyebrow">minha história</DeckReveal>
+    <DeckReveal :delay="0.05" class="eyebrow coral-eyebrow">2020–2022 · a pandemia e o ponto fora da curva</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">2022: a decisão mais difícil (e mais óbvia)</DeckReveal>
+
+    <DeckReveal :delay="0.28" class="ctx-pandemia">
+      Na pandemia o mercado ferveu: propostas <b>dobravam salários</b> da noite pro dia, <b>75%</b> remoto. E eu vivi isso na pele.
+    </DeckReveal>
 
     <DeckReveal :delay="0.35" class="destaque">
       <MailPlus :size="18" />
@@ -44,6 +48,8 @@ const cenas = [
 <style scoped>
 .s-title { font-size: 42px; margin-top: 10px; }
 .coral-eyebrow { color: var(--coral); }
+.ctx-pandemia { margin-top: 14px; font-size: 16px; line-height: 1.5; color: var(--text2); max-width: 820px; }
+.ctx-pandemia b { color: var(--text); }
 .destaque { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 10px 18px; border-radius: 40px; background: color-mix(in srgb, var(--coral) 8%, transparent); border: 1px solid color-mix(in srgb, var(--coral) 30%, transparent); color: var(--coral); font-size: 16px; white-space: nowrap; width: fit-content; }
 .destaque b { font-family: 'Space Grotesk', sans-serif; font-size: 19px; }
 .cenas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 44px; }

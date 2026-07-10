@@ -35,16 +35,16 @@ Rápido: "Quando falo desenvolvimento, falo de apps no seu celular, sites, siste
 → "E essa atividade mudou muito desde que eu comecei. Deixa eu te mostrar."`,
   },
   {
-    title: '5 · Linha do tempo',
-    notes: `[Steps: 4 — uma era por clique]
-"Quando comecei, não existia essa divisão de front, back, DevOps, SRE, QA. Você era desenvolvedor. Ou fazia web, ou desktop. Uma linguagem principal, talvez uma secundária. Depois o mercado se organizou: especializações, times maiores, cascata deu lugar ao ágil, Scrum, entrega contínua. E agora vivemos a era da IA e dos agentes." (cascata → ágil sem aprofundar)
+    title: '4 · Software em tudo + linha do tempo',
+    notes: `[Steps: 4 — uma era por clique] (abre com "software está em tudo")
+Abrir rápido: "Quando falo desenvolvimento, falo de tudo — apps, sites, sistemas, automações, produtos, infra, integrações. Software está em tudo." Depois a linha do tempo: "Quando comecei, não existia essa divisão de front, back, DevOps, SRE, QA. Você era desenvolvedor. Ou fazia web, ou desktop. Depois o mercado se organizou: especializações, times maiores, cascata deu lugar ao ágil. E agora vivemos a era da IA e dos agentes." (cascata → ágil sem aprofundar)
 → "E reparem: em cada uma dessas viradas, alguém decretou a morte do desenvolvedor."`,
   },
   {
-    title: '6 · "O dev já morreu" (de novo)',
-    notes: `[Steps: 2 — ① carimbos R.I.P. ② frase-síntese] (humor leve)
-"Low-code ia acabar com dev. No-code ia acabar com dev. Geradores de site, CMS, frameworks... e aqui estamos. O que cada onda fez de verdade foi subir o nível de abstração: menos digitação mecânica, mais pensamento sistêmico. Com IA, é o mesmo filme — só que em velocidade muito maior."
-→ "Mas se não é o fim do mundo, também não é o paraíso que os gurus vendem."`,
+    title: '5 · "O dev já morreu" + anti-hype',
+    notes: `[Steps: 3 — ① carimbos R.I.P. ② frase-síntese ③ anti-hype "nem paraíso"] (humor leve, tom firme)
+"Low-code ia acabar com dev. No-code ia acabar com dev. Geradores de site, CMS, frameworks... e aqui estamos. O que cada onda fez de verdade foi subir o nível de abstração: menos digitação mecânica, mais pensamento sistêmico. Com IA, é o mesmo filme — só que muito mais rápido." Então o anti-hype: "Mas se não é o apocalipse, também não é o paraíso que os gurus vendem. Não é 'fature 50 mil sem programar' — é fundamentos + método + experiência. Essa palestra é o oposto do hype." (não citar influenciadores)
+→ "Dito isso, existe uma mudança real e incômoda: o código virou commodity."`,
   },
   {
     title: '7 · Anti-hype',
@@ -108,9 +108,9 @@ Lado A: "Faça um app de tarefas" → resultado genérico, sem autenticação de
 → "E eu vivi isso na pele. Deixa eu contar o que aconteceu com a minha empresa."`,
   },
   {
-    title: '17 · Minha história ♥',
+    title: '16 · Pandemia + minha história ♥',
     notes: `[Steps: 4 — uma cena por clique] STORYTELLING — a fala carrega, slide minimalista
-"Em 2022 a minha empresa sofria dos dois lados: clientes com contratos recorrentes quebrando com a pandemia, e nossos devs recebendo propostas que dobravam o salário — de 7 pra 14, 15 mil. Impossível competir. Eu recebia 20+ mensagens de recruiter por semana. Decidi pausar a operação e testar o mercado. Resultado: todos da equipe se recolocaram muito bem. Eu cheguei a trabalhar full-time para duas, às vezes três empresas ao mesmo tempo — Brasil e EUA. Para ter o mesmo líquido com a Codions, eu precisaria vender mais de R$ 1 milhão por mês. Era um ponto fora da curva — e pontos fora da curva não duram."
+Abrir com o contexto (já no slide): "Na pandemia o mercado ferveu: propostas dobravam salários da noite pro dia, 75% remoto." Aí a história: "Em 2022 a minha empresa sofria dos dois lados: clientes com contratos quebrando, e nossos devs recebendo propostas que dobravam o salário — de 7 pra 14, 15 mil. Impossível competir. Eu recebia 20+ mensagens de recruiter por semana. Decidi pausar a operação e testar o mercado. Todos da equipe se recolocaram muito bem. Eu cheguei a trabalhar full-time para duas, às vezes três empresas ao mesmo tempo — Brasil e EUA. Para ter o mesmo líquido com a Codions, eu precisaria vender mais de R$ 1 milhão por mês. Era um ponto fora da curva — e pontos fora da curva não duram."
 → "E o que aconteceu depois? O mercado voltou pro chão. Os números mostram." (corte seco)`,
   },
   {
@@ -224,5 +224,14 @@ Agradecer o evento, o IFMA e a plateia. Apontar o QR: "A apresentação completa
     notes: `[Steps: 6 — ① issue+generate ② prd ③ plan ④ execute ⑤ review FAIL→PASS (half-loop) ⑥ pr]
 "Isto é o Issue Flow, uma ferramenta que eu mantenho — skills + agente + automação. ① Descrevo o problema numa frase e ele cria a issue #42. ② prd: ele gera a especificação. ③ plan: quebra em tarefas (tasks.json). ④ execute: o agente implementa, story a story. ⑤ E aqui está o pulo do gato: review. Ele testa e REPROVA — FAIL. Aí entra o loop de autocorreção: corrige e revalida, até 3 ciclos, até dar PASS. ⑥ pr: abre o Pull Request pronto para revisão humana." Enfatizar o momento FAIL→PASS: "Isto é o que eu chamo de half-loop — o valor não está só em rodar o loop, mas em ter dentro dele algo capaz de dizer NÃO: um teste, um review, um erro real. Um review-issue com loop, até 3 ciclos." (screencast pré-gravado; não rodar ao vivo. Só comandos confirmados.)
 → "Isso tudo só funciona se você domina o que está por baixo. Os fundamentos."`,
+  },
+  // ————————————————————————————————————————————————————————————
+  // Fechamento — provocações / Q&A (antes do slide de contato).
+  // ————————————————————————————————————————————————————————————
+  {
+    title: 'Q&A · Provocações para o debate',
+    notes: `[Steps: 4 — uma provocação por clique] (tom "olhos abertos", convite ao debate)
+"Antes das perguntas, quatro provocações pra levar pra casa. ① Se a IA escreve o código, o que exatamente você está vendendo? ② Vibe coding é dívida técnica com marketing melhor? ③ Quando a conta da IA subir, seus fundamentos seguram? ④ O seu fluxo de IA tem algo que sabe dizer 'não' — um teste, um review, um erro real?" Deixar no ar; usar como trampolim pro Q&A. Materiais e referências completas estão no QR do próximo slide.
+→ "Agora sim: vamos conversar."`,
   },
 ]

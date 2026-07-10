@@ -27,6 +27,12 @@
         Ela <span class="kw kw-cyan kw-live" style="--kd: .3s">eleva o nível de abstração</span>.
       </p>
     </DeckStep>
+
+    <DeckStep :at="3" variant="dn" class="antihype">
+      <span class="ah-nao">nem apocalipse,</span>
+      <span class="ah-nao">nem paraíso.</span>
+      <span class="ah-real">Não é "fature 50 mil sem programar" — é <b>fundamentos + método + experiência</b>.</span>
+    </DeckStep>
   </DeckSlide>
 </template>
 
@@ -45,6 +51,10 @@ const lapides = ['Low-code', 'No-code', 'CMS', 'Website builders', 'Frameworks']
 .rip { display: block; font-size: 13px; letter-spacing: 0.3em; color: var(--text2); }
 .grave-name { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 19px; margin-top: 10px; }
 .stamp { position: absolute; top: 8px; right: -14px; padding: 3px 10px; border: 2px solid var(--red); color: var(--red); font-size: 11px; letter-spacing: 0.12em; border-radius: 4px; transform: rotate(12deg); background: color-mix(in srgb, var(--red) 8%, transparent); }
-.synth { margin-top: 64px; text-align: center; }
-.synth-text { font-size: 36px; line-height: 1.3; font-weight: 500; }
+.synth { margin-top: 48px; text-align: center; }
+.synth-text { font-size: 34px; line-height: 1.3; font-weight: 500; }
+.antihype { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.ah-nao { font-family: 'Space Grotesk', sans-serif; font-size: 20px; color: var(--coral); font-weight: 600; }
+.ah-real { margin-top: 10px; font-size: 16px; color: var(--text2); }
+.ah-real b { color: var(--text); }
 </style>

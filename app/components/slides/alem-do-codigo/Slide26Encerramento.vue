@@ -48,7 +48,8 @@
           </ClientOnly>
         </div>
         <span class="qr-label">Material da palestra</span>
-        <span class="qr-sub mono">slides · links · referências</span>
+        <span class="qr-sub mono">slides · links · referências · materiais complementares</span>
+        <div class="cta mono"><Terminal :size="14" /> npx issue-flow init</div>
       </DeckReveal>
     </div>
   </DeckSlide>
@@ -56,7 +57,7 @@
 
 <script setup>
 import QrcodeVue from 'qrcode.vue'
-import { Globe, Github, Linkedin, Mail } from 'lucide-vue-next'
+import { Globe, Github, Linkedin, Mail, Terminal } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 import { CONTATOS, URL_APRESENTACAO, EVENTO } from '~/data/presentations/alem-do-codigo/contatos'
 import { LOGO_IFMA } from '~/data/presentations/alem-do-codigo/ferramentas'
@@ -91,7 +92,8 @@ html.deck-light .qr-card { border: 1px solid var(--border); }
 .qr-card::after { content: ''; position: absolute; inset: 0; border-radius: 16px; box-shadow: 0 0 72px -8px color-mix(in srgb, var(--cyan) 55%, transparent); opacity: 0; pointer-events: none; z-index: -1; }
 .deck-root.ambient-on .slide.active .qr-card::after { animation: amb-pulse 6s ease-in-out infinite; --amb-o1: .85; --amb-o2: .25; }
 .qr-label { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; margin-top: 6px; }
-.qr-sub { font-size: 12px; color: var(--text2); letter-spacing: 0.1em; }
+.qr-sub { font-size: 12px; color: var(--text2); letter-spacing: 0.1em; max-width: 288px; text-align: center; }
+.cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 8px 14px; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--coral) 40%, var(--border)); background: color-mix(in srgb, var(--coral) 8%, transparent); color: var(--coral); font-size: 14px; }
 /* pulso escalonado dos pontos da malha (eco da capa) */
 .deck-root.ambient-on .slide.active .mesh-dots circle { animation: amb-pulse 6s ease-in-out infinite; --amb-o1: 1; --amb-o2: .35; }
 .deck-root.ambient-on .slide.active .mesh-dots circle:nth-child(2) { animation-delay: 1s; }

@@ -1,8 +1,13 @@
 <template>
   <!-- Slide 5 — Linha do tempo · ⭐⭐⭐ · Steps: 4 (uma era por clique; era atual com glow) -->
   <DeckSlide :title="nota.title" :notes="nota.notes">
-    <DeckReveal :delay="0.05" class="eyebrow">a evolução do desenvolvimento</DeckReveal>
+    <DeckReveal :delay="0.05" class="eyebrow">o que é desenvolvimento — e como ele evoluiu</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">No começo, você era só "desenvolvedor"</DeckReveal>
+
+    <DeckReveal :delay="0.24" class="ctx-strip">
+      <b class="ctx-lead">Software está em tudo:</b>
+      <span v-for="c in categorias" :key="c.t" class="ctx-item"><component :is="c.i" :size="16" /> {{ c.t }}</span>
+    </DeckReveal>
 
     <div class="timeline">
       <div class="axis"></div>
@@ -27,10 +32,20 @@
 </template>
 
 <script setup>
-import { Terminal, GitBranch, Blocks, BrainCircuit } from 'lucide-vue-next'
+import { Terminal, GitBranch, Blocks, BrainCircuit, Smartphone, Globe, Building2, Workflow, Package, Server, PlugZap } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 
 const nota = NOTAS[4]
+
+const categorias = [
+  { i: Smartphone, t: 'apps' },
+  { i: Globe, t: 'sites' },
+  { i: Building2, t: 'sistemas' },
+  { i: Workflow, t: 'automações' },
+  { i: Package, t: 'produtos' },
+  { i: Server, t: 'infra' },
+  { i: PlugZap, t: 'integrações' },
+]
 
 const eras = [
   { icon: Terminal, titulo: 'O Início', bullets: ['dev "faz-tudo"', 'web vs desktop'], atual: false },
@@ -42,7 +57,11 @@ const eras = [
 
 <style scoped>
 .s-title { font-size: 44px; margin-top: 10px; }
-.timeline { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 88px; }
+.ctx-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 20px; }
+.ctx-lead { font-family: 'Space Grotesk', sans-serif; font-size: 15px; color: var(--text); }
+.ctx-item { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--text2); }
+.ctx-item svg { color: var(--cyan); }
+.timeline { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 56px; }
 .axis { position: absolute; top: 7px; left: 10px; right: 10px; height: 2px; background: var(--border); }
 .era-col { position: relative; }
 .axis-fill span { position: absolute; top: 7px; left: -26px; right: 0; height: 2px; background: var(--cyan); opacity: 0.5; display: block; }
