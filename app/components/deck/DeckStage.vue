@@ -656,6 +656,8 @@ onBeforeUnmount(() => {
 <style src="~/assets/css/deck.css"></style>
 
 <style>
-/* Presenter mode: o palco cede a faixa inferior ao painel de notas. */
+/* Presenter mode: o palco cede a faixa inferior ao painel de notas e a
+   toolbar sobe para não ficar coberta pelo painel (z-index 50 vs 40). */
 .deck-root.with-presenter .viewport { bottom: 34vh; }
+.deck-root.with-presenter .controls { bottom: calc(34vh + 10px); }
 </style>
