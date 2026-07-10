@@ -31,7 +31,7 @@
         <DollarSign :size="26" class="s-icon amber-i" />
         <span class="sinal-num">US$ 20<span class="mes">/mês</span></span>
         <p class="sinal-sub">é <b>subsídio</b>: preços artificialmente baixos, sustentados por bilhões em caixa queimado</p>
-        <span class="sinal-fonte mono">médio prazo: preço sobe, ferramenta muda — ou some</span>
+        <span class="sinal-fonte mono">médio prazo: preço sobe, ferramenta muda ou some</span>
       </DeckStep>
     </div>
 

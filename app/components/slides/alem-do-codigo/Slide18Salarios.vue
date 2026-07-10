@@ -26,15 +26,15 @@
       <div class="callouts">
         <DeckStep :at="5" class="callout deck-card">
           <TrendingUp :size="17" class="c-cyan" />
-          <span><b>Salto da pandemia</b> — Sênior a R$ 14,4k já em 2022</span>
+          <span><b>Salto da pandemia</b>: Sênior a R$ 14,4k já em 2022</span>
         </DeckStep>
         <DeckStep :at="5" :delay="0.15" class="callout deck-card">
           <TrendingDown :size="17" class="c-red" />
-          <span><b>1ª queda nominal do Sênior</b> — pico de R$ 15,6k (2025) → R$ 14,6k (2026)</span>
+          <span><b>1ª queda nominal do Sênior</b>: pico de R$ 15,6k (2025) → R$ 14,6k (2026)</span>
         </DeckStep>
         <DeckStep :at="5" :delay="0.3" class="callout deck-card destaque-callout">
           <Crown :size="17" class="c-coral" />
-          <span><b>Especialista: +136%</b> — o único nível que cresceu todos os anos</span>
+          <span><b>Especialista: +136%</b>, o único nível que cresceu todos os anos</span>
         </DeckStep>
         <DeckStep :at="5" :delay="0.45" class="callout deck-card">
           <BrainCircuit :size="17" class="c-cyan" />
@@ -42,7 +42,7 @@
         </DeckStep>
         <DeckStep :at="5" :delay="0.6" class="callout deck-card ma">
           <MapPin :size="17" class="c-green" />
-          <span><b>Maranhão:</b> R$ 3,7k (2021) → R$ 10k (2026) — quase 3×</span>
+          <span><b>Maranhão:</b> R$ 3,7k (2021) → R$ 10k (2026), quase 3×</span>
         </DeckStep>
       </div>
     </div>

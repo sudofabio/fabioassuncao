@@ -7,7 +7,7 @@ export const STATS_BUMERANGUE = [
   {
     valor: 32,
     sufixo: '%',
-    rotulo: 'eliminaram cargos por causa da IA — e recontrataram para a mesma função',
+    rotulo: 'eliminaram cargos por causa da IA e recontrataram para a mesma função',
     fonte: 'Robert Half',
   },
   {

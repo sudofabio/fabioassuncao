@@ -3,6 +3,14 @@
        ① morph tipográfico TDD→SDD  ② badge "#1 skill 2026" + frases -->
   <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep">
     <div class="center">
+      <DeckReveal :delay="0.1" class="evo">
+        <span class="evo-item ghost"><b>Go Horse</b><i>improviso, sem plano</i></span>
+        <ChevronRight :size="16" class="evo-arrow" />
+        <span class="evo-item tdd"><b>TDD</b><i>o teste guia</i></span>
+        <ChevronRight :size="16" class="evo-arrow" />
+        <span class="evo-item sdd"><b>SDD</b><i>a spec guia, sem jogar fora os testes</i></span>
+      </DeckReveal>
+
       <div class="morph title" :class="{ lit: morphLit }" aria-hidden="false">
         <span class="letter-box">
           <span ref="tRef" class="letter t-letter">T</span>
@@ -11,7 +19,7 @@
       </div>
 
       <p ref="nameRef" class="sdd-name">
-        <b>Spec-Driven Development</b> — a habilidade <span class="hash mono">#1</span> para devs em 2026
+        <b>Spec-Driven Development</b>: a habilidade <span class="hash mono">#1</span> para devs em 2026
       </p>
 
       <p ref="lineRef" class="line">
@@ -28,6 +36,7 @@
 </template>
 
 <script setup>
+import { ChevronRight } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 
 const nota = NOTAS[12]
@@ -70,7 +79,16 @@ useSlideTimeline((tl) => {
 
 <style scoped>
 .center { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.morph { font-size: 150px; font-weight: 700; letter-spacing: 0.02em; color: var(--text2); display: flex; align-items: baseline; perspective: 700px; }
+.evo { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+.evo-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); background: color-mix(in srgb, var(--bg2) 50%, transparent); min-width: 130px; }
+.evo-item b { font-family: 'Space Grotesk', sans-serif; font-size: 16px; }
+.evo-item i { font-style: normal; font-size: 11.5px; color: var(--text2); }
+.evo-item.ghost b { color: var(--red); }
+.evo-item.tdd b { color: var(--cyan); }
+.evo-item.sdd { border-color: color-mix(in srgb, var(--coral) 45%, var(--border)); background: color-mix(in srgb, var(--coral) 8%, transparent); }
+.evo-item.sdd b { color: var(--coral); }
+.evo-arrow { color: var(--text2); flex-shrink: 0; }
+.morph { font-size: 132px; font-weight: 700; letter-spacing: 0.02em; color: var(--text2); display: flex; align-items: baseline; perspective: 700px; }
 .letter { display: inline-block; transition: color 0.6s ease, text-shadow 0.6s ease; }
 .morph.lit .letter { color: var(--coral); text-shadow: 0 0 44px color-mix(in srgb, var(--coral) 45%, transparent); }
 .letter-box { position: relative; display: inline-block; }

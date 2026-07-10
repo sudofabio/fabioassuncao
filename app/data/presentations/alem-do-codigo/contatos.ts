@@ -22,7 +22,7 @@ export const URL_APRESENTACAO =
   'https://fabioassuncao.com/presentations/alem-do-codigo-inteligencia-artificial-e-o-novo-desenvolvedor'
 
 export const EVENTO = {
-  lockup: '10º TALK — VALE DO PINDARÉ TECH',
+  lockup: '10º TALK · VALE DO PINDARÉ TECH',
   local: 'IFMA Campus Santa Inês',
   dataEvento: '10 de julho',
 }
