@@ -11,6 +11,7 @@
     <!-- Bloco A — Abertura -->
     <Slide01Capa />
     <Slide02QuemSou />
+    <SlideSumario />
     <Slide03Reflexao />
     <!-- Bloco B — Contexto rápido (04+05 e 06+07 fundidos) -->
     <Slide05LinhaDoTempo />
@@ -57,6 +58,7 @@ import { alemDoCodigoTheme } from '~/themes/alem-do-codigo'
 import Slide01Capa from '~/components/slides/alem-do-codigo/Slide01Capa.vue'
 import Slide02QuemSou from '~/components/slides/alem-do-codigo/Slide02QuemSou.vue'
 import Slide03Reflexao from '~/components/slides/alem-do-codigo/Slide03Reflexao.vue'
+import SlideSumario from '~/components/slides/alem-do-codigo/SlideSumario.vue'
 import Slide05LinhaDoTempo from '~/components/slides/alem-do-codigo/Slide05LinhaDoTempo.vue'
 import Slide06DevMorreu from '~/components/slides/alem-do-codigo/Slide06DevMorreu.vue'
 import Slide08Commodity from '~/components/slides/alem-do-codigo/Slide08Commodity.vue'

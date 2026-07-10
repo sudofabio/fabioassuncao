@@ -50,4 +50,5 @@ export const VOCABULARIO: Conceito[] = [
   { termo: 'MCP', resumo: 'Model Context Protocol', detalhe: 'Padrão aberto que conecta o modelo a ferramentas e dados. A "porta USB-C" da IA.', icon: 'Cable' },
   { termo: 'Agent Skills', resumo: 'conhecimento empacotado', detalhe: 'Uma pasta com instruções que ensina o agente a executar uma tarefa repetível.', icon: 'Package' },
   { termo: 'Agentes', resumo: 'tudo junto, em fluxo', detalhe: 'Skills + modelo + ferramentas orquestrados num loop que roda sob supervisão.', icon: 'Workflow' },
+  { termo: 'Subagentes', resumo: 'especialistas sob orquestração', detalhe: 'Agentes focados que o principal aciona para uma tarefa (pesquisar, testar, revisar), cada um no seu contexto, devolvendo só o resultado.', icon: 'Waypoints' },
 ]

@@ -74,14 +74,14 @@ const TREE = [
 </script>
 
 <style scoped>
-.s-title { font-size: 40px; margin-top: 8px; }
-.grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 30px; margin-top: 30px; align-items: start; }
-.etapas { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-.etapa { display: flex; align-items: center; gap: 13px; padding: 8px 10px; border-radius: 8px; }
-.n { font-size: 15px; color: var(--border); font-weight: 600; width: 24px; flex-shrink: 0; }
+.s-title { font-size: 36px; margin-top: 4px; }
+.grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; margin-top: 20px; align-items: start; }
+.etapas { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.etapa { display: flex; align-items: center; gap: 13px; padding: 5px 10px; border-radius: 8px; }
+.n { font-size: 14px; color: var(--border); font-weight: 600; width: 22px; flex-shrink: 0; }
 .et-txt { flex: 1; display: flex; flex-direction: column; }
-.et-txt b { font-size: 15.5px; }
-.sub { font-size: 12px; color: var(--text2); }
+.et-txt b { font-size: 14.5px; }
+.sub { font-size: 11px; color: var(--text2); }
 .fase { font-size: 10.5px; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 5px; font-family: var(--mono, monospace); border: 1px solid var(--border); }
 .fase.generate, .fase.prd, .fase.plan { color: var(--cyan); border-color: color-mix(in srgb, var(--cyan) 35%, transparent); }
 .fase.execute { color: var(--coral); border-color: color-mix(in srgb, var(--coral) 35%, transparent); }
@@ -93,7 +93,7 @@ const TREE = [
   --cyan: #37C6F4; --coral: #F2762E; --green: #3ECF8E; --red: #E85D4C; --amber: #E8B44C;
   padding: 0; overflow: hidden; background: var(--terminal-bg, #0A1220); }
 .tree-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: var(--bg2); border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text2); letter-spacing: 0.06em; }
-.tree-body { padding: 14px 16px; font-size: 13.5px; display: flex; flex-direction: column; gap: 7px; min-height: 300px; }
+.tree-body { padding: 14px 16px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; min-height: 250px; }
 .tline { color: var(--text2); }
 .tline.indent { padding-left: 20px; }
 .tline .mark { display: inline-block; width: 18px; color: var(--text2); }
@@ -108,7 +108,7 @@ const TREE = [
 .tline.pr .mark { color: var(--green); }
 .tcaret { margin-top: 6px; color: var(--text); }
 .caret { color: var(--cyan); }
-.foot { margin-top: 24px; text-align: center; font-size: 14.5px; color: var(--text2); }
+.foot { margin-top: 14px; text-align: center; font-size: 13.5px; color: var(--text2); }
 .foot b { color: var(--text); font-family: var(--mono, monospace); }
 
 /* Ambient: caret piscando na árvore/terminal. */
