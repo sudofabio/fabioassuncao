@@ -19,7 +19,7 @@
       </div>
 
       <p ref="nameRef" class="sdd-name">
-        <b>Spec-Driven Development</b> — a habilidade <span class="hash mono">#1</span> para devs em 2026
+        <b>Spec-Driven Development</b>: a habilidade <span class="hash mono">#1</span> para devs em 2026
       </p>
 
       <p ref="lineRef" class="line">

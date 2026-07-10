@@ -35,7 +35,7 @@
     </div>
 
     <DeckStep :at="2" :delay="0.5" class="foot">
-      A IA reduz a barreira de entrada <b>e</b> aumenta a exigência de maturidade — ao mesmo tempo.
+      A IA reduz a barreira de entrada <b>e</b> aumenta a exigência de maturidade, ao mesmo tempo.
     </DeckStep>
   </DeckSlide>
 </template>

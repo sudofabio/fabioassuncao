@@ -26,7 +26,7 @@
       A IA executa. <b>Você escreve a partitura.</b>
     </DeckStep>
 
-    <p class="source">Base: Spec-Kit (GitHub) — fluxo de Spec-Driven Development</p>
+    <p class="source">Base: Spec-Kit (GitHub), fluxo de Spec-Driven Development</p>
   </DeckSlide>
 </template>
 

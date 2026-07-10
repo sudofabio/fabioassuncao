@@ -28,7 +28,7 @@
 
     <DeckStep :at="2" variant="sc" class="dna">
       <GitFork :size="16" />
-      <span>Por baixo, os três são <b class="hl">o mesmo VS Code</b> — Cursor e Antigravity são forks. O que muda é a camada de agente por cima.</span>
+      <span>Por baixo, os três são <b class="hl">o mesmo VS Code</b>. Cursor e Antigravity são forks. O que muda é a camada de agente por cima.</span>
     </DeckStep>
 
     <DeckStep :at="3" :delay="0.3" class="foot">

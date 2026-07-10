@@ -36,7 +36,7 @@
     </div>
 
     <DeckStep :at="3" :delay="0.4" class="foot">
-      Carência extrema de profissionais — <b>todo mundo</b> recebia proposta.
+      Carência extrema de profissionais: <b>todo mundo</b> recebia proposta.
     </DeckStep>
   </DeckSlide>
 </template>

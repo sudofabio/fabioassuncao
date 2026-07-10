@@ -38,7 +38,7 @@
 
     <DeckStep :at="5" :delay="0.3" class="roadmap">
       <span class="rm-logo" :style="{ color: 'var(--coral)' }"><BrandLogo :src="ROADMAP_SH.logo" alt="roadmap.sh" /></span>
-      <span><b>{{ ROADMAP_SH.url }}</b> — {{ ROADMAP_SH.label }}.</span>
+      <span><b>{{ ROADMAP_SH.url }}</b>: {{ ROADMAP_SH.label }}.</span>
     </DeckStep>
   </DeckSlide>
 </template>

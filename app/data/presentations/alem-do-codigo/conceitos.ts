@@ -16,7 +16,7 @@ export interface Provedor {
 
 export const PROVEDORES: Provedor[] = [
   { nome: 'OpenAI', logo: `${LOGOS}/openai.svg`, modelos: 'ChatGPT · GPT · Codex', tag: 'fechado' },
-  { nome: 'Anthropic', logo: `${LOGOS}/anthropic.svg`, modelos: 'Claude — Opus · Sonnet · Haiku', tag: 'fechado' },
+  { nome: 'Anthropic', logo: `${LOGOS}/anthropic.svg`, modelos: 'Claude: Opus · Sonnet · Haiku', tag: 'fechado' },
   { nome: 'Google', logo: `${LOGOS}/google.svg`, modelos: 'Gemini · Antigravity', tag: 'fechado' },
   { nome: 'Meta', logo: `${LOGOS}/meta.svg`, modelos: 'Llama', tag: 'aberto' },
   { nome: 'Mistral', logo: `${LOGOS}/mistral.svg`, modelos: 'Mistral · Mixtral', tag: 'aberto · europeu' },
@@ -32,7 +32,7 @@ export interface Definicao {
 }
 
 export const DEFINICOES: Definicao[] = [
-  { termo: 'Modelo', analogia: 'o motor', descricao: 'O cérebro que prevê o próximo token. Sozinho, não faz nada — precisa de um veículo.', exemplos: 'Claude · GPT · Gemini · Llama', icon: 'Cpu' },
+  { termo: 'Modelo', analogia: 'o motor', descricao: 'O cérebro que prevê o próximo token. Sozinho, não faz nada: precisa de um veículo.', exemplos: 'Claude · GPT · Gemini · Llama', icon: 'Cpu' },
   { termo: 'Ferramenta', analogia: 'as mãos', descricao: 'O que dá ações ao modelo: rodar comandos, ler arquivos, buscar na web, chamar APIs.', exemplos: 'terminal · navegador · MCP', icon: 'Wrench' },
   { termo: 'Editor', analogia: 'o carro', descricao: 'Onde você senta e dirige o modelo dentro do seu código, no dia a dia.', exemplos: 'VS Code · Cursor · Antigravity', icon: 'PanelsTopLeft' },
   { termo: 'Agente', analogia: 'o piloto automático', descricao: 'O modelo agindo em loop: planeja, executa, observa o resultado e corrige.', exemplos: 'Claude Code · Codex · Issue Flow', icon: 'Bot' },

@@ -43,7 +43,7 @@
     </div>
 
     <p ref="footRef" class="foot">
-      Empresas pagam por <b>produtos</b> — não por protótipos.
+      Empresas pagam por <b>produtos</b>, não por protótipos.
     </p>
 
     <DeckStep v-for="n in 3" :key="n" :at="n" class="anchor"><span aria-hidden="true"></span></DeckStep>

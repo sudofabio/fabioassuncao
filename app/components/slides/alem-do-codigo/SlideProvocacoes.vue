@@ -12,7 +12,7 @@
     </div>
 
     <DeckStep :at="4" :delay="0.4" class="foot">
-      <MessagesSquare :size="20" /> <span>Agora sim — <b>vamos conversar</b>.</span>
+      <MessagesSquare :size="20" /> <span>Agora sim, <b>vamos conversar</b>.</span>
     </DeckStep>
   </DeckSlide>
 </template>
@@ -27,7 +27,7 @@ const PROVOCACOES = [
   { icon: Coins, txt: 'Se a IA escreve o código, o que exatamente você está vendendo?' },
   { icon: Sparkles, txt: 'Vibe coding é dívida técnica com marketing melhor?' },
   { icon: Flame, txt: 'Quando a conta da IA subir, os seus fundamentos seguram?' },
-  { icon: RotateCcw, txt: 'O seu fluxo de IA tem algo que sabe dizer "não" — um teste, um review, um erro real?' },
+  { icon: RotateCcw, txt: 'O seu fluxo de IA tem algo que sabe dizer "não": um teste, um review, um erro real?' },
 ]
 </script>
 

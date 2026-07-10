@@ -20,7 +20,7 @@ export const ETAPAS_EVOLUCAO: EtapaEvolucao[] = [
   { ano: 'fev/2025', titulo: 'Vibe Coding', desc: 'descrever a ideia e deixar a IA gerar o app', icon: 'Sparkles' },
   { ano: '2025', titulo: 'A onda de exageros', desc: 'promessas de "programar sem saber programar"', icon: 'Megaphone' },
   { ano: '2025', titulo: 'O amadurecimento', desc: 'boas práticas, revisão, engenharia de verdade', icon: 'ShieldCheck' },
-  { ano: '2026', titulo: 'SDD', desc: 'a especificação guia a IA — a resposta madura', icon: 'FileCheck2', atual: true },
+  { ano: '2026', titulo: 'SDD', desc: 'a especificação guia a IA: a resposta madura', icon: 'FileCheck2', atual: true },
 ]
 
 /** Caixa factual do Vibe Coding (§6.2) — origem e reconhecimento verificados. */
@@ -28,5 +28,5 @@ export const VIBE_CODING_FATO = {
   termo: '"Vibe Coding"',
   origem: 'cunhado por Andrej Karpathy no X · 02/02/2025',
   reconhecimento: 'Merriam-Webster (mar/2025) · Palavra do Ano do Collins (2025)',
-  nuance: 'Nem todo desenvolvimento com IA é vibe coding — Simon Willison e Andrew Ng fazem essa distinção.',
+  nuance: 'Nem todo desenvolvimento com IA é vibe coding. Simon Willison e Andrew Ng fazem essa distinção.',
 }

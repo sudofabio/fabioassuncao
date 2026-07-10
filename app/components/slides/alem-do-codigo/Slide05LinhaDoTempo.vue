@@ -1,7 +1,7 @@
 <template>
   <!-- Slide 5 — Linha do tempo · ⭐⭐⭐ · Steps: 4 (uma era por clique; era atual com glow) -->
   <DeckSlide :title="nota.title" :notes="nota.notes">
-    <DeckReveal :delay="0.05" class="eyebrow">o que é desenvolvimento — e como ele evoluiu</DeckReveal>
+    <DeckReveal :delay="0.05" class="eyebrow">o que é desenvolvimento, e como ele evoluiu</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">No começo, você era só "desenvolvedor"</DeckReveal>
 
     <DeckReveal :delay="0.24" class="ctx-strip">
@@ -64,7 +64,12 @@ const eras = [
 .timeline { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 56px; }
 .axis { position: absolute; top: 7px; left: 10px; right: 10px; height: 2px; background: var(--border); }
 .era-col { position: relative; }
-.axis-fill span { position: absolute; top: 7px; left: -26px; right: 0; height: 2px; background: var(--cyan); opacity: 0.5; display: block; }
+/* o segmento do eixo "cresce" (scaleX) da esquerda p/ direita, sincronizado com
+   a entrada da era — em vez de acender de uma vez. A entrada padrão do dstep é
+   neutralizada aqui para o preenchimento parecer contínuo. */
+.axis-fill { transform: none; opacity: 1; }
+.axis-fill span { position: absolute; top: 7px; left: -26px; right: 0; height: 2px; background: var(--cyan); opacity: 0.5; display: block; transform: scaleX(0); transform-origin: left; transition: transform 0.7s var(--ease) 0.08s; }
+.axis-fill.on span { transform: scaleX(1); }
 .era-col:first-child .axis-fill span { left: 10px; }
 .era { position: relative; padding-top: 34px; }
 .era-node { position: absolute; top: 0; left: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--bg2); border: 3px solid var(--text2); }

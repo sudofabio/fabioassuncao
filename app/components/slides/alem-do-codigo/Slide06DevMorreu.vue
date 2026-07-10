@@ -3,7 +3,9 @@
        ① lápides/carimbos com stagger  ② frase-síntese -->
   <DeckSlide :title="nota.title" :notes="nota.notes">
     <DeckReveal :delay="0.05" class="eyebrow">já decretaram a nossa morte várias vezes</DeckReveal>
-    <DeckReveal tag="h2" :delay="0.15" class="title s-title">"Dessa vez o dev acabou" — de novo</DeckReveal>
+    <DeckReveal tag="h2" :delay="0.15" class="title s-title">"Dessa vez o dev acabou", de novo</DeckReveal>
+
+    <div class="mist" aria-hidden="true"></div>
 
     <div class="graves">
       <DeckStep
@@ -31,7 +33,7 @@
     <DeckStep :at="3" variant="dn" class="antihype">
       <span class="ah-nao">nem apocalipse,</span>
       <span class="ah-nao">nem paraíso.</span>
-      <span class="ah-real">Não é "fature 50 mil sem programar" — é <b>fundamentos + método + experiência</b>.</span>
+      <span class="ah-real">Não é "fature 50 mil sem programar": é <b>fundamentos + método + experiência</b>.</span>
     </DeckStep>
   </DeckSlide>
 </template>
@@ -46,7 +48,8 @@ const lapides = ['Low-code', 'No-code', 'CMS', 'Website builders', 'Frameworks']
 
 <style scoped>
 .s-title { font-size: 44px; margin-top: 10px; }
-.graves { display: flex; gap: 22px; justify-content: center; margin-top: 56px; }
+.mist { position: absolute; left: 0; right: 0; top: 34%; height: 240px; pointer-events: none; z-index: 0; opacity: 0; background: radial-gradient(ellipse 46% 60% at 50% 50%, color-mix(in srgb, var(--cyan) 7%, transparent), transparent 72%); }
+.graves { position: relative; z-index: 1; display: flex; gap: 22px; justify-content: center; margin-top: 56px; }
 .grave { position: relative; width: 190px; padding: 30px 18px 22px; text-align: center; background: var(--bg2); border: 1px solid var(--border); border-radius: 60px 60px 10px 10px; }
 .rip { display: block; font-size: 13px; letter-spacing: 0.3em; color: var(--text2); }
 .grave-name { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 19px; margin-top: 10px; }
@@ -57,4 +60,13 @@ const lapides = ['Low-code', 'No-code', 'CMS', 'Website builders', 'Frameworks']
 .ah-nao { font-family: 'Space Grotesk', sans-serif; font-size: 20px; color: var(--coral); font-weight: 600; }
 .ah-real { margin-top: 10px; font-size: 16px; color: var(--text2); }
 .ah-real b { color: var(--text); }
+
+/* ambient: névoa de cemitério deriva devagar; os carimbos "MORTO?" respiram sutilmente. */
+@keyframes mist-drift { 0% { transform: translateX(-26px) scaleX(1); } 100% { transform: translateX(26px) scaleX(1.12); } }
+.deck-root.ambient-on .slide.active .mist { opacity: 1; animation: mist-drift 13s ease-in-out infinite alternate; }
+.deck-root.ambient-on .slide.active .stamp { --amb-bright: 1.3; animation: amb-glow 4s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .graves > .dstep:nth-child(2) .stamp { animation-delay: -1s; }
+.deck-root.ambient-on .slide.active .graves > .dstep:nth-child(3) .stamp { animation-delay: -2s; }
+.deck-root.ambient-on .slide.active .graves > .dstep:nth-child(4) .stamp { animation-delay: -3s; }
+.deck-root.ambient-on .slide.active .graves > .dstep:nth-child(5) .stamp { animation-delay: -4s; }
 </style>

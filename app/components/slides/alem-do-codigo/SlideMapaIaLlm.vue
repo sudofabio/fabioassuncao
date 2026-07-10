@@ -17,12 +17,12 @@
       <p class="p-line mono">
         <span class="kw">function</span> soma(a, b) { <span class="kw">return</span> <span class="ghost">a + b }</span><span class="caret" aria-hidden="true">▌</span>
       </p>
-      <p class="predict-note">Treinado lendo bilhões de textos <b>e código</b> — igual à sugestão do teclado do celular, só que muitíssimo mais poderoso.</p>
+      <p class="predict-note">Treinado lendo bilhões de textos <b>e código</b>, igual à sugestão do teclado do celular, só que muitíssimo mais poderoso.</p>
     </DeckStep>
 
     <DeckStep :at="3" class="caveat">
       <TriangleAlert :size="18" class="cav-icon" />
-      <span>Ele <b>prevê</b> — não "entende" como você. Por isso às vezes erra com toda a confiança. <b class="hl">Você continua no comando.</b></span>
+      <span>Ele <b>prevê</b>, não "entende" como você. Por isso às vezes erra com toda a confiança. <b class="hl">Você continua no comando.</b></span>
     </DeckStep>
   </DeckSlide>
 </template>

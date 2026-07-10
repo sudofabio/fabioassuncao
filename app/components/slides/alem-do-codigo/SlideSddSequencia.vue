@@ -2,7 +2,7 @@
   <!-- As 9 etapas do SDD, do problema ao PR · Steps: 9 (a árvore cresce junto) -->
   <DeckSlide :title="nota.title" :notes="nota.notes">
     <DeckReveal :delay="0.05" class="eyebrow">o método, passo a passo</DeckReveal>
-    <DeckReveal tag="h2" :delay="0.15" class="title s-title">Do problema ao PR — em 9 etapas</DeckReveal>
+    <DeckReveal tag="h2" :delay="0.15" class="title s-title">Do problema ao PR em 9 etapas</DeckReveal>
 
     <div class="grid">
       <!-- esquerda: as 9 etapas, uma por clique -->

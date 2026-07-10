@@ -26,7 +26,7 @@
     </div>
 
     <DeckStep :at="4" :delay="0.5" class="foot">
-      Era um ponto fora da curva — <b>e pontos fora da curva não duram</b>.
+      Era um ponto fora da curva, <b>e pontos fora da curva não duram</b>.
     </DeckStep>
   </DeckSlide>
 </template>

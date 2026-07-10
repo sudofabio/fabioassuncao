@@ -27,7 +27,7 @@
       <DeckStep :at="4" variant="sc" class="fato">
         <BadgeInfo :size="16" class="fato-icon" />
         <div>
-          <b>{{ VIBE_CODING_FATO.termo }}</b> — {{ VIBE_CODING_FATO.origem }}.
+          <b>{{ VIBE_CODING_FATO.termo }}</b>: {{ VIBE_CODING_FATO.origem }}.
           <span class="fato-sub">{{ VIBE_CODING_FATO.reconhecimento }}. {{ VIBE_CODING_FATO.nuance }}</span>
         </div>
       </DeckStep>

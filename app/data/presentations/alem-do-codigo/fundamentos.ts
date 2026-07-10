@@ -46,6 +46,6 @@ export const GRUPOS_FUNDAMENTOS: GrupoFundamento[] = [
 
 export const ROADMAP_SH = {
   url: 'roadmap.sh',
-  label: 'o mapa de estudos — uma recomendação, não conteúdo',
+  label: 'o mapa de estudos: uma recomendação, não conteúdo',
   logo: `${LOGOS}/roadmap-sh.svg`,
 }

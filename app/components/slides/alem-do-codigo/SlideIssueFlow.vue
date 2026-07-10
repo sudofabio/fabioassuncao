@@ -50,7 +50,7 @@
 
     <DeckStep :at="5" variant="dn" class="halfloop">
       <RotateCcw :size="16" class="hl-ic" />
-      <span>O <b class="hl">half-loop</b>: o <b>review</b> sabe dizer <b class="no">não</b> — reprova, corrige e revalida (até 3 ciclos). É a metade que valida.</span>
+      <span>O <b class="hl">half-loop</b>: o <b>review</b> sabe dizer <b class="no">não</b>, reprova, corrige e revalida (até 3 ciclos). É a metade que valida.</span>
     </DeckStep>
   </DeckSlide>
 </template>
