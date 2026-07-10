@@ -10,7 +10,7 @@
         <span class="nivel mono">nível 1</span>
         <Sparkles :size="30" class="icon i1" />
         <b class="d-title">Vibe Coding</b>
-        <p class="d-desc">Exploração: "descreva e receba".</p>
+        <p class="d-desc">Exploração: "descreva e receba".<span class="caret mono" aria-hidden="true">▌</span></p>
         <p class="d-risco"><TriangleAlert :size="14" /> risco: loop infinito de bugs</p>
       </DeckStep>
 
@@ -26,12 +26,9 @@
         <b class="d-title loop-title">Loop Engineering</b>
         <p class="d-desc">Automação: o agente se autocorrige, com limites e regras de parada.</p>
 
-        <!-- ciclo girando (única animação em loop da apresentação) -->
+        <!-- ciclo girando (setas circulares — única animação em loop da apresentação) -->
         <div class="cycle" aria-hidden="true">
-          <svg viewBox="0 0 160 160" class="cycle-svg">
-            <circle cx="80" cy="80" r="62" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="5 8" class="ring" />
-            <polygon points="80,10 87,22 73,22" class="ring-arrow" />
-          </svg>
+          <RefreshCw :size="104" class="cycle-icon" :stroke-width="1.5" />
           <span v-for="(fase, i) in ciclo" :key="fase" class="fase mono" :class="`f${i}`">{{ fase }}</span>
         </div>
       </DeckStep>
@@ -44,7 +41,7 @@
 </template>
 
 <script setup>
-import { Sparkles, Target, TriangleAlert } from 'lucide-vue-next'
+import { Sparkles, Target, TriangleAlert, RefreshCw } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 
 const nota = NOTAS[11]
@@ -59,7 +56,6 @@ const ciclo = ['objetivo', 'ação', 'observação', 'correção']
 .d1 { min-height: 190px; }
 .d2 { min-height: 240px; }
 .d3 { min-height: 300px; border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
-.ring-arrow { fill: var(--cyan); }
 .nivel { font-size: 12px; letter-spacing: 0.2em; color: var(--text2); }
 .icon { margin-top: 2px; }
 .i1 { color: var(--coral); }
@@ -69,10 +65,10 @@ const ciclo = ['objetivo', 'ação', 'observação', 'correção']
 .d-desc { font-size: 14.5px; line-height: 1.45; color: var(--text2); }
 .d-risco { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--red); margin-top: auto; }
 .cycle { position: relative; width: 160px; height: 160px; margin: 10px auto 0; }
-.cycle-svg { position: absolute; inset: 0; transform-origin: center; }
+.cycle-icon { position: absolute; top: 50%; left: 50%; margin: -52px 0 0 -52px; color: var(--cyan); transform-origin: center; filter: drop-shadow(0 0 10px color-mix(in srgb, var(--cyan) 35%, transparent)); }
 /* ambient: o ciclo do Loop Engineering gira só no slide ativo com animações ON
    (congela no estado base em export/reduced-motion/toggle off). */
-.deck-root.ambient-on .slide.active .cycle-svg { animation: spin 14s linear infinite; }
+.deck-root.ambient-on .slide.active .cycle-icon { animation: spin 14s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .fase { position: absolute; font-size: 11px; color: var(--cyan); background: var(--bg2); padding: 2px 7px; border-radius: 20px; border: 1px solid var(--border); }
 .f0 { top: -6px; left: 50%; transform: translateX(-50%); }
@@ -81,4 +77,10 @@ const ciclo = ['objetivo', 'ação', 'observação', 'correção']
 .f3 { left: -18px; top: 50%; transform: translateY(-50%); }
 .foot { margin-top: 30px; text-align: center; font-size: 19px; color: var(--text2); }
 .foot b { color: var(--cyan); }
+.caret { color: var(--coral); margin-left: 2px; opacity: 0; }
+
+/* ambient dos outros níveis (discreto): cursor piscando no Vibe, ícone do Prompt respira. */
+.deck-root.ambient-on .slide.active .d1 .caret { animation: amb-blink 1.1s steps(1) infinite; }
+.deck-root.ambient-on .slide.active .i2 { --amb-bright: 1.4; animation: amb-glow 4.5s ease-in-out infinite; }
+.deck-root.ambient-on .slide.active .i1 { --amb-bright: 1.4; animation: amb-glow 4.5s ease-in-out infinite 1.5s; }
 </style>

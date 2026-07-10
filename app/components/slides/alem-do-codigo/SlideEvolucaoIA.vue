@@ -13,7 +13,10 @@
         <DeckStep :at="i + 1" variant="dn" class="etapa" :class="{ atual: e.atual }">
           <span class="node" :class="{ 'node-atual': e.atual }"></span>
           <span class="ano mono">{{ e.ano }}</span>
-          <component :is="ICONS[e.icon]" :size="26" class="et-icon" :class="{ 'icon-atual': e.atual }" />
+          <div v-if="e.logos" class="et-logos">
+            <span v-for="l in e.logos" :key="l" class="et-logo"><BrandLogo :src="`${LOGOS}/${l}.svg`" :alt="l" /></span>
+          </div>
+          <component v-else :is="ICONS[e.icon]" :size="26" class="et-icon" :class="{ 'icon-atual': e.atual }" />
           <b class="et-titulo">{{ e.titulo }}</b>
           <span class="et-desc">{{ e.desc }}</span>
         </DeckStep>
@@ -40,8 +43,10 @@
 import { Search, MessageSquare, Code2, Sparkles, Megaphone, ShieldCheck, FileCheck2, BadgeInfo } from 'lucide-vue-next'
 import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 import { ETAPAS_EVOLUCAO, VIBE_CODING_FATO } from '~/data/presentations/alem-do-codigo/evolucao'
+import BrandLogo from './BrandLogo.vue'
 
 const nota = NOTAS[31]
+const LOGOS = '/presentations/alem-do-codigo/logos'
 const ICONS = { Search, MessageSquare, Code2, Sparkles, Megaphone, ShieldCheck, FileCheck2 }
 </script>
 
@@ -54,6 +59,8 @@ const ICONS = { Search, MessageSquare, Code2, Sparkles, Megaphone, ShieldCheck, 
 .node-atual { border-color: var(--coral); background: var(--coral); box-shadow: 0 0 16px color-mix(in srgb, var(--coral) 70%, transparent); }
 .ano { font-size: 12px; color: var(--cyan); letter-spacing: 0.02em; }
 .et-icon { color: var(--text2); margin-top: 2px; }
+.et-logos { display: flex; align-items: center; gap: 8px; height: 24px; margin-top: 2px; color: var(--text); }
+.et-logo { display: inline-flex; height: 22px; width: 22px; }
 .icon-atual { color: var(--coral); filter: drop-shadow(0 0 9px color-mix(in srgb, var(--coral) 55%, transparent)); }
 .et-titulo { font-family: 'Space Grotesk', sans-serif; font-size: 15.5px; line-height: 1.2; }
 .etapa.atual .et-titulo { color: var(--coral); }

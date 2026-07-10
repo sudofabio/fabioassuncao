@@ -18,8 +18,15 @@
       </p>
 
       <div ref="priceRef" class="price">
-        <span class="price-label mono">assinatura a partir de</span>
-        <span class="price-value mono">US$ <DeckCounter :to="20" :at="2" :duration="1200" /><span class="price-per">/mês</span></span>
+        <span class="price-label mono">o custo de gerar código, por mês</span>
+        <div class="tiers">
+          <div v-for="t in TIERS" :key="t.nome" class="tier" :class="{ hot: t.hot }">
+            <span class="tier-nome mono">{{ t.nome }}</span>
+            <span class="tier-brl">≈ R$ {{ t.brl }}</span>
+            <span class="tier-usd mono">US$ {{ t.usd }}</span>
+          </div>
+        </div>
+        <span class="price-note mono">valores aproximados · variam com câmbio, impostos e plano · US$ 1 ≈ R$ 5,14</span>
       </div>
     </div>
 
@@ -34,6 +41,13 @@ import { NOTAS } from '~/data/presentations/alem-do-codigo/notas'
 const nota = NOTAS[7]
 
 const slideEl = ref(null)
+
+// Faixa de planos (genéricos). US$ reais → R$ à cotação ~5,14 (aproximado).
+const TIERS = [
+  { nome: 'básico', usd: '20', brl: '103' },
+  { nome: 'profissional', usd: '100', brl: '514' },
+  { nome: 'intensivo', usd: '200', brl: '1.028', hot: true },
+]
 
 const rain = [
   'const app = await ai.generate()',
@@ -74,10 +88,15 @@ useSlideTimeline((tl) => {
 .commodity { color: var(--cyan); text-shadow: 0 0 34px color-mix(in srgb, var(--cyan) 40%, transparent); }
 .support { margin-top: 30px; font-size: 21px; opacity: 0; }
 .support-b { color: var(--text); font-weight: 600; }
-.price { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; }
-.price-label { font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text2); }
-.price-value { font-size: 54px; font-weight: 500; color: var(--coral); white-space: nowrap; }
-.price-per { font-size: 22px; color: var(--text2); }
+.price { margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0; }
+.price-label { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text2); }
+.tiers { display: flex; align-items: stretch; gap: 14px; }
+.tier { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 12px 22px; border-radius: 12px; border: 1px solid var(--border); background: color-mix(in srgb, var(--bg2) 60%, transparent); }
+.tier.hot { border-color: color-mix(in srgb, var(--coral) 45%, var(--border)); background: color-mix(in srgb, var(--coral) 8%, transparent); }
+.tier-nome { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text2); }
+.tier-brl { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; color: var(--coral); white-space: nowrap; }
+.tier-usd { font-size: 12.5px; color: var(--text2); }
+.price-note { font-size: 11px; color: var(--text2); opacity: 0.8; }
 .anchor { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 /* ambient: chuva de código estilo Matrix — as linhas (rotacionadas 90deg)

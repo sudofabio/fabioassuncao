@@ -9,13 +9,14 @@ export interface EtapaEvolucao {
   titulo: string
   desc: string
   icon: string
+  logos?: string[]
   atual?: boolean
 }
 
 export const ETAPAS_EVOLUCAO: EtapaEvolucao[] = [
-  { ano: '~2008', titulo: 'Google + Stack Overflow', desc: 'a resposta estava num fórum — você copiava e adaptava', icon: 'Search' },
-  { ano: 'nov/2022', titulo: 'ChatGPT', desc: 'a resposta virou conversa (GPT-3.5)', icon: 'MessageSquare' },
-  { ano: '2023', titulo: 'Copilot & Cursor', desc: 'a IA entra no editor — o "ghost text"', icon: 'Code2' },
+  { ano: '~2008', titulo: 'Google + Stack Overflow', desc: 'a resposta estava num fórum, você copiava e adaptava', icon: 'Search', logos: ['google', 'stackoverflow'] },
+  { ano: 'nov/2022', titulo: 'ChatGPT', desc: 'a resposta virou conversa (GPT-3.5)', icon: 'MessageSquare', logos: ['openai'] },
+  { ano: '2023', titulo: 'Copilot & Cursor', desc: 'a IA entra no editor, o "ghost text"', icon: 'Code2', logos: ['github-copilot', 'cursor'] },
   { ano: 'fev/2025', titulo: 'Vibe Coding', desc: 'descrever a ideia e deixar a IA gerar o app', icon: 'Sparkles' },
   { ano: '2025', titulo: 'A onda de exageros', desc: 'promessas de "programar sem saber programar"', icon: 'Megaphone' },
   { ano: '2025', titulo: 'O amadurecimento', desc: 'boas práticas, revisão, engenharia de verdade', icon: 'ShieldCheck' },

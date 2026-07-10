@@ -24,7 +24,7 @@ const props = defineProps({
 })
 
 // Marcas monocromáticas cadastradas em public/.../logos/ que precisam do mask.
-const MONO = ['openai', 'anthropic', 'aws', 'roadmap-sh', 'cursor', 'v0', 'antigravity', 'github-copilot']
+const MONO = ['openai', 'anthropic', 'aws', 'roadmap-sh', 'cursor', 'v0', 'antigravity', 'github-copilot', 'stackoverflow']
 
 const isMono = computed(() => {
   const base = props.src.split('/').pop()?.replace('.svg', '') ?? ''
