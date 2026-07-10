@@ -2,6 +2,15 @@
 import { presentations } from "~/data/presentations";
 
 const { t, locale } = useLocale();
+
+usePageSeo({
+  title: () => (locale.value === "en" ? "Talks & Presentations" : "Palestras & Apresentações"),
+  description: () =>
+    locale.value === "en"
+      ? "Talks and technical presentations by Fábio Assunção on software engineering, AI, and cloud computing."
+      : "Palestras e apresentações técnicas de Fábio Assunção sobre engenharia de software, IA e cloud computing.",
+  path: "/presentations",
+});
 </script>
 
 <template>

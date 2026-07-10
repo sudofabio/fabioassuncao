@@ -55,6 +55,7 @@
 
 <script setup>
 import { alemDoCodigoTheme } from '~/themes/alem-do-codigo'
+import { presentations } from '~/data/presentations'
 import Slide01Capa from '~/components/slides/alem-do-codigo/Slide01Capa.vue'
 import Slide02QuemSou from '~/components/slides/alem-do-codigo/Slide02QuemSou.vue'
 import Slide03Reflexao from '~/components/slides/alem-do-codigo/Slide03Reflexao.vue'
@@ -102,13 +103,31 @@ onMounted(async () => {
   deckRef.value?.onDownload()
 })
 
+// SEO a partir do registro canônico da palestra (data/presentations).
+const entry = presentations.find(p => p.slug === route.path.split('/').pop())
+  ?? presentations[0]
+
+usePageSeo({
+  title: entry.title,
+  description: `Palestra no ${entry.event}. ${entry.description.pt}`,
+  path: `/presentations/${entry.slug}`,
+  ogLocale: 'pt_BR',
+})
+
 useHead({
-  title: 'Além do código — IA e o novo desenvolvedor · Apresentação',
-  meta: [
+  // O conteúdo da apresentação é pt-BR (override do lang global do site).
+  htmlAttrs: { lang: 'pt-BR' },
+  script: [
     {
-      name: 'description',
-      content:
-        'Apresentação do 10º Talk — Vale do Pindaré Tech (IFMA Santa Inês/MA): a evolução do mercado, a comoditização do código e o novo papel do desenvolvedor.',
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'PresentationDigitalDocument',
+        'name': entry.title,
+        'description': entry.description.pt,
+        'inLanguage': 'pt-BR',
+        'author': { '@type': 'Person', 'name': 'Fábio Assunção', 'url': 'https://fabioassuncao.com' },
+      }),
     },
   ],
 })
