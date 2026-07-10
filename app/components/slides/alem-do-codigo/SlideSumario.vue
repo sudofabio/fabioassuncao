@@ -1,6 +1,6 @@
 <template>
   <!-- Sumário — panorama da palestra · Steps: 6 (um bloco por clique, em cascata) -->
-  <DeckSlide :title="nota.title" :notes="nota.notes">
+  <DeckSlide :title="nota.title" :notes="nota.notes" effect="tech-constellation">
     <DeckReveal :delay="0.05" class="eyebrow">o mapa de hoje</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">O que vem por aí</DeckReveal>
 

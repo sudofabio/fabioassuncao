@@ -45,7 +45,7 @@
 
         <DeckStep :at="3" class="mundo">
           <span class="mundo-kicker mono">o remoto derrubou a fronteira geográfica</span>
-          <p class="mundo-frase title"><Globe :size="26" class="mundo-globe" /> De <span class="kw kw-coral kw-live" style="--kd: .3s">Santa Inês</span> para o mundo</p>
+          <!-- <p class="mundo-frase title"><Globe :size="26" class="mundo-globe" /> De <span class="kw kw-coral kw-live" style="--kd: .3s">Santa Inês</span> para o mundo</p> -->
           <p class="mundo-apoio">No Brasil, <b><DeckCounter :to="CALLOUTS_TRABALHO.atuamExterior" :decimals="0" suffix="%" :at="3" /></b> dos devs já trabalham para o exterior e <b><DeckCounter :to="CALLOUTS_TRABALHO.maisDeUmContrato" :decimals="1" suffix="%" :at="3" /></b> têm mais de um contrato. Do interior, você também pode.</p>
         </DeckStep>
       </div>

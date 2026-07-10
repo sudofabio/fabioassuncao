@@ -1,5 +1,7 @@
 import type { InjectionKey, Ref, ComputedRef } from 'vue'
 
+export type { DeckBackgroundAccent, DeckBackgroundConfig, DeckBackgroundInput } from './backgrounds/registry'
+
 /**
  * Deck Engine v2 — contexto compartilhado entre a engine (`DeckStage`) e os
  * componentes de slide. A engine é agnóstica de conteúdo: nada específico de
@@ -92,6 +94,13 @@ export interface DeckContext {
    * `.deck-root`; este computed existe para loops dirigidos por JS/GSAP.
    */
   ambientOn: ComputedRef<boolean>
+  /**
+   * Camadas de fundo decorativas (DeckSlideBackground) montadas — off no SSR,
+   * durante o export e por preferência do usuário ("Fundos animados", menu ⋮).
+   * O MOVIMENTO delas continua gated por `ambientOn`/classe `.ambient-on`:
+   * com backgrounds on e ambient off, a camada existe porém estática.
+   */
+  backgroundsOn: ComputedRef<boolean>
   /**
    * Pedido transiente de "revelar os steps do slide atual ao estado final sem
    * animar", disparado ao completar o slide via avanço. Só o GSAP o honra

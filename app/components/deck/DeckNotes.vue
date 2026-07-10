@@ -13,17 +13,36 @@
     <div class="pr-side">
       <div class="pr-next-label">A seguir</div>
       <div class="pr-next">{{ nextTitle }}</div>
-      <div class="pr-timer" aria-label="Tempo decorrido">{{ elapsed }}</div>
+      <div class="pr-timer-row">
+        <span class="pr-timer" :class="{ paused: !running }" aria-label="Tempo decorrido">{{ elapsed }}</span>
+        <button
+          type="button"
+          class="pr-timer-btn"
+          :title="running ? 'Pausar cronômetro' : 'Retomar cronômetro'"
+          :aria-label="running ? 'Pausar cronômetro' : 'Retomar cronômetro'"
+          :aria-pressed="!running"
+          @click="toggleTimer"
+        >
+          <Pause v-if="running" :size="14" />
+          <Play v-else :size="14" />
+        </button>
+        <button type="button" class="pr-timer-btn" title="Zerar cronômetro" aria-label="Zerar cronômetro" @click="resetTimer">
+          <RotateCcw :size="14" />
+        </button>
+      </div>
     </div>
   </aside>
 </template>
 
 <script setup>
 /**
- * Presenter mode (escopo mínimo): notas do slide atual, contagem de steps,
- * título do próximo slide e timer decorrido. Ativado por ?presenter=1 no
- * DeckStage. Os metadados vêm do registro dos DeckSlide (props title/notes).
+ * Presenter mode: notas do slide atual, contagem de steps, título do próximo
+ * slide e cronômetro com pausa/zerar. Ativado pelo menu ⋮ ("Notas do
+ * palestrante"), tecla N ou ?presenter=1 no DeckStage. Os metadados vêm do
+ * registro dos DeckSlide (props title/notes).
  */
+import { Pause, Play, RotateCcw } from 'lucide-vue-next'
+
 const props = defineProps({
   /** Registro de metadados dos slides ({ title, notes }[]). */
   metas: { type: Array, required: true },
@@ -40,19 +59,47 @@ const nextTitle = computed(() => {
   return meta.title || `Slide ${props.slideIndex + 2}`
 })
 
-// Timer decorrido desde a montagem (início da apresentação).
+// Cronômetro: acumulador (ms) + período corrente. Pausar congela sem perder
+// o tempo já contado; zerar volta a 00:00 mantendo o estado rodando/pausado.
+const running = ref(true)
 const elapsed = ref('00:00')
-let start = 0
+let accumulated = 0
+let startedAt = 0
 let interval = null
 
+function format(ms) {
+  const s = Math.floor(ms / 1000)
+  const mm = String(Math.floor(s / 60)).padStart(2, '0')
+  const ss = String(s % 60).padStart(2, '0')
+  return `${mm}:${ss}`
+}
+
+function tick() {
+  elapsed.value = format(accumulated + (running.value ? Date.now() - startedAt : 0))
+}
+
+function toggleTimer() {
+  if (running.value) {
+    accumulated += Date.now() - startedAt
+    clearInterval(interval)
+    interval = null
+  } else {
+    startedAt = Date.now()
+    interval = setInterval(tick, 1000)
+  }
+  running.value = !running.value
+  tick()
+}
+
+function resetTimer() {
+  accumulated = 0
+  startedAt = Date.now()
+  tick()
+}
+
 onMounted(() => {
-  start = Date.now()
-  interval = setInterval(() => {
-    const s = Math.floor((Date.now() - start) / 1000)
-    const mm = String(Math.floor(s / 60)).padStart(2, '0')
-    const ss = String(s % 60).padStart(2, '0')
-    elapsed.value = `${mm}:${ss}`
-  }, 1000)
+  startedAt = Date.now()
+  interval = setInterval(tick, 1000)
 })
 
 onBeforeUnmount(() => clearInterval(interval))

@@ -32,3 +32,12 @@ Personal website for Fabio Assuncao. Built with Nuxt 4 and deployed to Cloudflar
 ## Cloudflare Bindings
 
 Access Cloudflare bindings in server routes via `event.context.cloudflare.env`. Types are defined in `env.d.ts` and `worker-configuration.d.ts`.
+
+## Deck Engine (presentations)
+
+Custom slide engine, content-agnostic, in `app/components/deck/` (planned for extraction as a Nuxt Layer):
+
+- **Contract:** `app/components/deck/context.ts` — `DeckContext`, `DeckTheme`, injection keys.
+- **Ambient convention:** `app/assets/css/deck.css` — every infinite CSS loop must live behind `.deck-root.ambient-on .slide.active …`; the base state must be static and deterministic (PDF export captures it).
+- **Animated backgrounds:** `app/components/deck/backgrounds/registry.ts` — how to create/register background effects and presets is documented in its docblock. Slides opt in via the `effect` prop on `DeckSlide` (effect name, preset name, or config object). The "Fundos animados" toggle (⋮ menu, `useDeckBackgrounds`) mounts/unmounts the layer; "Animações contínuas" (`useDeckAmbient`) gates its motion.
+- **Presentations:** a page in `app/pages/presentations/` renders `<DeckStage :theme>` with slide components as ordered children; per-presentation content lives in `app/components/slides/<name>/` and `app/data/presentations/<name>/`, theme in `app/themes/`.

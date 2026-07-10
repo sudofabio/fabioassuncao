@@ -7,16 +7,24 @@
     aria-roledescription="slide"
     :aria-hidden="!isActive"
   >
+    <DeckSlideBackground v-if="effectConfig" :config="effectConfig" />
     <slot />
   </section>
 </template>
 
 <script setup>
 import { DECK_KEY, SLIDE_KEY } from './context'
+import DeckSlideBackground from './backgrounds/DeckSlideBackground.vue'
+import { resolveBackgroundConfig } from './backgrounds/registry'
 
 const props = defineProps({
   /** Background do slide: qualquer valor CSS. 'deep' = fundo de impacto do tema. */
   background: { type: String, default: '' },
+  /**
+   * Fundo animado decorativo: nome de efeito ('aurora'), nome de preset
+   * ('tech-constellation') ou config `DeckBackgroundConfig` (ver backgrounds/registry.ts).
+   */
+  effect: { type: [String, Object], default: '' },
   /** Remove o padding interno (slide "sangrado"). */
   flush: { type: Boolean, default: false },
   /** Título curto do slide (presenter mode / acessibilidade). */
@@ -58,6 +66,8 @@ provide(SLIDE_KEY, ctx)
 // Exposto para o componente-dono do slide (que renderiza o DeckSlide e portanto
 // não pode usar inject): útil para useSlideTimeline e opções reativas de gráfico.
 defineExpose({ ctx })
+
+const effectConfig = props.effect ? resolveBackgroundConfig(props.effect) : null
 
 const resolvedBackground = computed(() => {
   if (!props.background) return 'var(--bg)'

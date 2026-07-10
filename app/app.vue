@@ -2,7 +2,8 @@
 const { locale } = useLocale();
 
 useHead({
-  titleTemplate: "Fábio Assunção — Software Engineer",
+  titleTemplate: (chunk?: string) =>
+    chunk ? `${chunk} · Fábio Assunção` : "Fábio Assunção — Software Engineer",
   htmlAttrs: computed(() => ({ lang: locale.value })),
   meta: [
     { name: "author", content: "Fábio Assunção" },
@@ -28,10 +29,7 @@ useHead({
     { name: "twitter:creator", content: "@fabioassuncaohq" },
     { name: "theme-color", content: "#0f0d0b" },
   ],
-  link: [
-    { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
-    { rel: "canonical", href: "https://fabioassuncao.com" },
-  ],
+  link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   script: [
     {
       type: "application/ld+json",

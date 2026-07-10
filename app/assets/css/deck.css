@@ -140,6 +140,18 @@ html.deck-light .deck-root {
 /* Palavra-chave acesa que continua "respirando" (brilho sobe e desce). */
 .deck-root.ambient-on .slide.active .kw-live { animation: amb-glow 4.5s ease-in-out infinite; }
 
+/* ---------- backgrounds decorativos (DeckSlideBackground) ----------
+   Camada de fundo animado de um slide (prop `effect` do DeckSlide). Fica
+   atrás de todo o conteúdo (z-index:-1 sob o isolation:isolate do .slide) e
+   acima do background do próprio slide. Só existe no client, no slide ativo,
+   fora do export e com "Fundos animados" (menu ⋮) ligado — o snapdom nunca a
+   captura. Os efeitos em components/deck/backgrounds/ seguem a MESMA regra de
+   ouro do ambient acima: estado base estático, loops só atrás de
+   `.deck-root.ambient-on .slide.active`. Parametrização via vars setadas pelo
+   host: --bge-opacity, --bge-speed, --bge-accent, --bge-accent-2. */
+.deck-root .slide-bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  opacity: var(--bge-opacity, .5); transition: opacity .6s var(--ease); }
+
 /* ---------- controls (toolbar) ---------- */
 .deck-root .controls { position: fixed; left: 50%; bottom: var(--controls-bottom); transform: translateX(-50%);
   display: flex; align-items: center; gap: calc(6px * var(--ui-scale));
@@ -255,7 +267,13 @@ html.deck-light .deck-root {
 .deck-root .presenter .pr-side { width: 240px; flex: none; border-left: 1px solid var(--ui-hairline); padding-left: 18px; }
 .deck-root .presenter .pr-next-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text2); margin-bottom: 5px; }
 .deck-root .presenter .pr-next { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13.5px; color: var(--ui-text-dim); line-height: 1.3; }
-.deck-root .presenter .pr-timer { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--coral); margin-top: 12px; font-variant-numeric: tabular-nums; }
+.deck-root .presenter .pr-timer-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.deck-root .presenter .pr-timer { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; color: var(--coral); font-variant-numeric: tabular-nums; }
+.deck-root .presenter .pr-timer.paused { color: var(--text2); }
+.deck-root .presenter .pr-timer-btn { display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; padding: 0; border-radius: 6px; border: 1px solid var(--ui-hairline);
+  background: transparent; color: var(--ui-text-dim); cursor: pointer; transition: background .15s, color .15s; }
+.deck-root .presenter .pr-timer-btn:hover { background: var(--ui-hover); color: var(--ui-text); }
 
 /* Presenter em telas pequenas: empilha notas e coluna lateral. */
 @media (max-width: 640px) {
@@ -263,7 +281,8 @@ html.deck-light .deck-root {
   .deck-root .presenter .pr-side { width: 100%; border-left: 0; padding-left: 0;
     border-top: 1px solid var(--ui-hairline); padding-top: 8px;
     display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-  .deck-root .presenter .pr-timer { margin-top: 0; font-size: 18px; }
+  .deck-root .presenter .pr-timer-row { margin-top: 0; }
+  .deck-root .presenter .pr-timer { font-size: 18px; }
 }
 
 /* ---------- acessibilidade: respeitar redução de movimento ---------- */

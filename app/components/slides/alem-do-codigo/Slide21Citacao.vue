@@ -1,7 +1,7 @@
 <template>
   <!-- Slide 21 — "Uma narrativa conveniente demais" · ⭐⭐ · Steps: 1
        Apenas a citação nº 1 de Huang (regra inviolável). Sem foto — nome + cargo. -->
-  <DeckSlide :title="nota.title" :notes="nota.notes" background="deep">
+  <DeckSlide :title="nota.title" :notes="nota.notes" background="deep" effect="quote-glow">
     <div class="center">
       <span class="aspas title" aria-hidden="true">"</span>
       <DeckStep :at="1" tag="blockquote" class="quote">

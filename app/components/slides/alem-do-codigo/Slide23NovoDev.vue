@@ -1,7 +1,7 @@
 <template>
   <!-- Slide 23 — O novo desenvolvedor · ⭐⭐⭐ · Steps: 2
        ① perfil "digitador" ② transformação → "arquiteto" (tom de PROMOÇÃO) -->
-  <DeckSlide :title="nota.title" :notes="nota.notes">
+  <DeckSlide :title="nota.title" :notes="nota.notes" :effect="{ type: 'flow', accent: 'mix', opacity: 0.35 }">
     <DeckReveal :delay="0.05" class="eyebrow">juntando tudo</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">O novo desenvolvedor não é quem digita mais rápido</DeckReveal>
 
