@@ -201,4 +201,19 @@ Agradecer o evento, o IFMA e a plateia. Apontar o QR: "A apresentação completa
 "Três palavras que você vai ouvir muito. MCP, Model Context Protocol: um padrão aberto que conecta o modelo a ferramentas e dados — pensa nele como a porta USB-C da IA. Agent Skills: pacotes de conhecimento, uma pasta com instruções que ensina o agente a fazer uma tarefa repetível. E agentes/automações: é juntar tudo num fluxo que roda sozinho, sob a sua supervisão."
 → "E o meu Issue Flow é exatamente isso: skills + agente + automação. Daqui a pouco eu mostro rodando."`,
   },
+  // ————————————————————————————————————————————————————————————
+  // Bloco SDD — narrativa de evolução e a sequência de 9 etapas.
+  // ————————————————————————————————————————————————————————————
+  {
+    title: 'SDD · Como chegamos até aqui',
+    notes: `[Steps: 7 — uma etapa por clique; caixa factual do Vibe Coding aparece no passo 4]
+"Antes de eu te mostrar o método, uma linha do tempo rápida. ① Lá atrás: Google e Stack Overflow — a resposta estava num fórum, você copiava e adaptava. ② Fim de 2022: ChatGPT — a resposta virou conversa. ③ 2023: Copilot e Cursor colocam a IA dentro do editor, o 'ghost text'. ④ Fevereiro de 2025: Vibe Coding — descrever a ideia e deixar a IA gerar o app inteiro. (o termo foi cunhado pelo Andrej Karpathy num post no X; virou verbete e Palavra do Ano). ⑤ Em paralelo, uma onda de exageros e promessas oportunistas. ⑥ E o mercado amadureceu: boas práticas, revisão, engenharia de verdade. ⑦ Daí nasce o SDD." Tratar o hype com respeito profissional — sem citar influenciadores.
+→ "De copiar resposta de fórum a copiar resposta de chat, o problema sempre foi o mesmo: contexto. O SDD é a resposta madura."`,
+  },
+  {
+    title: 'SDD · As 9 etapas, do problema ao PR',
+    notes: `[Steps: 9 — uma etapa por clique; a árvore de arquivos cresce junto]
+"O SDD, na prática, é uma sequência. ① Tenho um problema real — uma frase vaga de usuário. ② Transformo em intenção clara. ③ Gero uma especificação. ④ Refino requisitos e restrições — stack, regras, segurança. ⑤ Valido o escopo com critérios de aceite. ⑥ Quebro em tarefas atômicas. ⑦ Implemento com apoio da IA. ⑧ Reviso, testo e ajusto — e aqui mora o loop de correção. ⑨ Integro ao projeto num Pull Request." Amarrar às fases: problema/intenção = generate, spec/refino/validação = prd, tarefas = plan, implemento = execute, revisão = review, integração = pr.
+→ "E não é teoria: deixa eu te mostrar isso rodando de verdade, com o Issue Flow."`,
+  },
 ]

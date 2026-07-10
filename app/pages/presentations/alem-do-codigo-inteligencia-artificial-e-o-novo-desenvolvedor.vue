@@ -27,11 +27,13 @@
     <SlideEditoresDna />
     <SlideMapaMcpSkills />
     <Slide11Iceberg />
-    <!-- Bloco D — O método -->
+    <!-- Bloco E — O método / SDD -->
+    <SlideEvolucaoIA />
     <Slide12Niveis />
     <Slide13TddSdd />
     <Slide14FluxoSdd />
     <Slide15PromptVsSpec />
+    <SlideSddSequencia />
     <!-- Bloco E — Mercado em números -->
     <Slide16Pandemia />
     <Slide17Historia />
@@ -67,10 +69,12 @@ import SlideMapaModeloAgente from '~/components/slides/alem-do-codigo/SlideMapaM
 import SlideEditoresDna from '~/components/slides/alem-do-codigo/SlideEditoresDna.vue'
 import SlideMapaMcpSkills from '~/components/slides/alem-do-codigo/SlideMapaMcpSkills.vue'
 import Slide11Iceberg from '~/components/slides/alem-do-codigo/Slide11Iceberg.vue'
+import SlideEvolucaoIA from '~/components/slides/alem-do-codigo/SlideEvolucaoIA.vue'
 import Slide12Niveis from '~/components/slides/alem-do-codigo/Slide12Niveis.vue'
 import Slide13TddSdd from '~/components/slides/alem-do-codigo/Slide13TddSdd.vue'
 import Slide14FluxoSdd from '~/components/slides/alem-do-codigo/Slide14FluxoSdd.vue'
 import Slide15PromptVsSpec from '~/components/slides/alem-do-codigo/Slide15PromptVsSpec.vue'
+import SlideSddSequencia from '~/components/slides/alem-do-codigo/SlideSddSequencia.vue'
 import Slide16Pandemia from '~/components/slides/alem-do-codigo/Slide16Pandemia.vue'
 import Slide17Historia from '~/components/slides/alem-do-codigo/Slide17Historia.vue'
 import Slide18Salarios from '~/components/slides/alem-do-codigo/Slide18Salarios.vue'
