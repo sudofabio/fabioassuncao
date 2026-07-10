@@ -1,7 +1,7 @@
 <template>
   <!-- Slide 13 — TDD → SDD · ⭐⭐⭐ CLÍMAX DA PALESTRA (âncora) · Steps: 2
        ① morph tipográfico TDD→SDD  ② badge "#1 skill 2026" + frases -->
-  <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep">
+  <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep" effect="climax-ribbon">
     <div class="center">
       <DeckReveal :delay="0.1" class="evo">
         <span class="evo-item ghost"><b>Go Horse</b><i>improviso, sem plano</i></span>

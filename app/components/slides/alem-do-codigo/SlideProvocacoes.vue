@@ -1,6 +1,6 @@
 <template>
   <!-- Provocações / Q&A · Steps: 4 (uma provocação por clique) -->
-  <DeckSlide :title="nota.title" :notes="nota.notes" background="deep">
+  <DeckSlide :title="nota.title" :notes="nota.notes" background="deep" :effect="{ type: 'embers', accent: 'mix', opacity: 0.4 }">
     <DeckReveal :delay="0.05" class="eyebrow">antes das perguntas · leve pra casa</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">Quatro provocações</DeckReveal>
 

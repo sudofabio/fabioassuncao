@@ -140,6 +140,18 @@ html.deck-light .deck-root {
 /* Palavra-chave acesa que continua "respirando" (brilho sobe e desce). */
 .deck-root.ambient-on .slide.active .kw-live { animation: amb-glow 4.5s ease-in-out infinite; }
 
+/* ---------- backgrounds decorativos (DeckSlideBackground) ----------
+   Camada de fundo animado de um slide (prop `effect` do DeckSlide). Fica
+   atrás de todo o conteúdo (z-index:-1 sob o isolation:isolate do .slide) e
+   acima do background do próprio slide. Só existe no client, no slide ativo,
+   fora do export e com "Fundos animados" (menu ⋮) ligado — o snapdom nunca a
+   captura. Os efeitos em components/deck/backgrounds/ seguem a MESMA regra de
+   ouro do ambient acima: estado base estático, loops só atrás de
+   `.deck-root.ambient-on .slide.active`. Parametrização via vars setadas pelo
+   host: --bge-opacity, --bge-speed, --bge-accent, --bge-accent-2. */
+.deck-root .slide-bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  opacity: var(--bge-opacity, .5); transition: opacity .6s var(--ease); }
+
 /* ---------- controls (toolbar) ---------- */
 .deck-root .controls { position: fixed; left: 50%; bottom: var(--controls-bottom); transform: translateX(-50%);
   display: flex; align-items: center; gap: calc(6px * var(--ui-scale));

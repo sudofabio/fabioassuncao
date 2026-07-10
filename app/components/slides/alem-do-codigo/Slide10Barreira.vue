@@ -1,7 +1,7 @@
 <template>
   <!-- Slide 10 — A barreira despencou · ⭐⭐⭐ (momento wow) · Steps: 2
        ① os dois cenários "de antes" (empresa · freelancer)  ② o cenário com IA + punchline -->
-  <DeckSlide :title="nota.title" :notes="nota.notes">
+  <DeckSlide :title="nota.title" :notes="nota.notes" :effect="{ type: 'glow', accent: 'cyan', opacity: 0.35 }">
     <DeckReveal :delay="0.05" class="eyebrow">vibe coding e a quebra da barreira de entrada</DeckReveal>
     <DeckReveal tag="h2" :delay="0.15" class="title s-title">A barreira de entrada despencou</DeckReveal>
 

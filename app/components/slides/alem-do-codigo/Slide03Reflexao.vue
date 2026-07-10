@@ -1,7 +1,7 @@
 <template>
   <!-- Slide 3 — Desenvolver ≠ digitar código · ⭐⭐⭐ (âncora) · Steps: 2
        ① risco corta "Escrever sintaxe"  ② "Resolver problemas reais" -->
-  <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep">
+  <DeckSlide ref="slideEl" :title="nota.title" :notes="nota.notes" background="deep" :effect="{ type: 'aurora', accent: 'mix', opacity: 0.45 }">
     <div class="center">
       <p ref="oldRef" class="title old">
         Escrever sintaxe

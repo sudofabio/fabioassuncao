@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles, PanelTop } from 'lucide-vue-next'
+import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles, PanelTop, Layers } from 'lucide-vue-next'
 import { DECK_KEY } from './context'
 import DeckNotes from './DeckNotes.vue'
 import DeckMenu from './DeckMenu.vue'
@@ -169,8 +169,19 @@ const presenterOn = computed(() => isMounted.value && route.query.presenter === 
 const { enabled: ambientEnabled, toggle: toggleAmbient } = useDeckAmbient()
 // Visibilidade da barra de progresso — independente dos controles de navegação.
 const { visible: progressVisible, toggle: toggleProgress } = useDeckProgress()
+// Aba oculta remove `.ambient-on`: loops CSS voltam ao estado base e param de
+// consumir CPU/GPU; ao voltar, recomeçam (delays negativos disfarçam o reset).
+const pageVisible = ref(true)
 const ambientOn = computed(() =>
-  isMounted.value && ambientEnabled.value && !exporting.value && !reducedMotion.value
+  isMounted.value && ambientEnabled.value && !exporting.value && !reducedMotion.value && pageVisible.value
+)
+
+// Fundos animados (DeckSlideBackground): gate de MONTAGEM da camada — ortogonal
+// ao ambient, que governa o movimento. Off durante export (snapdom captura o
+// slide sem a camada) e no SSR (HTML prerenderizado nunca a contém).
+const { enabled: backgroundsEnabled, toggle: toggleBackgrounds } = useDeckBackgrounds()
+const backgroundsOn = computed(() =>
+  isMounted.value && backgroundsEnabled.value && !exporting.value
 )
 
 // Painel de ajuda adaptado ao dispositivo.
@@ -219,6 +230,7 @@ const menuItems = computed(() => {
       disabled: exporting.value,
     },
     { id: 'ambient', label: 'Animações contínuas', icon: Sparkles, checked: ambientEnabled.value },
+    { id: 'backgrounds', label: 'Fundos animados', icon: Layers, checked: backgroundsEnabled.value },
     { id: 'pin', label: 'Controles sempre visíveis', icon: Pin, checked: pinned.value },
     { id: 'progress', label: 'Barra de progresso', icon: PanelTop, checked: progressVisible.value },
     { id: 'help', label: 'Atalhos e ajuda', icon: Info },
@@ -231,6 +243,7 @@ function onMenuSelect(id) {
   if (id === 'fullscreen') toggleFullscreen()
   else if (id === 'pdf') onDownload()
   else if (id === 'ambient') toggleAmbient()
+  else if (id === 'backgrounds') toggleBackgrounds()
   else if (id === 'pin') pinned.value = !pinned.value
   else if (id === 'progress') toggleProgress()
   else if (id === 'help') helpOpen.value = true
@@ -292,6 +305,7 @@ provide(DECK_KEY, {
   reducedMotion,
   exporting,
   ambientOn,
+  backgroundsOn,
   snapSteps,
   registerTimeline,
   registerChart,
@@ -572,6 +586,8 @@ function onKeydown(e) {
   else if (e.key.toLowerCase() === 'c') pinned.value = !pinned.value
 }
 
+function onVisibilityChange() { pageVisible.value = document.visibilityState === 'visible' }
+
 function onDocPointerDown(e) {
   if (helpOpen.value && helpRef.value && !helpRef.value.contains(e.target)) helpOpen.value = false
 }
@@ -599,6 +615,8 @@ onMounted(() => {
   document.addEventListener('mouseleave', onMouseLeave)
   document.addEventListener('pointerdown', onDocPointerDown)
   document.addEventListener('fullscreenchange', onFullscreenChange)
+  pageVisible.value = document.visibilityState === 'visible'
+  document.addEventListener('visibilitychange', onVisibilityChange)
 })
 
 watch(presenterOn, () => nextTick(applyScale))
@@ -614,6 +632,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('mouseleave', onMouseLeave)
   document.removeEventListener('pointerdown', onDocPointerDown)
   document.removeEventListener('fullscreenchange', onFullscreenChange)
+  document.removeEventListener('visibilitychange', onVisibilityChange)
   narrowMq?.removeEventListener('change', onNarrowChange)
   motionMq?.removeEventListener('change', onMotionChange)
 })
