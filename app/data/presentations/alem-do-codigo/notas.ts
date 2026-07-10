@@ -59,10 +59,10 @@ Rápido: "Quando falo desenvolvimento, falo de apps no seu celular, sites, siste
 → "Commodity gerada por quais ferramentas? O ecossistema hoje é gigante."`,
   },
   {
-    title: '9 · O novo arsenal',
-    notes: `[Steps: 2 — ① grupo prototipação ② grupo engenharia]
-"De um lado, prototipação e vibe coding: Lovable, v0, Replit, Bolt — qualquer pessoa cria algo funcional. De outro, engenharia profissional: Codex, Claude Code, Gemini CLI, Cursor, GitHub Copilot — onde dev extrai o máximo combinando com boas práticas." Não comparar feature a feature; o ponto é o uso. (Dado opcional de fala: Claude Code é a ferramenta nº 1 entre devs BR em 2026 — 36%.)
-→ "Esse primeiro grupo criou um fenômeno com nome próprio: Vibe Coding."`,
+    title: '9 · O arsenal do desenvolvedor',
+    notes: `[Steps: 3 — ① prototipação ② editores com IA ③ agentes de terminal]
+"Três famílias. ① Prototipação/navegador: Lovable, v0, Bolt, Replit — validar uma ideia, MVP descartável. ② Editores com IA: VS Code+Copilot, Cursor, Antigravity — o dia a dia dentro de uma base de código. ③ Agentes de terminal: Claude Code, Codex, Gemini CLI — automação profissional, tarefas de repo inteiro; é onde o Issue Flow vive." Não comparar feature a feature; o ponto é o uso. (Dado opcional: Claude Code é a ferramenta nº 1 entre devs BR em 2026.)
+→ "Repara que três desses editores parecem concorrentes — mas têm o mesmo DNA."`,
   },
   {
     title: '10 · A barreira despencou',
@@ -166,5 +166,39 @@ SILÊNCIO DE 2s após a frase. Depois agradecer.
     title: '26 · Obrigado! Vamos conversar?',
     notes: `[Steps: 0] (fica projetado durante o Q&A)
 Agradecer o evento, o IFMA e a plateia. Apontar o QR: "A apresentação completa está disponível neste QR, junto com os links e referências do que citei aqui." Abrir para perguntas se houver tempo.`,
+  },
+  // ————————————————————————————————————————————————————————————
+  // Bloco "O mapa da IA" (D1–D5) — inseridos após "A barreira despencou".
+  // Índices anexados ao fim; a ordem visual é controlada pelo template.
+  // ————————————————————————————————————————————————————————————
+  {
+    title: 'Mapa 1 · O que é essa IA?',
+    notes: `[Steps: 3 — ① a analogia (autocompletar gigante) ② previsão do próximo token ③ ressalva "prevê, não entende"] (~60s, sem matemática)
+"Sem mistério: um LLM é um autocompletar gigante. Foi treinado lendo bilhões de textos e códigos, e faz uma coisa só — prever a próxima palavra, o próximo pedacinho de código. Igual ao teclado do celular que sugere a próxima palavra, só que muito mais poderoso." Ressalva honesta: "Ele não 'entende' como a gente; ele prevê. Por isso às vezes erra com toda a confiança do mundo — e é por isso que você, humano, continua no comando."
+→ "E quem constrói esses modelos? São poucas empresas."`,
+  },
+  {
+    title: 'Mapa 2 · Quem é quem',
+    notes: `[Steps: 2 — ① os provedores e seus modelos ② a mensagem-chave]
+"Poucas empresas treinam os modelos-base. OpenAI, com o ChatGPT e o Codex. Anthropic, com o Claude — nos tamanhos Opus, Sonnet e Haiku. Google, com Gemini e o Antigravity. Meta, com o Llama, aberto. Mistral, europeia, também aberta." Mensagem: "Guardem isso: pouquíssimas empresas treinam os modelos; todo o resto do ecossistema constrói em cima delas."
+→ "Modelo é uma coisa. Ferramenta, editor e agente são outra. Vamos separar."`,
+  },
+  {
+    title: 'Mapa 3 · Modelo × Ferramenta × Agente × Editor',
+    notes: `[Steps: 4 — ① Modelo/motor ② Ferramenta/mãos ③ Editor/carro ④ Agente/piloto automático]
+"Uma analogia pra fixar. O MODELO é o motor — o cérebro que prevê tokens; sozinho não anda. A FERRAMENTA são as mãos — o que dá ações ao modelo: rodar comando, ler arquivo, buscar na web. O EDITOR é o carro — onde você senta e dirige, dentro do seu código: VS Code, Cursor, Antigravity. E o AGENTE é o piloto automático — o modelo agindo em loop: planeja, executa, observa e corrige."
+→ "Com esse vocabulário, o arsenal de ferramentas faz muito mais sentido."`,
+  },
+  {
+    title: 'Mapa 4 · 3 editores, 1 DNA',
+    notes: `[Steps: 3 — ① os 3 editores ② revelação: todos são VS Code por baixo ③ a regra de ouro]
+"Esses três editores parecem concorrentes: VS Code com Copilot, Cursor e o Antigravity, do Google. Mas tem um segredo: por baixo, os três são o mesmo VS Code. O Cursor é um fork do VS Code; o Antigravity também. O que muda é a camada de agente por cima." Regra de ouro: "Aprenda o VS Code de verdade e você transita entre todos eles. O Antigravity, inclusive, é gratuito para uso individual e roda vários agentes em paralelo."
+→ "Falta uma última peça de vocabulário: MCP, Skills e agentes."`,
+  },
+  {
+    title: 'Mapa 5 · MCP, Skills e agentes',
+    notes: `[Steps: 3 — ① MCP ② Agent Skills ③ Agentes/automação → gancho Issue Flow] (~60s)
+"Três palavras que você vai ouvir muito. MCP, Model Context Protocol: um padrão aberto que conecta o modelo a ferramentas e dados — pensa nele como a porta USB-C da IA. Agent Skills: pacotes de conhecimento, uma pasta com instruções que ensina o agente a fazer uma tarefa repetível. E agentes/automações: é juntar tudo num fluxo que roda sozinho, sob a sua supervisão."
+→ "E o meu Issue Flow é exatamente isso: skills + agente + automação. Daqui a pouco eu mostro rodando."`,
   },
 ]

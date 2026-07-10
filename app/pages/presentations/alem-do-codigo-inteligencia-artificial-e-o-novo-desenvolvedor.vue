@@ -18,8 +18,14 @@
     <Slide07AntiHype />
     <!-- Bloco C — A virada -->
     <Slide08Commodity />
-    <Slide09Ecossistema />
     <Slide10Barreira />
+    <!-- Bloco D — O mapa da IA (contextualização acessível) -->
+    <SlideMapaIaLlm />
+    <SlideMapaProvedores />
+    <SlideMapaModeloAgente />
+    <Slide09Ecossistema />
+    <SlideEditoresDna />
+    <SlideMapaMcpSkills />
     <Slide11Iceberg />
     <!-- Bloco D — O método -->
     <Slide12Niveis />
@@ -55,6 +61,11 @@ import Slide07AntiHype from '~/components/slides/alem-do-codigo/Slide07AntiHype.
 import Slide08Commodity from '~/components/slides/alem-do-codigo/Slide08Commodity.vue'
 import Slide09Ecossistema from '~/components/slides/alem-do-codigo/Slide09Ecossistema.vue'
 import Slide10Barreira from '~/components/slides/alem-do-codigo/Slide10Barreira.vue'
+import SlideMapaIaLlm from '~/components/slides/alem-do-codigo/SlideMapaIaLlm.vue'
+import SlideMapaProvedores from '~/components/slides/alem-do-codigo/SlideMapaProvedores.vue'
+import SlideMapaModeloAgente from '~/components/slides/alem-do-codigo/SlideMapaModeloAgente.vue'
+import SlideEditoresDna from '~/components/slides/alem-do-codigo/SlideEditoresDna.vue'
+import SlideMapaMcpSkills from '~/components/slides/alem-do-codigo/SlideMapaMcpSkills.vue'
 import Slide11Iceberg from '~/components/slides/alem-do-codigo/Slide11Iceberg.vue'
 import Slide12Niveis from '~/components/slides/alem-do-codigo/Slide12Niveis.vue'
 import Slide13TddSdd from '~/components/slides/alem-do-codigo/Slide13TddSdd.vue'
