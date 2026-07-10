@@ -18,13 +18,21 @@ export const FERRAMENTAS_PROTOTIPACAO: Ferramenta[] = [
   { nome: 'Bolt', logo: `${LOGOS}/bolt.svg` },
 ]
 
-/** Grupo 2 — Engenharia com IA (profissionais extraem o máximo). */
-export const FERRAMENTAS_ENGENHARIA: Ferramenta[] = [
-  { nome: 'Codex', logo: `${LOGOS}/codex.svg` },
-  { nome: 'Claude Code', logo: `${LOGOS}/claude.svg` },
-  { nome: 'Gemini CLI', logo: `${LOGOS}/gemini.svg` },
+/**
+ * Grupo 2 — Editores com IA (o dia a dia dentro de uma base de código).
+ * Os três compartilham o mesmo DNA: o VS Code (ver slide "3 editores, 1 DNA").
+ */
+export const FERRAMENTAS_EDITORES: Ferramenta[] = [
+  { nome: 'VS Code + Copilot', logo: `${LOGOS}/vscode.svg` },
   { nome: 'Cursor', logo: `${LOGOS}/cursor.svg` },
-  { nome: 'GitHub Copilot', logo: `${LOGOS}/github-copilot.svg` },
+  { nome: 'Antigravity', logo: `${LOGOS}/antigravity.svg` },
+]
+
+/** Grupo 3 — Agentes de terminal / CLI (automação profissional; onde o Issue Flow vive). */
+export const FERRAMENTAS_ENGENHARIA: Ferramenta[] = [
+  { nome: 'Claude Code', logo: `${LOGOS}/claude.svg` },
+  { nome: 'Codex', logo: `${LOGOS}/codex.svg` },
+  { nome: 'Gemini CLI', logo: `${LOGOS}/gemini.svg` },
 ]
 
 /** Logos de plataformas / sistemas operacionais (slide 4). */
