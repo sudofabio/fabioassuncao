@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles, PanelTop, Layers } from 'lucide-vue-next'
+import { X, ChevronLeft, ChevronRight, Pin, Minimize, Maximize, Download, Info, Sun, Moon, Sparkles, PanelTop, Layers, NotebookText, Play } from 'lucide-vue-next'
 import { DECK_KEY } from './context'
 import DeckNotes from './DeckNotes.vue'
 import DeckMenu from './DeckMenu.vue'
@@ -137,7 +137,8 @@ const stepIndex = ref(0)
 const navDirection = ref(1)
 const total = ref(0)
 const scaleVal = ref(1)
-const pinned = ref(props.controlsPinned)
+// Preferência persistida; sem valor salvo vale a prop `controlsPinned`.
+const { pinned, toggle: togglePin } = useDeckPin(props.controlsPinned)
 const uiVisible = ref(false)
 const menuOpen = ref(false)
 const helpOpen = ref(false)
@@ -156,10 +157,14 @@ const exporting = ref(false)
 // contadores e gráficos reagem ao stepIndex com sua entrada rápida normal.
 const snapSteps = ref(false)
 
-// Presenter mode via ?presenter=1 (client-only: o painel tem timer e não
-// deve entrar no HTML prerenderizado — evita hydration mismatch).
+// Presenter mode (notas do palestrante): toggle em runtime (menu ⋮ ou tecla
+// N), sem persistência — inicializa de ?presenter=1 (deep-link). Client-only:
+// o painel tem timer e não deve entrar no HTML prerenderizado (evita
+// hydration mismatch).
 const isMounted = ref(false)
-const presenterOn = computed(() => isMounted.value && route.query.presenter === '1')
+const presenterEnabled = ref(route.query.presenter === '1')
+const presenterOn = computed(() => isMounted.value && presenterEnabled.value)
+function togglePresenter() { presenterEnabled.value = !presenterEnabled.value }
 
 // ---------- animações ambient (loops contínuos dos slides) ----------
 // A classe `.ambient-on` no .deck-root é o gate CSS de todo loop infinito dos
@@ -194,7 +199,7 @@ const helpItems = computed(() => {
       'Deslize para o lado para trocar de slide',
       'Toque à direita da tela para avançar, à esquerda para voltar',
       'Toque no contador (ex.: 07 / 26) para ir a um slide específico',
-      'Menu ⋮: tela cheia, PDF, controles e sair',
+      'Menu ⋮: tela cheia, PDF, notas do palestrante e sair',
       'Botão de sol/lua: alternar tema claro ou escuro',
     ]
   }
@@ -202,9 +207,11 @@ const helpItems = computed(() => {
     autoplayOn.value
       ? '← → ou espaço: trocar de slide (o conteúdo aparece sozinho)'
       : '← → ou espaço: avançar etapas e slides',
+    'Home ou End: ir para o primeiro ou o último slide',
     'G ou clique no contador: ir para um slide específico',
     'F: entrar ou sair da tela cheia',
     'C: ocultar ou mostrar os controles',
+    'N: mostrar ou ocultar as notas do palestrante',
     'M: abrir o menu de opções (tela cheia, PDF, sair)',
     'Botão de sol/lua: alternar tema claro ou escuro',
   ]
@@ -229,6 +236,8 @@ const menuItems = computed(() => {
       icon: Download,
       disabled: exporting.value,
     },
+    { id: 'presenter', label: 'Notas do palestrante', icon: NotebookText, checked: presenterEnabled.value },
+    { id: 'autoplay', label: 'Avanço automático', icon: Play, checked: autoplayEnabled.value },
     { id: 'ambient', label: 'Animações contínuas', icon: Sparkles, checked: ambientEnabled.value },
     { id: 'backgrounds', label: 'Fundos animados', icon: Layers, checked: backgroundsEnabled.value },
     { id: 'pin', label: 'Controles sempre visíveis', icon: Pin, checked: pinned.value },
@@ -242,9 +251,11 @@ const menuItems = computed(() => {
 function onMenuSelect(id) {
   if (id === 'fullscreen') toggleFullscreen()
   else if (id === 'pdf') onDownload()
+  else if (id === 'presenter') togglePresenter()
+  else if (id === 'autoplay') toggleAutoplay()
   else if (id === 'ambient') toggleAmbient()
   else if (id === 'backgrounds') toggleBackgrounds()
-  else if (id === 'pin') pinned.value = !pinned.value
+  else if (id === 'pin') togglePin()
   else if (id === 'progress') toggleProgress()
   else if (id === 'help') helpOpen.value = true
   else if (id === 'exit') router.push(props.exitTo)
@@ -321,12 +332,13 @@ const progressWidth = computed(() =>
 
 // ---------- navegação ----------
 // Autoplay (padrão): avançar/voltar troca de slide; os steps do slide ativo
-// são revelados sozinhos pelo driver abaixo. Modo manual (`:autoplay="false"`
-// ou `?manual=1`): comportamento clique-a-clique — avançar consome os steps
-// antes de trocar de slide.
-const autoplayOn = computed(() =>
-  props.autoplay && route.query.manual !== '1' && !exporting.value
-)
+// são revelados sozinhos pelo driver abaixo. Modo manual (`:autoplay="false"`,
+// `?manual=1` ou o toggle "Avanço automático" do menu ⋮): comportamento
+// clique-a-clique — avançar consome os steps antes de trocar de slide.
+// O toggle não persiste: o default é decisão do autor da apresentação.
+const autoplayEnabled = ref(props.autoplay && route.query.manual !== '1')
+const autoplayOn = computed(() => autoplayEnabled.value && !exporting.value)
+function toggleAutoplay() { autoplayEnabled.value = !autoplayEnabled.value }
 
 function stepsOf(i) { return stepsCounts[i] || 0 }
 
@@ -569,6 +581,8 @@ let motionMq = null
 function onMotionChange(e) { if (!exporting.value) reducedMotion.value = e.matches }
 
 function onKeydown(e) {
+  // Atalhos do sistema/navegador (Cmd/Ctrl/Alt+tecla) não são do deck.
+  if (e.metaKey || e.ctrlKey || e.altKey) return
   if (e.key.toLowerCase() === 'm' && !exporting.value) { e.preventDefault(); menuOpen.value = !menuOpen.value; return }
   if (e.key.toLowerCase() === 'g' && !exporting.value) { e.preventDefault(); slideNavOpen.value = !slideNavOpen.value; return }
   if (menuOpen.value || slideNavOpen.value) {
@@ -583,7 +597,8 @@ function onKeydown(e) {
   else if (e.key === 'Home') go(0)
   else if (e.key === 'End') go(total.value - 1, stepsOf(total.value - 1))
   else if (e.key.toLowerCase() === 'f') toggleFullscreen()
-  else if (e.key.toLowerCase() === 'c') pinned.value = !pinned.value
+  else if (e.key.toLowerCase() === 'c') togglePin()
+  else if (e.key.toLowerCase() === 'n' && !exporting.value) togglePresenter()
 }
 
 function onVisibilityChange() { pageVisible.value = document.visibilityState === 'visible' }
