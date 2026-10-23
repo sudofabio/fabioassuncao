@@ -12,8 +12,9 @@ em [`docs/legacy-inventory.md`](./docs/legacy-inventory.md).
 
 ## O que tem aqui
 
-- **Next.js 16** com `output: 'export'`: o build gera HTML estático em `out/`.
-- **Cloudflare Pages** (projeto `fabioassuncao`) serve `out/` e a Pages Function
+- **[vinext](https://vinext.io)** (a API do Next.js App Router sobre o Vite 8)
+  com `output: 'export'`: o build gera HTML estático em `dist/client/`.
+- **Cloudflare Pages** (projeto `fabioassuncao`) serve `dist/client/` e a Pages Function
   em `functions/api/orcamento.ts`, que recebe o formulário de orçamento.
 - Páginas: `/`, `/about/`, `/resume/` (+ `/resume.json`), `/projects/`,
   `/writing/`, `/presentations/`, `/trabalhe-comigo/`, `/contact/` e `/links/`
@@ -51,7 +52,7 @@ npm run format          # Prettier + Biome
 npm run lint            # Biome
 npm run type-check      # TypeScript
 npm test                # Vitest
-npm run build           # Export estático em out/
+npm run build           # vinext build + finalize-export → dist/client/
 npm run verify-export   # Inspeciona o HTML/XML gerado
 npm run measure-export  # Compara o export com scripts/budget.json
 npm run og              # Regenera os share cards
@@ -98,9 +99,15 @@ Cada rede aponta para `/links/` com a origem na URL, sem script de analytics:
 ## Deploy na Cloudflare Pages
 
 O projeto Pages `fabioassuncao` continua o mesmo, então a troca não exige
-mudança de DNS. Configuração em [`wrangler.jsonc`](./wrangler.jsonc): saída
-`./out`, `nodejs_compat`, observabilidade ligada. O diretório `functions/` na
-raiz é detectado pelo Wrangler.
+mudança de DNS. A saída é `dist/client/` e o diretório `functions/` na raiz é
+detectado pelo Wrangler.
+
+Não há `wrangler.jsonc`: com qualquer `wrangler.*` na raiz, o vinext trata o
+projeto como Workers e se recusa a gerar o export estático. Por isso a
+configuração do Pages está nas flags dos scripts `preview` e `deploy` (e no job
+de deploy do CI): data de compatibilidade `2026-10-01` e `nodejs_compat`. No
+painel do projeto, confira os mesmos valores para produção e, se quiser, ligue
+a observabilidade (Workers Logs) das Functions.
 
 Variáveis do projeto Pages (painel da Cloudflare → Settings → Variables):
 
@@ -113,7 +120,7 @@ Variáveis do projeto Pages (painel da Cloudflare → Settings → Variables):
 | `NEXT_PUBLIC_GA_TRACKING_ID`     | build (opcional) | Liga o Google Analytics 4                         |
 
 Se o projeto estiver ligado ao Git pelo painel, o comando de build deve ser
-`npm run build` e o diretório de saída `out`. Para deploy pelo GitHub Actions,
+`npm run build` e o diretório de saída `dist/client`, com Node 22 ou mais novo. Para deploy pelo GitHub Actions,
 crie os secrets `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID` e a variável de
 repositório `CLOUDFLARE_DEPLOY=true`; o job `deploy` fica desligado até lá.
 
