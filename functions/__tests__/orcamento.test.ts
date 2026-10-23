@@ -203,6 +203,32 @@ describe('POST /api/orcamento', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('stops reading a chunked body once it passes the limit', async () => {
+    const fetchMock = stubUpstream();
+    const chunk = new TextEncoder().encode('x'.repeat(4096));
+    let pulled = 0;
+    // An endless stream with no Content-Length: only a running count can stop
+    // it, so a 413 here proves the body is never buffered whole.
+    const body = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        pulled += 1;
+        controller.enqueue(chunk);
+      },
+    });
+    const request = new Request('https://fabioassuncao.com/api/orcamento', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      duplex: 'half',
+    } as RequestInit);
+
+    const response = await onRequestPost({ request, env: configured });
+
+    expect(response.status).toBe(413);
+    expect(pulled).toBeLessThan(MAX_BODY_BYTES / chunk.byteLength + 3);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('returns 503 without naming the missing secret', async () => {
     const fetchMock = stubUpstream();
 

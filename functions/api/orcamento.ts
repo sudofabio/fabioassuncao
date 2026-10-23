@@ -47,9 +47,36 @@ function json(status: number, body: unknown, headers?: HeadersInit): Response {
 class PayloadTooLarge extends Error {}
 
 /**
+ * Streams the body with a running byte count and stops as soon as it passes
+ * the limit, so a chunked body without Content-Length is never buffered past
+ * MAX_BODY_BYTES.
+ */
+async function readBounded(request: Request): Promise<Uint8Array<ArrayBuffer>> {
+  const body = new Uint8Array(MAX_BODY_BYTES);
+  if (!request.body) return body.subarray(0, 0);
+
+  const reader = request.body.getReader();
+  let received = 0;
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    if (received + value.byteLength > MAX_BODY_BYTES) {
+      await reader.cancel();
+      throw new PayloadTooLarge();
+    }
+    body.set(value, received);
+    received += value.byteLength;
+  }
+
+  return body.subarray(0, received);
+}
+
+/**
  * Reads the body once, bounded, then parses it by content type. Content-Length
- * is checked first but not trusted: chunked bodies omit it, so the byte count
- * of what actually arrived is checked too.
+ * is checked first but not trusted: chunked bodies omit it, so the stream is
+ * counted as it arrives too.
  */
 async function readSubmission(request: Request): Promise<unknown> {
   const declared = Number(request.headers.get('Content-Length'));
@@ -57,8 +84,7 @@ async function readSubmission(request: Request): Promise<unknown> {
     throw new PayloadTooLarge();
   }
 
-  const buffer = await request.arrayBuffer();
-  if (buffer.byteLength > MAX_BODY_BYTES) throw new PayloadTooLarge();
+  const buffer = await readBounded(request);
 
   const contentType = request.headers.get('Content-Type') ?? '';
 
