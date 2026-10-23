@@ -43,16 +43,16 @@ export const WRITING_DESCRIPTION =
  * to what the about page, résumé, and talks actually cover.
  */
 export const KNOWS_ABOUT = [
-  'Desenvolvimento backend',
+  'Inteligência artificial aplicada a negócios e ao desenvolvimento de software',
+  'Segurança de software',
+  'Desenvolvimento de software',
   'Arquitetura de software',
-  'Sistemas distribuídos',
+  'Modernização de sistemas legados',
   'Cloud computing',
-  'Microsserviços',
   'DevOps',
   'Liderança técnica',
-  'Inteligência artificial aplicada ao desenvolvimento de software',
   'PHP',
-  'Go',
+  'Node.js',
 ] as const;
 
 type SchemaNode = Record<string, unknown>;
@@ -114,12 +114,14 @@ export function personNode(): SchemaNode {
         ...(currentJob.url ? { url: currentJob.url } : {}),
       },
     }),
-    ...(degrees.length > 0 && {
-      alumniOf: degrees.map((degree) => ({
-        '@type': 'CollegeOrUniversity',
-        name: degree.school,
-        url: degree.link,
-      })),
+    ...(degrees.some((degree) => degree.school) && {
+      alumniOf: degrees
+        .filter((degree) => degree.school)
+        .map((degree) => ({
+          '@type': 'CollegeOrUniversity',
+          name: degree.school,
+          ...(degree.link ? { url: degree.link } : {}),
+        })),
     }),
   };
 }

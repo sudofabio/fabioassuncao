@@ -35,8 +35,12 @@ export const SHARE_IMAGE_DIMENSIONS = {
 } as const;
 
 // Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
+// Approved copy: social media project, `05-perfis/site-fabio.md` §1.
 export const SITE_DESCRIPTION =
-  'Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência em backend, arquitetura de sistemas, cloud computing e liderança técnica.';
+  'Engenheiro de software desde 2008, ex-Tech Lead do Portal QEdu e fundador da Codions. IA, desenvolvimento e segurança sem hype: sistemas sob medida, consultoria e mentoria.';
+
+/** The default document title, used where a page sets none. */
+export const SITE_TITLE = `${AUTHOR_NAME} | Engenheiro de Software · IA, Desenvolvimento e Segurança`;
 
 // Image dimension constants
 export const PROJECT_IMAGE = {

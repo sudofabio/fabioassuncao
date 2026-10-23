@@ -5,8 +5,8 @@ import { describe, expect, it } from 'vitest';
 
 import projects, {
   archive,
+  codionsProducts,
   type Project,
-  pendingProducts,
   shipped,
 } from '../projects';
 import work, { type Position } from '../resume/work';
@@ -249,12 +249,40 @@ describe('projects data', () => {
     }
   });
 
-  it('keeps products without a confirmed description off the page', () => {
-    const published = new Set(projects.map((project) => project.title));
+  it('lists the Codions products with https links and the Codions wording', () => {
+    expect(codionsProducts.map((product) => product.title)).toEqual([
+      'Brasil Data Hub',
+      'Tuttoria',
+    ]);
+    for (const product of codionsProducts) {
+      expect(product.url, product.title).toMatch(/^https:\/\//);
+      expect(product.desc.trim().length, product.title).toBeGreaterThan(0);
+      for (const part of product.parts ?? []) {
+        expect(part.url, part.title).toMatch(/^https:\/\//);
+        expect(part.desc.trim().length, part.title).toBeGreaterThan(0);
+      }
+    }
+  });
 
-    expect(pendingProducts.length).toBeGreaterThan(0);
-    for (const product of pendingProducts) {
-      expect(published.has(product.title), product.title).toBe(false);
+  it('shows the five bases of the Brasil Data Hub', () => {
+    const hub = codionsProducts.find(
+      (product) => product.title === 'Brasil Data Hub',
+    );
+
+    expect(hub?.url).toBe('https://brasildatahub.com.br');
+    expect(hub?.parts?.map((part) => [part.title, part.url])).toEqual([
+      ['Base Empresarial', 'https://baseempresarial.com.br'],
+      ['Base Eleições', 'https://baseeleicoes.com.br'],
+      ['Base Escolar', 'https://baseescolar.com.br'],
+      ['Base Hospitalar', 'https://basehospitalar.com.br'],
+      ['Base Agro', 'https://baseagro.com.br'],
+    ]);
+  });
+
+  it('keeps the Codions products out of the dated register', () => {
+    const registered = new Set(projects.map((project) => project.title));
+    for (const product of codionsProducts) {
+      expect(registered.has(product.title), product.title).toBe(false);
     }
   });
 });

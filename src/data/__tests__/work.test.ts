@@ -33,13 +33,37 @@ describe('work data', () => {
     }
   });
 
-  it('stores year-only records as the first day of the year', () => {
+  // The months come from LinkedIn and are kept, but are not confirmed for
+  // publication: every entry stays year-only until they are, and a month
+  // record is always the first of its month.
+  it('keeps every unconfirmed month behind year precision', () => {
     for (const job of work) {
-      if (job.datePrecision === 'year') {
-        expect(job.startDate.slice(4)).toBe('-01-01');
-        if (job.endDate) expect(job.endDate.slice(4)).toBe('-01-01');
-      }
+      expect(job.datePrecision, job.position).toBe('year');
+      expect(job.startDate.slice(8)).toBe('01');
+      if (job.endDate) expect(job.endDate.slice(8)).toBe('01');
     }
+  });
+
+  it('starts the career in 2008 and names the employers of the record', () => {
+    const years = work.map((job) => job.startDate.slice(0, 4)).sort();
+    expect(years[0]).toBe('2008');
+
+    const names = work.map((job) => job.name).filter(Boolean);
+    for (const employer of [
+      'Codions',
+      'Iede (Portal QEdu)',
+      'Zenvia',
+      'MPRJ (terceirizado)',
+      'VAT Tecnologia',
+      'Light Tecnologia',
+    ]) {
+      expect(names).toContain(employer);
+    }
+  });
+
+  it('links only the Codions, over https', () => {
+    const urls = work.flatMap((job) => (job.url ? [job.url] : []));
+    expect(new Set(urls)).toEqual(new Set(['https://codions.com']));
   });
 
   it('endDate is after startDate when present', () => {

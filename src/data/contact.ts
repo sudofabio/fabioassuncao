@@ -32,19 +32,25 @@ export interface ContactItem {
 /** Número público do WhatsApp, só dígitos com DDI, no formato do wa.me. */
 export const WHATSAPP_NUMBER = '5598985643922';
 
+/** The same number, written the way people read it. */
+export const WHATSAPP_DISPLAY = '(98) 98564-3922';
+
 /** Mensagem inicial sugerida em todo link de WhatsApp do site. */
-export const WHATSAPP_GREETING =
-  'Olá, Fábio! Vim pelo seu site e gostaria de conversar.';
+export const WHATSAPP_GREETING = 'Oi, Fábio! Vim pelo seu site.';
+
+/**
+ * Perfis nas redes. Hoje são os @fabioassuncaohq; quando o @ profissional for
+ * escolhido (DECISOES 4 do projeto de social media), troque só este valor.
+ * TODO(fabio): definir o @ profissional de Instagram, TikTok, Threads, YouTube e X.
+ */
+export const SOCIAL_HANDLE = 'fabioassuncaohq';
 
 export function whatsappLink(text: string = WHATSAPP_GREETING): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
-/**
- * Perfil no Threads. Vazio enquanto o endereço não for confirmado; entradas
- * sem link não são publicadas. TODO(fabio): confirmar o perfil no Threads.
- */
-export const THREADS_URL = '';
+/** Perfil no Threads (entradas sem link não são publicadas). */
+export const THREADS_URL = `https://www.threads.com/@${SOCIAL_HANDLE}`;
 
 const all: ContactItem[] = [
   {
@@ -67,19 +73,19 @@ const all: ContactItem[] = [
   },
   {
     id: 'instagram',
-    link: 'https://www.instagram.com/fabioassuncaohq',
+    link: `https://www.instagram.com/${SOCIAL_HANDLE}`,
     label: 'Instagram',
     icon: faInstagram,
   },
   {
     id: 'youtube',
-    link: 'https://www.youtube.com/@fabioassuncaohq',
+    link: `https://www.youtube.com/@${SOCIAL_HANDLE}`,
     label: 'YouTube',
     icon: faYoutube,
   },
   {
     id: 'tiktok',
-    link: 'https://www.tiktok.com/@fabioassuncaohq',
+    link: `https://www.tiktok.com/@${SOCIAL_HANDLE}`,
     label: 'TikTok',
     icon: faTiktok,
   },
@@ -91,7 +97,7 @@ const all: ContactItem[] = [
   },
   {
     id: 'x',
-    link: 'https://x.com/fabioassuncaohq',
+    link: `https://x.com/${SOCIAL_HANDLE}`,
     label: 'X',
     icon: faXTwitter,
   },

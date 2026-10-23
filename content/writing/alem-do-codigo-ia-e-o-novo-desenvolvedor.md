@@ -81,4 +81,4 @@ A IA não elimina o desenvolvedor, ela o promove: de digitador de código a arqu
 
 Fechei com uma pergunta: se a IA pode escrever qualquer código que você pedir, em segundos, você tem o repertório para saber se o que ela entregou é o que o seu negócio precisa? Não lute contra a IA. Torne-se a mente que a governa.
 
-Os slides completos estão na [página da palestra](/presentations/alem-do-codigo-inteligencia-artificial-e-o-novo-desenvolvedor/). Se quiser conversar sobre um projeto, [peça um orçamento](/trabalhe-comigo/#orcamento).
+Os slides completos estão na [página da palestra](/presentations/alem-do-codigo-inteligencia-artificial-e-o-novo-desenvolvedor/). Se quiser conversar sobre um projeto, [fale comigo](/contato/).

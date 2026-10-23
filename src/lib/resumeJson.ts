@@ -76,11 +76,11 @@ interface ResumeWork {
 }
 
 interface ResumeEducation {
-  institution: string;
-  url: string;
+  institution?: string;
+  url?: string;
   studyType?: string;
   area?: string;
-  endDate: string;
+  endDate?: string;
   courses?: string[];
 }
 
@@ -248,11 +248,12 @@ function buildEducation(): ResumeEducation[] {
       .filter((course) => course.university === degree.school)
       .map((course) => `${course.number} - ${course.title}`);
 
+    // Fields the data does not state are left out rather than emitted empty.
     return {
-      institution: degree.school,
-      url: degree.link,
+      ...(degree.school ? { institution: degree.school } : {}),
+      ...(degree.link ? { url: degree.link } : {}),
       ...splitDegree(degree.degree),
-      endDate: String(degree.year),
+      ...(degree.year ? { endDate: String(degree.year) } : {}),
       ...(schoolCourses.length > 0 ? { courses: schoolCourses } : {}),
     };
   });

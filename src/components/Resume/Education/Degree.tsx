@@ -5,14 +5,21 @@ interface DegreeProps {
 }
 
 export default function Degree({ data }: DegreeProps) {
+  const { degree, school, link, year } = data;
+  const schoolName =
+    school && link ? <a href={link}>{school}</a> : (school ?? null);
+
   return (
     <article className="degree-container">
       <header>
-        <h3 className="degree">{data.degree}</h3>
-        <p className="school">
-          <a href={data.link}>{data.school}</a>,{' '}
-          <time dateTime={String(data.year)}>{data.year}</time>
-        </p>
+        <h3 className="degree">{degree}</h3>
+        {schoolName || year ? (
+          <p className="school">
+            {schoolName}
+            {schoolName && year ? ', ' : null}
+            {year ? <time dateTime={String(year)}>{year}</time> : null}
+          </p>
+        ) : null}
       </header>
     </article>
   );

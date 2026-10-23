@@ -13,8 +13,8 @@
  * Uma entrada que declara `sourceWork` tem datas e números conferidos contra o
  * cargo correspondente em `src/data/resume/work.ts`.
  *
- * TODO(fabio): estudos de caso (problema, solução, resultado) dos trabalhos
- * mais relevantes, com o que puder ser publicado.
+ * Cases de clientes ficam no site da Codions (codions.com/cases-de-sucesso),
+ * que tem as aprovações de cada cliente; aqui eles são só linkados.
  */
 export type ProjectStatus = 'shipped' | 'archive';
 
@@ -151,14 +151,58 @@ const data: Project[] = [
   },
 ];
 
+/** A product of the Codions, the company behind Fábio's work. */
+export interface CodionsProduct {
+  title: string;
+  url: string;
+  desc: string;
+  /** Platforms that make up a product, such as the Brasil Data Hub bases. */
+  parts?: { title: string; url: string; desc: string }[];
+}
+
 /**
- * Produtos que ainda não têm descrição nem link confirmados. Ficam fora da
- * página até serem completados e movidos para `data`.
- * TODO(fabio): descrição, link e data de início de cada produto.
+ * Products the Codions develops and maintains. Descriptions are the ones the
+ * Codions site publishes (`codions/website/app/content/products/`), quoted
+ * rather than rewritten so the two sites never disagree.
  */
-export const pendingProducts: Pick<Project, 'title' | 'subtitle'>[] = [
-  { title: 'Brasil Data Hub', subtitle: 'Produto · Codions' },
-  { title: 'Base Empresarial', subtitle: 'Produto · Codions' },
+export const codionsProducts: CodionsProduct[] = [
+  {
+    title: 'Brasil Data Hub',
+    url: 'https://brasildatahub.com.br',
+    desc: 'A Codions desenvolve e mantém o Brasil Data Hub, ecossistema que reúne cinco plataformas para organizar dados públicos e compreender o Brasil.',
+    parts: [
+      {
+        title: 'Base Empresarial',
+        url: 'https://baseempresarial.com.br',
+        desc: 'Consulta de empresas, atividades econômicas e informações cadastrais a partir dos dados públicos do CNPJ.',
+      },
+      {
+        title: 'Base Eleições',
+        url: 'https://baseeleicoes.com.br',
+        desc: 'Candidaturas, financiamento e resultados eleitorais para compreender a representação política e seus territórios.',
+      },
+      {
+        title: 'Base Escolar',
+        url: 'https://baseescolar.com.br',
+        desc: 'Escolas, matrículas, infraestrutura e aprendizagem no contexto de cada comunidade.',
+      },
+      {
+        title: 'Base Hospitalar',
+        url: 'https://basehospitalar.com.br',
+        desc: 'Estabelecimentos de saúde, capacidade assistencial e redes de atendimento.',
+      },
+      {
+        title: 'Base Agro',
+        url: 'https://baseagro.com.br',
+        desc: 'Produção, rebanhos e cadeias produtivas para compreender o agro e suas relações com os territórios.',
+      },
+    ],
+  },
+  {
+    title: 'Tuttoria',
+    url: 'https://codions.com/produtos/tuttoria',
+    desc: 'Plataforma da Codions para formar pessoas, acompanhar programas e comprovar resultados: cursos e trilhas, observatório de dados, gestão e white label para o setor público.',
+  },
 ];
 
 export default data;

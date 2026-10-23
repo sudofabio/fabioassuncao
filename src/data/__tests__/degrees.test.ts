@@ -3,54 +3,63 @@ import { describe, expect, it } from 'vitest';
 import degrees from '../resume/degrees';
 
 describe('degrees data', () => {
-  // Empty until the education history is supplied; the résumé then omits the
-  // section rather than rendering an empty heading.
   it('exports an array of degrees', () => {
     expect(Array.isArray(degrees)).toBe(true);
   });
 
-  it('each degree has required properties', () => {
-    for (const degree of degrees) {
-      expect(degree).toHaveProperty('school');
-      expect(degree).toHaveProperty('degree');
-      expect(degree).toHaveProperty('link');
-      expect(degree).toHaveProperty('year');
+  it('lists the computer science bachelor degree', () => {
+    expect(degrees.map((degree) => degree.degree)).toContain(
+      'Bacharelado em Ciência da Computação',
+    );
+  });
 
-      expect(typeof degree.school).toBe('string');
+  it('each degree has a name and only well-typed optional fields', () => {
+    for (const degree of degrees) {
       expect(typeof degree.degree).toBe('string');
-      expect(typeof degree.link).toBe('string');
-      expect(typeof degree.year).toBe('number');
+      if (degree.school !== undefined) {
+        expect(typeof degree.school).toBe('string');
+        expect(degree.school.trim().length).toBeGreaterThan(0);
+      }
+      if (degree.link !== undefined) expect(typeof degree.link).toBe('string');
+      if (degree.year !== undefined) expect(typeof degree.year).toBe('number');
     }
   });
 
-  it('degree years are reasonable (between 1950 and current year + 10)', () => {
+  it('never carries a link without the school it points to', () => {
+    for (const degree of degrees) {
+      if (degree.link !== undefined) expect(degree.school).toBeDefined();
+    }
+  });
+
+  it('degree years, when stated, are reasonable (1950 to current year + 10)', () => {
     const currentYear = new Date().getFullYear();
 
     for (const degree of degrees) {
+      if (degree.year === undefined) continue;
       expect(degree.year).toBeGreaterThanOrEqual(1950);
       expect(degree.year).toBeLessThanOrEqual(currentYear + 10);
     }
   });
 
-  it('links are valid URLs', () => {
-    const urlRegex = /^https?:\/\/.+/;
-
+  it('links, when stated, are valid https URLs', () => {
     for (const degree of degrees) {
-      expect(degree.link).toMatch(urlRegex);
+      if (degree.link === undefined) continue;
+      expect(degree.link).toMatch(/^https:\/\/.+/);
     }
   });
 
-  it('degrees are ordered by year (most recent first)', () => {
-    for (let i = 0; i < degrees.length - 1; i++) {
-      expect(degrees[i].year).toBeGreaterThanOrEqual(degrees[i + 1].year);
-    }
+  it('dated degrees are ordered by year (most recent first)', () => {
+    const years = degrees
+      .map((degree) => degree.year)
+      .filter((year): year is number => year !== undefined);
+    expect(years).toEqual([...years].sort((a, b) => b - a));
   });
 
   it('has unique school entries', () => {
-    const schools = degrees.map((d) => d.school);
-    const uniqueSchools = new Set(schools);
-
-    expect(uniqueSchools.size).toBe(schools.length);
+    const schools = degrees
+      .map((d) => d.school)
+      .filter((school) => school !== undefined);
+    expect(new Set(schools).size).toBe(schools.length);
   });
 
   it('each degree has a non-empty degree name', () => {
