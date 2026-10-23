@@ -326,3 +326,7 @@ O site antigo não tinha página de projetos. Brasil Data Hub e Base Empresarial
 - O seletor de idioma PT/EN. O site novo é só PT-BR, e os textos EN estão
   guardados acima.
 - O README antigo, que era o perfil do GitHub.
+
+## Reposicionamento (23/10/2026)
+
+A linha do tempo antiga do site (7 cargos sem empresa, de "Estagiário de Desenvolvimento" em 2008 a "Engenheiro de Software Sênior / Arquiteto Cloud") tinha 7 divergências com o currículo real (`socialmedia/01-contexto/ponto-de-partida.md` §2.4). Ela foi substituída pela experiência listada no LinkedIn em 23/10/2026 (`ponto-de-partida.md` §2.3 e `05-perfis/site-fabio.md` §5): freelancer (2008–2012), VAT Tecnologia, Light Tecnologia, Codions, MPRJ (terceirizado), Zenvia, Iede/Portal QEdu e Codions (desde 2023). Os meses vieram do LinkedIn, mas o site mostra só o ano até o Fábio confirmar.
