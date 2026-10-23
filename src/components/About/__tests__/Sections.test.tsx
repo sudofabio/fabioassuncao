@@ -35,28 +35,28 @@ Hello from the intro.
     ).toBeInTheDocument();
   });
 
-  it('assigns section variants for compact and links sections', () => {
+  it('gives the career log the log treatment and leaves other sections plain', () => {
     const { container } = render(
       <AboutContent
         markdown={`# Intro
 
 Lead paragraph.
 
-# I Like
+# Desde 2008
 
-- Running
+- De 2008 a 2010, um cargo.
 
-# Websites from People I Admire
+# Outra seção
 
-- [Example](https://example.com)`}
+- Um item.`}
       />,
     );
 
     const sections = container.querySelectorAll('.about-section');
 
     expect(sections).toHaveLength(2);
-    expect(sections[0]).toHaveClass('about-section--compact');
-    expect(sections[1]).toHaveClass('about-section--links');
+    expect(sections[0]).toHaveClass('about-section--log');
+    expect(sections[1]).toHaveAttribute('class', 'about-section');
   });
 
   it('adds stable heading ids for deep links', () => {
@@ -87,7 +87,7 @@ Lead paragraph.
   it('renders section navigation and self-links for the real about markdown', () => {
     const sectionTitles = getActualSectionTitles(aboutMarkdown);
     const { container } = render(<AboutContent markdown={aboutMarkdown} />);
-    const nav = screen.getByRole('navigation', { name: 'About sections' });
+    const nav = screen.getByRole('navigation', { name: 'Seções da página' });
 
     expect(within(nav).getAllByRole('link')).toHaveLength(sectionTitles.length);
 
@@ -111,75 +111,66 @@ Lead paragraph.
       <AboutContent markdown={aboutMarkdown} />,
     );
 
-    expect(html).toContain('href="#some-history"');
-    expect(html).toContain('id="some-history"');
-    expect(html).toContain('href="#travel-geography"');
-    expect(html).toContain('id="travel-geography"');
+    expect(html).toContain('href="#desde-2008"');
+    expect(html).toContain('id="desde-2008"');
   });
 
-  it('renders only the history markers stated by the prose', () => {
+  it('renders only the years stated by the prose', () => {
     const { container } = render(<AboutContent markdown={aboutMarkdown} />);
     const history = container.querySelector('.about-section--log');
     const entries = Array.from(
       history?.querySelectorAll('.log-entry') ?? [],
     ) as HTMLElement[];
 
-    expect(entries).toHaveLength(15);
+    expect(entries).toHaveLength(8);
     expect(
       entries.map((entry) => ({
         year: entry.querySelector('.log-entry-year')?.textContent ?? null,
         age: entry.querySelector('.log-entry-age')?.textContent ?? null,
       })),
     ).toEqual([
-      { year: '1993', age: 'Age 3' },
-      { year: '1995', age: null },
-      { year: '1996', age: null },
-      { year: null, age: 'Age 7' },
-      { year: null, age: 'Age 8' },
-      { year: null, age: 'Age 10' },
-      { year: null, age: 'Age 11' },
-      { year: null, age: 'Age 12' },
-      { year: null, age: 'Age 13' },
-      { year: null, age: 'Age 14' },
-      { year: null, age: 'Age 14–17' },
-      { year: null, age: 'Age 16' },
-      { year: null, age: 'Age 18' },
-      { year: null, age: 'Age 19' },
-      { year: null, age: 'Age 20' },
+      { year: '2008–2010', age: null },
+      { year: '2010–2012', age: null },
+      { year: '2012–2014', age: null },
+      { year: '2014–2016', age: null },
+      { year: '2016–2019', age: null },
+      { year: '2019–2022', age: null },
+      { year: '2022', age: null },
+      { year: '2026', age: null },
     ]);
 
-    // Embedded markers remain in the prose, including meaningful qualifiers.
-    expect(entries[0].querySelector('.log-entry-body')?.textContent).toContain(
-      'a computer in my bedroom in 1993',
+    // Every marker is a leading one, lifted out of the sentence and therefore
+    // still exposed: the body no longer repeats it.
+    expect(entries[0].querySelector('.log-entry-body')?.textContent).toMatch(
+      /^Como estagiário de desenvolvimento/,
     );
-    expect(entries[2].querySelector('.log-entry-body')?.textContent).toContain(
-      'In the summer of 1996',
-    );
-    for (const index of [0, 1, 2]) {
-      expect(entries[index].querySelector('.log-entry-marker')).toHaveAttribute(
+    for (const entry of entries) {
+      expect(entry.querySelector('.log-entry-marker')).not.toHaveAttribute(
         'aria-hidden',
-        'true',
       );
     }
-
-    // A leading marker is lifted out instead, leaving a sentence behind.
-    expect(entries[3].querySelector('.log-entry-body')?.textContent).toMatch(
-      /^I discovered the mini-games/,
-    );
-    expect(entries[3].querySelector('.log-entry-marker')).not.toHaveAttribute(
-      'aria-hidden',
-    );
   });
 
   it('leaves an undated entry an empty gutter rather than a broken marker', () => {
-    const { container } = render(<AboutContent markdown={aboutMarkdown} />);
+    const { container } = render(
+      <AboutContent
+        markdown={`# Intro
+
+Lead.
+
+# Desde 2008
+
+- De 2008 a 2010, um cargo.
+- Um marco sem data.`}
+      />,
+    );
     const markers = Array.from(
       container.querySelectorAll('.about-section--log .log-entry-marker'),
     );
     const empty = markers.filter((marker) => marker.textContent === '');
 
-    expect(markers).toHaveLength(26);
-    expect(empty).toHaveLength(3);
+    expect(markers).toHaveLength(2);
+    expect(empty).toHaveLength(1);
 
     for (const marker of empty) {
       expect(marker.querySelector('.log-entry-year')).toBeNull();
@@ -191,32 +182,28 @@ Lead paragraph.
 
     render(<AboutContent markdown={aboutMarkdown} />);
 
-    const nav = screen.getByRole('navigation', { name: 'About sections' });
-    const navLink = within(nav).getByRole('link', {
-      name: 'Travel / Geography',
-    });
+    const nav = screen.getByRole('navigation', { name: 'Seções da página' });
+    const navLink = within(nav).getByRole('link', { name: 'Desde 2008' });
 
     navLink.click();
 
     await waitFor(() => {
-      expect(window.location.hash).toBe('#travel-geography');
+      expect(window.location.hash).toBe('#desde-2008');
     });
     expect(document.querySelector(window.location.hash)).toHaveTextContent(
-      'Travel / Geography',
+      'Desde 2008',
     );
 
-    const heading = screen.getByRole('heading', { name: 'Fun Facts' });
+    window.history.replaceState({}, '', '/about/');
+    const heading = screen.getByRole('heading', { name: 'Desde 2008' });
     const permalink = within(heading).getByRole('link', {
-      name: 'Fun Facts',
+      name: 'Desde 2008',
     });
 
     permalink.click();
 
     await waitFor(() => {
-      expect(window.location.hash).toBe('#fun-facts');
+      expect(window.location.hash).toBe('#desde-2008');
     });
-    expect(document.querySelector(window.location.hash)).toHaveTextContent(
-      'Fun Facts',
-    );
   });
 });

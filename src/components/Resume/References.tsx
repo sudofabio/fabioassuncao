@@ -6,15 +6,15 @@ export default function References() {
       {/* The sticky index links to #references, so the section needs a
           heading to land on like every other one. */}
       <div className="title">
-        <h2>References</h2>
+        <h2>Referências</h2>
       </div>
       <p className="text-sm text-[var(--color-fg-light)] text-center">
-        References available upon request.{' '}
+        Referências disponíveis mediante solicitação.{' '}
         <Link
           href="/contact"
           className="font-medium text-[var(--color-accent)] hover:text-[var(--color-fg-bold)] transition-colors duration-150"
         >
-          Get in touch →
+          Fale comigo →
         </Link>
       </p>
     </div>

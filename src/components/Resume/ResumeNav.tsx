@@ -2,20 +2,27 @@
 
 import { useEffect, useState } from 'react';
 
-const sections = [
-  { name: 'Experience', id: 'experience' },
-  { name: 'Education', id: 'education' },
-  { name: 'Skills', id: 'skills' },
-  { name: 'Courses', id: 'courses' },
-  { name: 'References', id: 'references' },
+const allSections = [
+  { name: 'Experiência', id: 'experience' },
+  { name: 'Formação', id: 'education' },
+  { name: 'Competências', id: 'skills' },
+  { name: 'Cursos', id: 'courses' },
+  { name: 'Referências', id: 'references' },
 ] as const;
 
-type SectionId = (typeof sections)[number]['id'];
+export type ResumeSectionId = (typeof allSections)[number]['id'];
+type SectionId = ResumeSectionId;
+
+interface ResumeNavProps {
+  /** Sections the page does not render (e.g. empty education). */
+  omit?: readonly SectionId[];
+}
 
 /** Offset from top of viewport for intersection detection (header height + nav) */
 const INTERSECTION_MARGIN = '-20% 0px -75% 0px';
 
-export default function ResumeNav() {
+export default function ResumeNav({ omit = [] }: ResumeNavProps) {
+  const sections = allSections.filter(({ id }) => !omit.includes(id));
   const [activeSection, setActiveSection] = useState<SectionId>('experience');
 
   useEffect(() => {
@@ -72,10 +79,10 @@ export default function ResumeNav() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [sections]);
 
   return (
-    <nav className="resume-nav" aria-label="Resume sections">
+    <nav className="resume-nav" aria-label="Seções do currículo">
       {sections.map((section) => (
         <a
           key={section.id}

@@ -31,7 +31,7 @@ export default function Hamburger() {
         type="button"
         className="slide-menu-close"
         onClick={closeMenu}
-        aria-label="Close navigation menu"
+        aria-label="Fechar menu de navegação"
       >
         <span aria-hidden="true">×</span>
       </button>
@@ -73,7 +73,7 @@ export default function Hamburger() {
                 onClick={toggleMenu}
                 className="hamburger-button"
                 aria-label={
-                  open ? 'Close navigation menu' : 'Open navigation menu'
+                  open ? 'Fechar menu de navegação' : 'Abrir menu de navegação'
                 }
                 aria-expanded={open}
                 aria-controls={MENU_ID}

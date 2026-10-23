@@ -39,21 +39,28 @@ export function monthsBetween(start: DateInput, end: DateInput): number {
   return Math.max(0, dayjs(end).diff(dayjs(start), 'month'));
 }
 
-/** `7 yr 11 mo` for the date gutter, or spelled out for a `.sr-only` label. */
+/** `7 a 11 m` for the date gutter, or spelled out for a `.sr-only` label. */
 export function formatDuration(months: number, long = false): string {
   const total = Math.max(0, Math.trunc(months));
 
-  if (total < 1) return long ? 'less than 1 month' : '<1 mo';
+  if (total < 1) return long ? 'menos de 1 mês' : '<1 m';
 
-  const unit = (value: number, short: string, word: string) =>
-    long ? `${value} ${word}${value === 1 ? '' : 's'}` : `${value} ${short}`;
+  const unit = (
+    value: number,
+    short: string,
+    singular: string,
+    plural: string,
+  ) =>
+    long ? `${value} ${value === 1 ? singular : plural}` : `${value} ${short}`;
 
   const years = Math.floor(total / 12);
   const remainingMonths = total % 12;
   const parts: string[] = [];
 
-  if (years > 0) parts.push(unit(years, 'yr', 'year'));
-  if (remainingMonths > 0) parts.push(unit(remainingMonths, 'mo', 'month'));
+  if (years > 0) parts.push(unit(years, 'a', 'ano', 'anos'));
+  if (remainingMonths > 0) {
+    parts.push(unit(remainingMonths, 'm', 'mês', 'meses'));
+  }
 
   return parts.join(' ');
 }

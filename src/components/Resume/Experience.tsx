@@ -24,7 +24,7 @@ function isoYear(date: string): number {
 }
 
 function isEarlyCareer(job: Position): boolean {
-  if (/intern/i.test(job.position)) {
+  if (/intern|estagi/i.test(job.position)) {
     return true;
   }
 
@@ -63,13 +63,13 @@ export default function Experience({
   return (
     <div className="experience">
       <div className="title">
-        <h2>Experience</h2>
+        <h2>Experiência</h2>
       </div>
       <div className="experience-spine">
         {positions.map((job) => (
           <Job
             data={job}
-            key={`${job.name}-${job.position}`}
+            key={`${job.name ?? ''}-${job.position}`}
             now={now}
             tier={tierFor(job, positions)}
           />

@@ -4,7 +4,7 @@ import Courses from '@/components/Resume/Courses';
 import Education from '@/components/Resume/Education';
 import Experience from '@/components/Resume/Experience';
 import References from '@/components/Resume/References';
-import ResumeNav from '@/components/Resume/ResumeNav';
+import ResumeNav, { type ResumeSectionId } from '@/components/Resume/ResumeNav';
 import Skills from '@/components/Resume/Skills';
 import PageWrapper from '@/components/Template/PageWrapper';
 import contact, { type ContactId } from '@/data/contact';
@@ -19,8 +19,8 @@ import { RESUME_JSON_PATH, RESUME_JSON_URL } from '@/lib/resumeJson';
 import { AUTHOR_NAME, SITE_URL } from '@/lib/utils';
 
 const resumeMetadata = createPageMetadata({
-  title: 'Resume',
-  description: `${AUTHOR_NAME}'s Resume. OpenAI, Promptfoo, Smile ID, Arthena, Matroid, Stanford ICME, YC alum.`,
+  title: 'Currículo',
+  description: `Currículo de ${AUTHOR_NAME}: trajetória desde 2008 em desenvolvimento de software, backend, arquitetura de sistemas e cloud computing.`,
   path: '/resume/',
 });
 
@@ -62,13 +62,18 @@ export default function ResumePage() {
   const careerSpan = careerSpanYears(work, now);
   const github = contactLink('github');
   const linkedin = contactLink('linkedin');
+  // Sections with no data are left out rather than rendered as empty headings.
+  const omitted: ResumeSectionId[] = [
+    ...(degrees.length === 0 ? (['education'] as const) : []),
+    ...(courses.length === 0 ? (['courses'] as const) : []),
+  ];
 
   return (
     <PageWrapper>
       <section className="resume-page">
         <header className="resume-header">
           <div className="resume-header-row">
-            <h1 className="resume-title">Resume</h1>
+            <h1 className="resume-title">Currículo</h1>
             {/* The same affordance as the RSS chip on /writing. The href is
                 document-relative on purpose: /resume/ may live below a
                 repository base path, while a root-relative href would escape
@@ -83,18 +88,16 @@ export default function ResumePage() {
             </a>
           </div>
           <p className="resume-summary">
-            Engineering leader with a career spanning {careerSpan}+ years across
-            AI, security, and infrastructure. I&apos;m currently a Member of the
-            Technical Staff at OpenAI, working on Promptfoo and Codex Security.
-            I help secure AI systems and use AI to find software
-            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
-            2026. Stanford MS, YC alum, previously VP Engineering.
+            Desenvolvedor de software, Tech Lead e empreendedor, com uma
+            trajetória de {careerSpan}+ anos em backend, arquitetura de
+            sistemas, cloud computing e liderança técnica. Atuo na construção de
+            soluções escaláveis, conectando engenharia, produto e negócio.
           </p>
           {/* Print-only, but real markup rather than CSS `content`, so it is
               selectable and linkable. Destinations come from shared contact
               data, while the location comes from the shared profile. */}
           <address className="resume-print-contact">
-            <span>{profile.currentCity}</span>
+            <span>{profile.location}</span>
             <a href={`${SITE_URL}/`}>{displayUrl(SITE_URL)}</a>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <a href={github}>{displayUrl(github)}</a>
@@ -102,24 +105,28 @@ export default function ResumePage() {
           </address>
         </header>
 
-        <ResumeNav />
+        <ResumeNav omit={omitted} />
 
         <div className="resume-content">
           <section id="experience" className="resume-section">
             <Experience data={work} now={now} />
           </section>
 
-          <section id="education" className="resume-section">
-            <Education data={degrees} />
-          </section>
+          {degrees.length > 0 ? (
+            <section id="education" className="resume-section">
+              <Education data={degrees} />
+            </section>
+          ) : null}
 
           <section id="skills" className="resume-section">
             <Skills skills={skills} categories={categories} />
           </section>
 
-          <section id="courses" className="resume-section">
-            <Courses data={courses} />
-          </section>
+          {courses.length > 0 ? (
+            <section id="courses" className="resume-section">
+              <Courses data={courses} />
+            </section>
+          ) : null}
 
           <section id="references" className="resume-section">
             <References />

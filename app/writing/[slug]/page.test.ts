@@ -20,6 +20,38 @@ import {
 
 import PostPage, { generateMetadata } from './page';
 
+/** The one published post; metadata tests pin its real card and canonical. */
+const PUBLISHED_SLUG = 'alem-do-codigo-ia-e-o-novo-desenvolvedor';
+const PUBLISHED_TITLE =
+  'Além do código: inteligência artificial e o novo desenvolvedor';
+
+/**
+ * A published post that names an article image. No real post does today, and
+ * a published fixture file would race the card-ledger suites, so this slug is
+ * served by a mock of `getPostBySlug` while every other slug reads the real
+ * directory. The image is the committed portrait, so its size is real.
+ */
+const IMAGE_SLUG = 'zz-article-image-fixture';
+
+vi.mock('@/lib/posts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/posts')>();
+  return {
+    ...actual,
+    getPostBySlug: (slug: string) =>
+      slug === 'zz-article-image-fixture'
+        ? {
+            slug,
+            title: 'A Post With An Article Image',
+            date: '2026-01-08',
+            description: 'Names a representative image.',
+            content: 'Body copy.',
+            image: '/images/me.jpg',
+            imageAlt: 'Retrato de Fábio Assunção',
+          }
+        : actual.getPostBySlug(slug),
+  };
+});
+
 /**
  * The draft path is read from `content/writing/` by slug, with no seam to
  * inject a fixture through, so the draft has to be a real file for the length
@@ -86,30 +118,30 @@ async function blogPostingFor(slug: string) {
 describe('writing post metadata', () => {
   it('uses a trailing-slash canonical URL for posts', async () => {
     const metadata = await generateMetadata({
-      params: Promise.resolve({ slug: 'claude-code-outage' }),
+      params: Promise.resolve({ slug: PUBLISHED_SLUG }),
     });
 
     expect(metadata.openGraph?.url).toBe(
-      `${SITE_URL}/writing/claude-code-outage/`,
+      `${SITE_URL}/writing/${PUBLISHED_SLUG}/`,
     );
   });
 
   /**
    * The share image is the post's own generated card, even when the post names
    * an article image. `summary_large_image` wants 1200x630, and a screenshot is
-   * whatever shape it happens to be — this one is 1117x812.
+   * whatever shape it happens to be.
    */
   it('uses the generated post card for social metadata', async () => {
     const metadata = await generateMetadata({
-      params: Promise.resolve({ slug: 'shipping-with-claude-code' }),
+      params: Promise.resolve({ slug: PUBLISHED_SLUG }),
     });
 
     expect(metadata.openGraph?.images).toEqual([
       {
-        url: `${SITE_URL}/og/writing/shipping-with-claude-code.png`,
+        url: `${SITE_URL}/og/writing/${PUBLISHED_SLUG}.png`,
         width: SHARE_IMAGE_DIMENSIONS.width,
         height: SHARE_IMAGE_DIMENSIONS.height,
-        alt: `What I learned shipping 1,000+ PRs with Claude Code — ${AUTHOR_NAME}`,
+        alt: `${PUBLISHED_TITLE} — ${AUTHOR_NAME}`,
       },
     ]);
     expect(metadata.twitter?.images).toEqual(metadata.openGraph?.images);
@@ -138,22 +170,21 @@ describe('writing post structured data', () => {
    * belongs and where its real dimensions are wanted.
    */
   it('keeps an explicitly selected article image in the BlogPosting', async () => {
-    const blogPosting = await blogPostingFor('shipping-with-claude-code');
+    const blogPosting = await blogPostingFor(IMAGE_SLUG);
 
     expect(blogPosting.image).toMatchObject({
-      url: `${SITE_URL}/images/writing/api-costs-july-2025.png`,
-      width: 1117,
-      height: 812,
-      caption:
-        'Anthropic API costs for July 2025 showing $9,986.20 in token usage',
+      url: `${SITE_URL}/images/me.jpg`,
+      width: 460,
+      height: 460,
+      caption: 'Retrato de Fábio Assunção',
     });
   });
 
   it('falls back to the post card for a post with no article image', async () => {
-    const blogPosting = await blogPostingFor('claude-code-outage');
+    const blogPosting = await blogPostingFor(PUBLISHED_SLUG);
 
     expect(blogPosting.image).toMatchObject({
-      url: `${SITE_URL}/og/writing/claude-code-outage.png`,
+      url: `${SITE_URL}/og/writing/${PUBLISHED_SLUG}.png`,
       width: SHARE_IMAGE_DIMENSIONS.width,
       height: SHARE_IMAGE_DIMENSIONS.height,
     });

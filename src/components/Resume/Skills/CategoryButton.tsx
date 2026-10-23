@@ -1,3 +1,6 @@
+/** Label of the filter that shows every category. */
+export const ALL_CATEGORY = 'Todas';
+
 interface CategoryButtonProps {
   label: string;
   handleClick: (label: string) => void;
@@ -9,7 +12,7 @@ export default function CategoryButton({
   isActive,
   label,
 }: CategoryButtonProps) {
-  const isAll = label === 'All';
+  const isAll = label === ALL_CATEGORY;
 
   return (
     <button

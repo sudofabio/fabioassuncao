@@ -119,7 +119,7 @@ export default function SlideMenu({
         id={id}
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation menu"
+        aria-label="Menu de navegação"
         className={`slide-menu slide-menu--${position}${isOpen ? ' slide-menu--open' : ''}`}
         aria-hidden={!isOpen}
         inert={!isOpen}

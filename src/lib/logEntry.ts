@@ -63,6 +63,19 @@ const LEADING_PATTERNS: Array<{
     pattern: /^I\s+was\s+(\d{1,2})\s+when\s+/i,
     read: (m) => ({ age: [num(m[1])] }),
   },
+  // "De 2008 a 2010, como estagiário …"
+  {
+    pattern: new RegExp(
+      `^De\\s+(${YEAR_PATTERN.source})\\s+a\\s+(${YEAR_PATTERN.source}),\\s+`,
+      'i',
+    ),
+    read: (m) => ({ year: [num(m[1]), num(m[2])] }),
+  },
+  // "Desde 2022, como engenheiro …" / "Em 2026, apresentei …"
+  {
+    pattern: new RegExp(`^(?:Desde|Em)\\s+(${YEAR_PATTERN.source}),\\s+`, 'i'),
+    read: (m) => ({ year: [num(m[1])] }),
+  },
   // "In 2016, I visited Canada …"
   // Qualified dates such as "In the summer of 1996" stay in the prose so the
   // qualifier is not discarded; INLINE_YEAR still annotates the entry.
@@ -118,7 +131,7 @@ function toMarker(reading: Reading, rest: string): LogMarker | null {
   }
 
   return {
-    ...(age ? { age: `Age ${formatSpan(age)}` } : {}),
+    ...(age ? { age: `${formatSpan(age)} anos` } : {}),
     ...(year ? { year: formatSpan(year) } : {}),
     rest,
   };

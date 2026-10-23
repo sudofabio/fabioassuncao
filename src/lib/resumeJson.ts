@@ -15,12 +15,12 @@
  * `references` entry — the schema wants a name and a quote.
  */
 
-import contact from '@/data/contact';
+import { profileLinks } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
 import { categories, skills } from '@/data/resume/skills';
-import work from '@/data/resume/work';
+import work, { type Position } from '@/data/resume/work';
 import { sortPositions } from '@/lib/career';
 import {
   AUTHOR_NAME,
@@ -51,8 +51,7 @@ interface ResumeProfile {
 }
 
 interface ResumeLocation {
-  city: string;
-  region?: string;
+  countryCode: string;
 }
 
 interface ResumeBasics {
@@ -67,9 +66,9 @@ interface ResumeBasics {
 }
 
 interface ResumeWork {
-  name: string;
+  name?: string;
   position: string;
-  url: string;
+  url?: string;
   startDate: string;
   endDate?: string;
   summary?: string;
@@ -167,16 +166,11 @@ export function toPlainText(value: string): string {
 }
 
 /**
- * `profile.currentCity` is a single display string ("New York, NY"). It is
- * split rather than duplicated, and `countryCode` is left off because the data
- * does not state a country — a hardcoded `US` here would silently outlive a
- * move abroad.
+ * The profile states a country, not a city, so the location is the ISO
+ * country code alone rather than a city invented from the display string.
  */
 function buildLocation(): ResumeLocation {
-  const [city, region] = profile.currentCity
-    .split(',')
-    .map((part) => part.trim());
-  return { city, ...(region ? { region } : {}) };
+  return { countryCode: profile.countryCode };
 }
 
 /** The trailing path segment of a profile URL is the handle on every network here. */
@@ -196,23 +190,31 @@ function buildBasics(): ResumeBasics {
     url: `${SITE_URL}/`,
     summary: SITE_DESCRIPTION,
     location: buildLocation(),
-    profiles: contact
-      .filter((item) => !item.link.startsWith('mailto:'))
-      .map((item) => ({
-        network: item.label,
-        username: usernameFrom(item.link),
-        url: item.link,
-      })),
+    profiles: profileLinks.map((item) => ({
+      network: item.label,
+      username: usernameFrom(item.link),
+      url: item.link,
+    })),
   };
+}
+
+/** JSON Resume accepts `YYYY`; a year-only record must not gain a month. */
+function resumeDate(
+  date: string,
+  precision: Position['datePrecision'],
+): string {
+  return precision === 'year' ? date.slice(0, 4) : date;
 }
 
 function buildWork(): ResumeWork[] {
   return sortPositions(work).map((position) => ({
-    name: position.name,
+    ...(position.name ? { name: position.name } : {}),
     position: position.position,
-    url: position.url,
-    startDate: position.startDate,
-    ...(position.endDate ? { endDate: position.endDate } : {}),
+    ...(position.url ? { url: position.url } : {}),
+    startDate: resumeDate(position.startDate, position.datePrecision),
+    ...(position.endDate
+      ? { endDate: resumeDate(position.endDate, position.datePrecision) }
+      : {}),
     ...(position.summary ? { summary: toPlainText(position.summary) } : {}),
     ...(position.highlights
       ? { highlights: position.highlights.map(toPlainText) }
@@ -268,7 +270,8 @@ function buildSkills(): ResumeSkill[] {
       .filter((skill) => skill.category.includes(category.name))
       .sort(
         (a, b) =>
-          b.competency - a.competency || a.title.localeCompare(b.title, 'en'),
+          (b.competency ?? 0) - (a.competency ?? 0) ||
+          a.title.localeCompare(b.title, 'pt-BR'),
       )
       .map((skill) => skill.title),
   }));

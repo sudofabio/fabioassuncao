@@ -5,19 +5,8 @@ export interface Degree {
   year: number;
 }
 
-const degrees: Degree[] = [
-  {
-    school: 'Stanford University',
-    degree: 'M.S. Computational and Mathematical Engineering (ICME)',
-    link: 'https://stanford.edu',
-    year: 2016,
-  },
-  {
-    school: 'University at Buffalo',
-    degree: 'B.S. Electrical Engineering, Computer Engineering',
-    link: 'https://buffalo.edu',
-    year: 2012,
-  },
-];
+// TODO(fabio): informar a formação acadêmica (instituição, curso, ano e link).
+// Enquanto a lista estiver vazia, a seção não aparece no currículo.
+const degrees: Degree[] = [];
 
 export default degrees;

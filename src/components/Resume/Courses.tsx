@@ -22,7 +22,7 @@ export default function Courses({ data }: CoursesProps) {
   return (
     <div className="courses">
       <div className="title">
-        <h2>Selected Courses</h2>
+        <h2>Cursos</h2>
       </div>
       <ul className="course-list">{getRows(data)}</ul>
     </div>

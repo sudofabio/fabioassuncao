@@ -1,6 +1,5 @@
-import dayjs from 'dayjs';
-
 import type { Project } from '@/data/projects';
+import dayjs from '@/lib/dayjs';
 
 /**
  * Month precision, because year precision was hiding the register: four
@@ -26,15 +25,15 @@ export default function DateRange({ date, endDate, ongoing }: DateRangeProps) {
       {isRange && (
         <>
           {/* The dash is decorative, so without the spoken "to" a screen
-              reader runs the two dates together as "July 2024 Present". */}
+              reader runs the two dates together as "jul. 2024 Atual". */}
           <span className="daterange-sep" aria-hidden="true">
             –
           </span>
-          <span className="sr-only"> to </span>
+          <span className="sr-only"> até </span>
           {endDate ? (
             <time dateTime={endDate}>{dayjs(endDate).format(MONTH_YEAR)}</time>
           ) : (
-            <span className="daterange-present">Present</span>
+            <span className="daterange-present">Atual</span>
           )}
         </>
       )}

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SchemaGraph } from '@/components/Schema';
 import PageWrapper from '@/components/Template/PageWrapper';
@@ -87,7 +88,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: 'Post Not Found',
+      title: 'Artigo não encontrado',
     };
   }
 
@@ -169,8 +170,8 @@ export default async function PostPage({ params }: PageProps) {
           }),
           blogPostingNode(post, articleImage),
           breadcrumbNode(postUrl, [
-            { name: 'Home', url: HOME_URL },
-            { name: 'Writing', url: writingUrl },
+            { name: 'Início', url: HOME_URL },
+            { name: 'Artigos', url: writingUrl },
             { name: post.title, url: postUrl },
           ]),
         ]}
@@ -191,6 +192,19 @@ export default async function PostPage({ params }: PageProps) {
             allowMissingLocalImages={allowMissingLocalImages}
           />
         </div>
+        <aside className="post-cta" aria-labelledby="post-cta-title">
+          <h2 id="post-cta-title" className="post-cta-title">
+            Quer ajuda com isso no seu time ou projeto?
+          </h2>
+          <div className="post-cta-actions">
+            <Link href="/trabalhe-comigo/#orcamento" className="button">
+              Pedir orçamento
+            </Link>
+            <Link href="/contact" className="button button-secondary">
+              Fale comigo
+            </Link>
+          </div>
+        </aside>
       </article>
     </PageWrapper>
   );

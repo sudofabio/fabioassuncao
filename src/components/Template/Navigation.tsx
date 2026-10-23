@@ -15,11 +15,15 @@ export default function Navigation() {
 
   return (
     <header className="site-header">
-      <Link href="/" className="site-logo" aria-label={`${AUTHOR_NAME} — home`}>
-        <span className="logo-text">md</span>
+      <Link
+        href="/"
+        className="site-logo"
+        aria-label={`${AUTHOR_NAME} — início`}
+      >
+        <span className="logo-text">fa</span>
       </Link>
 
-      <nav className="nav-links" aria-label="Primary">
+      <nav className="nav-links" aria-label="Principal">
         {routes
           .filter((l) => !l.index && l.primary !== false)
           .map((l) => {

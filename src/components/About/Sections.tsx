@@ -78,12 +78,7 @@ interface ParsedAboutSection {
  * The rest stay as plain lists, because order carries no meaning there.
  */
 const sectionVariants: Record<string, string> = {
-  'Some History': 'about-section--log',
-  'Travel / Geography': 'about-section--log',
-  'Fun Facts': 'about-section--compact',
-  'I Like': 'about-section--compact',
-  'I Dream Of': 'about-section--compact',
-  'Websites from People I Admire': 'about-section--links',
+  'Desde 2008': 'about-section--log',
 };
 
 function splitAboutMarkdown(markdown: string) {
@@ -159,7 +154,7 @@ export default function AboutContent({ markdown }: AboutContentProps) {
         </div>
       ) : null}
       {sections.length > 0 ? (
-        <nav className="about-section-nav" aria-label="About sections">
+        <nav className="about-section-nav" aria-label="Seções da página">
           {sections.map((section) => (
             <a
               key={section.id}

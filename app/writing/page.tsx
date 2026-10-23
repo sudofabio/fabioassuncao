@@ -17,7 +17,7 @@ import { getWritingItems, type WritingItem as Item } from '@/lib/writing';
 const WRITING_URL = `${SITE_URL}/writing/`;
 
 const writingMetadata = createPageMetadata({
-  title: 'Writing',
+  title: 'Artigos',
   description: WRITING_DESCRIPTION,
   path: '/writing/',
 });
@@ -66,7 +66,7 @@ function WritingItem({
       <p className="writing-description">{item.description}</p>
       {item.isExternal && (
         // The arrow is decorative, so the warning has to be spoken.
-        <span className="sr-only"> (opens in a new tab)</span>
+        <span className="sr-only"> (abre em nova aba)</span>
       )}
     </>
   );
@@ -110,26 +110,26 @@ export default function WritingPage() {
         nodes={[
           collectionPageNode({
             url: WRITING_URL,
-            name: 'Writing',
+            name: 'Artigos',
             description: WRITING_DESCRIPTION,
             hasBreadcrumb: true,
           }),
           blogNode(latestPostDate),
           breadcrumbNode(WRITING_URL, [
-            { name: 'Home', url: HOME_URL },
-            { name: 'Writing', url: WRITING_URL },
+            { name: 'Início', url: HOME_URL },
+            { name: 'Artigos', url: WRITING_URL },
           ]),
         ]}
       />
       <article className="writing-page">
         <header className="writing-header">
           <div className="writing-header-row">
-            <h1 className="page-title">Writing</h1>
+            <h1 className="page-title">Artigos</h1>
             <a
               href="/feed.xml"
               className="writing-rss-link"
-              title="RSS Feed"
-              aria-label="RSS Feed"
+              title="Feed RSS"
+              aria-label="Feed RSS"
             >
               RSS
             </a>
@@ -138,7 +138,7 @@ export default function WritingPage() {
 
         <section className="writing-group" aria-labelledby="writing-here">
           <h2 id="writing-here" className="writing-section-label">
-            Essays on this site
+            Neste site
           </h2>
           <div className="writing-list">
             {internal.map((item) => (
@@ -151,25 +151,30 @@ export default function WritingPage() {
           </div>
         </section>
 
-        <section className="writing-group" aria-labelledby="writing-elsewhere">
-          <h2 id="writing-elsewhere" className="writing-section-label">
-            Selected writing elsewhere
-          </h2>
-          <div className="writing-list">
-            {external.map((item) => (
-              <WritingItem
-                key={item.url}
-                item={item}
-                featured={item.url === latestDatedItem?.url}
-              />
-            ))}
-          </div>
-        </section>
+        {external.length > 0 && (
+          <section
+            className="writing-group"
+            aria-labelledby="writing-elsewhere"
+          >
+            <h2 id="writing-elsewhere" className="writing-section-label">
+              Em outros lugares
+            </h2>
+            <div className="writing-list">
+              {external.map((item) => (
+                <WritingItem
+                  key={item.url}
+                  item={item}
+                  featured={item.url === latestDatedItem?.url}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {guides.length > 0 && (
           <section className="writing-group" aria-labelledby="writing-guides">
             <h2 id="writing-guides" className="writing-section-label">
-              Guides
+              Guias
             </h2>
             <div className="writing-list">
               {guides.map((item) => (

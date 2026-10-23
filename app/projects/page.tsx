@@ -16,20 +16,20 @@ import { AUTHOR_NAME } from '@/lib/utils';
 
 const PROJECTS_URL = `${SITE_URL}/projects/`;
 
-const PAGE_TITLE = 'Projects';
+const PAGE_TITLE = 'Projetos';
 
 /**
  * Built from the register itself, so the share text cannot claim a lineup the
  * page no longer has. Capped at three names to keep the description short
  * enough to survive a search result.
  */
-const PROJECTS_DESCRIPTION = `Selected work from ${AUTHOR_NAME} — ${shipped
+const PROJECTS_DESCRIPTION = `Projetos de ${AUTHOR_NAME} — ${shipped
   .slice(0, 3)
   .map((project) => project.title)
-  .join(', ')} — plus earlier projects and experiments.`;
+  .join(', ')} — e trabalhos anteriores.`;
 
 function projectCountLabel(count: number): string {
-  return `${count} ${count === 1 ? 'project' : 'projects'}`;
+  return `${count} ${count === 1 ? 'projeto' : 'projetos'}`;
 }
 
 export const metadata: Metadata = createPageMetadata({
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
             hasBreadcrumb: true,
           }),
           breadcrumbNode(PROJECTS_URL, [
-            { name: 'Home', url: HOME_URL },
+            { name: 'Início', url: HOME_URL },
             { name: PAGE_TITLE, url: PROJECTS_URL },
           ]),
         ]}
@@ -59,15 +59,15 @@ export default function ProjectsPage() {
         <header className="projects-header">
           <h1 className="page-title">{PAGE_TITLE}</h1>
           <p className="page-subtitle">
-            Work I have built, led, and contributed to, plus earlier student
-            projects.
+            Projetos open source que mantenho e trabalhos anteriores.
+            {/* TODO(fabio): estudos de caso de projetos de clientes. */}
           </p>
         </header>
 
         <section className="projects-group" aria-labelledby="projects-selected">
           <div className="projects-group-header">
             <h2 id="projects-selected" className="projects-section-title">
-              Selected work
+              Em destaque
             </h2>
             {/* Counted, never typed. */}
             <span className="projects-section-count">
@@ -86,14 +86,14 @@ export default function ProjectsPage() {
         <section className="projects-group" aria-labelledby="projects-archive">
           <div className="projects-group-header">
             <h2 id="projects-archive" className="projects-section-title">
-              Archive
+              Anteriores
             </h2>
             <span className="projects-section-count">
               {projectCountLabel(archive.length)}
             </span>
           </div>
           <p className="projects-group-note">
-            Student projects, hackathons, and experiments, kept for the record.
+            Projetos e experimentos anteriores, mantidos como registro.
           </p>
           <ol className="projects-grid">
             {archive.map((project) => (

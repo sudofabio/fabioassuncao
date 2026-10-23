@@ -62,8 +62,14 @@ const ICONS: Record<ThemeChoice, ReactNode> = {
  * read out on the light device whose first press goes dark. A name that says
  * less is still true.
  */
+const CHOICE_NAMES: Record<ThemeChoice, string> = {
+  light: 'claro',
+  dark: 'escuro',
+  system: 'sistema',
+};
+
 function stateLabel(choice: ThemeChoice): string {
-  return `Theme preference: ${choice}.`;
+  return `Tema: ${CHOICE_NAMES[choice]}.`;
 }
 
 /**
@@ -75,7 +81,7 @@ function stateLabel(choice: ThemeChoice): string {
  * label cannot disagree with the cycle it describes.
  */
 function labelFor(choice: ThemeChoice, next: ThemeChoice): string {
-  return `${stateLabel(choice)} Switch to ${next}.`;
+  return `${stateLabel(choice)} Mudar para ${CHOICE_NAMES[next]}.`;
 }
 
 /**

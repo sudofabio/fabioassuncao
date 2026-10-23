@@ -1,17 +1,20 @@
 /**
- * The register of things I have built.
+ * O registro do que eu construí.
  *
- * Two groups, both kept deliberately:
+ * Dois grupos:
  *
- * - `shipped` — selected production work Michael built, led, or contributed
- *   to, and can be pointed at.
- * - `archive` — student-era experiments. A register that deletes its own
- *   history is a brochure, so these stay, stepped down rather than removed.
+ * - `shipped` — trabalho recente, com destino público para apontar.
+ * - `archive` — projetos anteriores, mantidos como registro.
  *
- * Every shipped entry declares the role in `src/data/resume/work.ts` that
- * backs its dates and numeric claims. Archive entries are maintained here
- * directly. Those checks establish internal consistency; factual claims and
- * public destinations still need primary-source and live-link review.
+ * Hoje os dois grupos são projetos open source públicos no GitHub. Datas são a
+ * criação de cada repositório e as descrições traduzem a descrição do próprio
+ * repositório — nada além do que está publicado lá.
+ *
+ * Uma entrada que declara `sourceWork` tem datas e números conferidos contra o
+ * cargo correspondente em `src/data/resume/work.ts`.
+ *
+ * TODO(fabio): estudos de caso (problema, solução, resultado) dos trabalhos
+ * mais relevantes, com o que puder ser publicado.
  */
 export type ProjectStatus = 'shipped' | 'archive';
 
@@ -24,7 +27,7 @@ export interface Project {
    * visibly inert rather than as cards that look clickable and are not.
    */
   link?: string;
-  /** Résumé role that backs a shipped entry's dates and numeric claims. */
+  /** Résumé role (by `position`) that backs an entry's dates and claims. */
   sourceWork?: string;
   /**
    * Screenshot, where one exists. Optional: the card and the register row are
@@ -33,7 +36,7 @@ export interface Project {
    */
   image?: string;
   /**
-   * ISO date Michael's work on the project started, or a one-off shipped.
+   * ISO date work on the project started, or a one-off shipped.
    * This is project activity, not necessarily a public launch date.
    */
   date: string;
@@ -59,119 +62,109 @@ export interface Project {
  */
 const data: Project[] = [
   {
-    title: 'Codex Security',
-    subtitle: 'OpenAI · Research preview',
-    link: 'https://openai.com/index/codex-security-now-in-research-preview/',
-    sourceWork: 'OpenAI',
-    // Michael's involvement began with his OpenAI role. The public research
-    // preview launched three days earlier; month-precision UI shows Mar 2026.
-    date: '2026-03-09',
-    ongoing: true,
-    desc: 'Securing AI systems and applying AI to software security at OpenAI — using models to find and fix vulnerabilities in code.',
+    title: 'agentskills',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/agentskills',
+    date: '2026-04-14',
+    desc: 'Coleção pessoal de Agent Skills para automatizar tarefas do dia a dia.',
     status: 'shipped',
   },
   {
-    title: 'Promptfoo',
-    subtitle: 'Co-founder & CTO through acquisition · Continued at OpenAI',
-    link: 'https://promptfoo.dev',
-    sourceWork: 'Promptfoo',
-    date: '2024-07-01',
-    ongoing: true,
-    desc: 'Started as a developer-first eval tool and grew into a platform for AI security, red-teaming, and compliance: evaluation framework, vulnerability scanning, static analysis, and automated red-teaming. Reached more than 350,000 developers, 130,000 monthly active users, and teams at more than 25% of the Fortune 500 before joining OpenAI in 2026.',
+    title: 'issue-flow',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/codions-archive/issue-flow',
+    date: '2026-03-18',
+    desc: 'Transforma uma issue em um Pull Request revisado, sem precisar acompanhar o processo passo a passo. Apresentado na palestra “Além do código”.',
+    tech: ['TypeScript'],
     status: 'shipped',
   },
   {
-    title: 'Smile ID',
-    subtitle: 'VP Engineering & Head of AI',
-    link: 'https://smile.id',
-    sourceWork: 'Smile ID',
-    date: '2022-01-01',
-    endDate: '2024-07-01',
-    desc: 'ML-powered identity verification APIs used by banks, fintechs, and telcos across Africa. Re-architected inference to scale from 1,000 to more than 1M users per day, cutting job time from over 30 seconds to 7 seconds, and shipped a fraud detection product built on 1-N facial recognition.',
-    tech: ['AWS Lambda', 'Computer vision', 'Embeddings', 'Vector search'],
+    title: 'imgtool',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/imgtool',
+    date: '2026-03-06',
+    desc: 'Processador de imagens em lote para a linha de comando: um único script Bash, autocontido, que usa o ImageMagick 7 para comprimir, redimensionar e converter imagens recursivamente.',
+    tech: ['Bash', 'ImageMagick'],
     status: 'shipped',
   },
   {
-    title: 'Arthena',
-    subtitle: 'Co-founder & CTO',
-    link: 'https://www.ycombinator.com/companies/arthena',
-    sourceWork: 'Arthena',
-    date: '2014-01-01',
-    endDate: '2022-01-01',
-    desc: 'Quantitative art-investment platform backed by Anthemis, Foundation Capital, and Y Combinator. Built valuation models over irregularly sampled time series, plus the data pipelines and research tools behind them. Masterworks later acquired the company in 2023.',
-    tech: [
-      'Graph embeddings',
-      'Probabilistic forecasting',
-      'Online learning',
-      'Microservices',
-    ],
+    title: 'frankenphp-wordpress',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/frankenphp-wordpress',
+    date: '2026-02-11',
+    desc: 'Imagem base com FrankenPHP, WordPress core, PHP 8.4, WP-CLI, mu-plugins e configurações do servidor.',
+    tech: ['FrankenPHP', 'PHP', 'Docker'],
     status: 'shipped',
   },
   {
-    title: 'Matroid',
-    subtitle: 'Co-founder',
-    link: 'https://matroid.com',
-    sourceWork: 'Matroid',
-    date: '2015-09-01',
-    endDate: '2016-06-01',
-    desc: 'Computer vision platform for creating and deploying detectors. Architected and built the initial platform for identifying objects, events, and patterns in video, and carried it through the seed round.',
-    tech: ['Computer vision'],
+    title: 'Tutorial Claude Code',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/Tutorial-Claude-Code',
+    date: '2025-09-01',
+    desc: 'Tutoriais para usar Claude Code e agentes de IA no desenvolvimento de software com metodologia TDD. Cada tutorial é completo e otimizado para tecnologias específicas.',
     status: 'shipped',
   },
   {
-    title: 'Nearest Dollar',
-    subtitle: 'BVP Hackathon',
-    image: '/images/projects/nearestdollar.jpg',
-    date: '2015-11-20',
-    desc: 'Connected to bank accounts to round up purchases and donate spare change to charity.',
-    tech: ['React', 'Node.js', 'Plaid API', 'MongoDB'],
+    title: 'laravel-k8s',
+    subtitle: 'Workshop · GitHub',
+    link: 'https://github.com/fabioassuncao/laravel-k8s',
+    date: '2024-01-08',
+    desc: 'Projeto de demonstração do meu workshop de Laravel e Kubernetes, com deploy no Azure Kubernetes Service e no DigitalOcean Kubernetes.',
+    tech: ['PHP', 'Laravel', 'Kubernetes'],
     status: 'archive',
   },
   {
-    title: 'Harvest',
-    subtitle: '3rd place at TechCrunch Disrupt SF',
-    link: 'https://devpost.com/software/harvest',
-    image: '/images/projects/harvest.jpg',
-    date: '2015-09-20',
-    desc: 'Low-cost crop monitoring to catch irrigation leaks and nutrient deficiencies.',
-    tech: ['Python', 'Arduino', 'Computer vision', 'AWS'],
+    title: 'homelab-setup',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/homelab-setup',
+    date: '2023-12-27',
+    desc: 'Script que automatiza o setup de um servidor de homelab: atualização de pacotes, usuários, ferramentas (git, Docker e outras) e CapRover como PaaS com SSL e proxy reverso.',
+    tech: ['Shell', 'Docker'],
     status: 'archive',
   },
   {
-    title: 'Space Potato',
-    subtitle: 'Kickstarter-funded weather balloon',
-    image: '/images/projects/spacepotato.jpg',
-    date: '2015-06-28',
-    desc: 'Potato-powered weather balloon with cameras. Photos published in a coffee table book.',
-    tech: ['Hardware', 'GPS', 'Photography'],
+    title: 'WireHole',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/wirehole',
+    date: '2023-12-23',
+    desc: 'Projeto docker-compose que combina WireGuard, Pi-Hole e Unbound para implantar uma VPN completa ou em split-tunnel, com bloqueio de anúncios e mais privacidade e cache de DNS.',
+    tech: ['Docker', 'WireGuard'],
     status: 'archive',
   },
   {
-    title: 'Cat Detector',
-    subtitle: 'CNN for cat breed classification',
-    image: '/images/projects/catdetector.jpg',
-    date: '2015-05-15',
-    desc: 'Classified 60,000+ cats across 80 breeds before server costs shut it down.',
-    // TensorFlow was not open-sourced until November 2015, six months after
-    // this project date. No primary source establishes a later port.
-    tech: ['Python', 'CNN', 'AWS'],
+    title: 'azure-cluster-terraform',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/azure-cluster-terraform',
+    date: '2023-09-08',
+    desc: 'Setup Terraform para Docker Swarm no Azure.',
+    tech: ['Terraform', 'Azure'],
     status: 'archive',
   },
   {
-    title: 'UB Nanosatellite Program',
-    subtitle: 'AFRL University Nanosatellite Program',
-    link: 'https://ubnl.space/glados/',
-    date: '2011-06-01',
-    endDate: '2012-05-01',
-    desc: 'Co-authored the grant to design and build a multi-spectral imaging satellite, designed its attitude determination and control, and led a 60-person student team through the development lifecycle.',
+    title: 'docker-images',
+    subtitle: 'Open source · GitHub',
+    link: 'https://github.com/fabioassuncao/docker-images',
+    date: '2018-01-22',
+    desc: 'Imagens Docker para desenvolvimento.',
+    tech: ['Docker'],
     status: 'archive',
   },
 ];
 
+/**
+ * Produtos que ainda não têm descrição nem link confirmados. Ficam fora da
+ * página até serem completados e movidos para `data`.
+ * TODO(fabio): descrição, link e data de início de cada produto.
+ */
+export const pendingProducts: Pick<Project, 'title' | 'subtitle'>[] = [
+  { title: 'Brasil Data Hub', subtitle: 'Produto · Codions' },
+  { title: 'Base Empresarial', subtitle: 'Produto · Codions' },
+];
+
 export default data;
 
-/** The register: production work, most recent first. */
+/** The register: recent work, most recent first. */
 export const shipped = data.filter((project) => project.status === 'shipped');
 
-/** Student-era history, most recent first. */
+/** Earlier projects, most recent first. */
 export const archive = data.filter((project) => project.status === 'archive');

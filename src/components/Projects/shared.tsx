@@ -5,10 +5,10 @@
  */
 
 /** Spoken as part of the link name, since the ↗ glyph is decorative. */
-export const NEW_TAB_SUFFIX = '(opens in a new tab)';
+export const NEW_TAB_SUFFIX = '(abre em nova aba)';
 
 /** What a card says when there is no public destination to offer. */
-export const NO_LINK_LABEL = 'No public link';
+export const NO_LINK_LABEL = 'Sem link público';
 
 /**
  * Every project destination is off-site, so each opens in a new tab and says

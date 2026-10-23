@@ -28,7 +28,6 @@ export function compareWritingItems(a: WritingItem, b: WritingItem): number {
 function externalSource(url: string): string {
   const hostname = new URL(url).hostname.replace(/^www\./, '');
 
-  if (hostname === 'promptfoo.dev') return 'Promptfoo';
   if (hostname === 'linkedin.com') return 'LinkedIn';
 
   return hostname;
@@ -42,7 +41,7 @@ export function getWritingItems(): WritingItem[] {
     date: post.date,
     description: post.description,
     isExternal: false,
-    source: 'On this site',
+    source: 'Neste site',
   }));
   const external: WritingItem[] = externalWriting.map((item) => ({
     ...item,

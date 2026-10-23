@@ -1,6 +1,11 @@
 export interface Skill {
   title: string;
-  competency: number;
+  /**
+   * Self-assessed 1–5 score. Optional: without it the tag is shown with no
+   * proficiency tier instead of an invented one.
+   * TODO(fabio): informar o nível (1–5) de cada competência, se quiser exibir.
+   */
+  competency?: number;
   category: string[];
 }
 
@@ -8,116 +13,111 @@ export interface Category {
   name: string;
 }
 
+// Os quatro grupos de competências do site anterior, na mesma ordem de itens.
 const skills: Skill[] = [
-  // Languages
+  // Backend
   {
-    title: 'Python',
-    competency: 5,
-    category: ['Languages', 'ML Engineering'],
+    title: 'PHP',
+    category: ['Backend'],
+  },
+  {
+    title: 'Go',
+    category: ['Backend'],
+  },
+  {
+    title: 'Node.js',
+    category: ['Backend'],
   },
   {
     title: 'TypeScript',
-    competency: 5,
-    category: ['Languages', 'Web Development'],
+    category: ['Backend'],
+  },
+  {
+    title: 'Python',
+    category: ['Backend'],
+  },
+  {
+    title: 'Rust',
+    category: ['Backend'],
   },
   {
     title: 'SQL',
-    competency: 4,
-    category: ['Languages', 'Databases'],
+    category: ['Backend'],
   },
-  // AI & LLM
+  // Arquitetura
   {
-    title: 'AI Agents',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Microsserviços',
+    category: ['Arquitetura'],
   },
   {
-    title: 'LLM Evaluation',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Event-Driven',
+    category: ['Arquitetura'],
   },
   {
-    title: 'AI Red-teaming',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'REST / GraphQL',
+    category: ['Arquitetura'],
   },
   {
-    title: 'LLM APIs',
-    competency: 5,
-    category: ['ML Engineering'],
+    title: 'Domain-Driven Design',
+    category: ['Arquitetura'],
   },
   {
-    title: 'RAG',
-    competency: 4,
-    category: ['ML Engineering'],
+    title: 'CQRS',
+    category: ['Arquitetura'],
   },
-  {
-    title: 'Prompt Engineering',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Vector Databases',
-    competency: 4,
-    category: ['ML Engineering', 'Databases'],
-  },
-  {
-    title: 'PyTorch',
-    competency: 4,
-    category: ['ML Engineering'],
-  },
-  {
-    title: 'Pandas',
-    competency: 5,
-    category: ['ML Engineering', 'Data Engineering'],
-  },
-  // Web Development
-  {
-    title: 'Node.js',
-    competency: 5,
-    category: ['Web Development'],
-  },
-  {
-    title: 'FastAPI',
-    competency: 4,
-    category: ['Web Development'],
-  },
-  {
-    title: 'Next.js',
-    competency: 3,
-    category: ['Web Development'],
-  },
-  // Databases
-  {
-    title: 'PostgreSQL',
-    competency: 4,
-    category: ['Databases'],
-  },
-  {
-    title: 'Redis',
-    competency: 3,
-    category: ['Databases'],
-  },
-  // Infrastructure
+  // Cloud & DevOps
   {
     title: 'AWS',
-    competency: 4,
-    category: ['Infrastructure'],
+    category: ['Cloud & DevOps'],
+  },
+  {
+    title: 'GCP',
+    category: ['Cloud & DevOps'],
+  },
+  {
+    title: 'Cloudflare',
+    category: ['Cloud & DevOps'],
   },
   {
     title: 'Docker',
-    competency: 4,
-    category: ['Infrastructure'],
+    category: ['Cloud & DevOps'],
   },
   {
     title: 'Kubernetes',
-    competency: 3,
-    category: ['Infrastructure'],
+    category: ['Cloud & DevOps'],
   },
   {
-    title: 'Observability',
-    competency: 4,
-    category: ['Infrastructure', 'ML Engineering'],
+    title: 'Terraform',
+    category: ['Cloud & DevOps'],
+  },
+  {
+    title: 'CI/CD',
+    category: ['Cloud & DevOps'],
+  },
+  // Engenharia
+  {
+    title: 'Git',
+    category: ['Engenharia'],
+  },
+  {
+    title: 'Linux',
+    category: ['Engenharia'],
+  },
+  {
+    title: 'Testes',
+    category: ['Engenharia'],
+  },
+  {
+    title: 'Observabilidade',
+    category: ['Engenharia'],
+  },
+  {
+    title: 'Performance',
+    category: ['Engenharia'],
+  },
+  {
+    title: 'Segurança',
+    category: ['Engenharia'],
   },
 ].map((skill) => ({ ...skill, category: skill.category.sort() }));
 

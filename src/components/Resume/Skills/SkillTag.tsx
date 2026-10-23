@@ -8,9 +8,9 @@ interface SkillTagProps {
 export type SkillTier = 'deep' | 'working' | 'familiar';
 
 const TIER_DESCRIPTION: Record<SkillTier, string> = {
-  deep: 'deep knowledge',
-  working: 'working knowledge',
-  familiar: 'familiarity',
+  deep: 'domínio profundo',
+  working: 'domínio prático',
+  familiar: 'familiaridade',
 };
 
 /**
@@ -25,6 +25,16 @@ export function knowledgeTier(competency: number): SkillTier {
 
 export default function SkillTag({ data }: SkillTagProps) {
   const { competency, title } = data;
+
+  // No declared level means no tier: never imply a proficiency nobody stated.
+  if (competency === undefined) {
+    return (
+      <span className="skill-tag">
+        <span className="skill-tag-name">{title}</span>
+      </span>
+    );
+  }
+
   const tier = knowledgeTier(competency);
 
   return (

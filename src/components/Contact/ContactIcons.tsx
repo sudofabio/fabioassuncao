@@ -23,7 +23,7 @@ export default function ContactIcons({
               <a
                 href={s.link}
                 aria-label={
-                  isMailto ? s.label : `${s.label} (opens in new tab)`
+                  isMailto ? s.label : `${s.label} (abre em nova aba)`
                 }
                 {...(isMailto
                   ? {}

@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import type { Category, Skill } from '@/data/resume/skills';
 
-import CategoryButton from './Skills/CategoryButton';
+import CategoryButton, { ALL_CATEGORY } from './Skills/CategoryButton';
 import SkillTag from './Skills/SkillTag';
 
 interface SkillsProps {
@@ -12,7 +12,7 @@ interface SkillsProps {
   categories: Category[];
 }
 
-export const ALL_CATEGORY = 'All';
+export { ALL_CATEGORY };
 
 /**
  * One selected category at a time, held as a string.
@@ -53,7 +53,8 @@ export default function Skills({ skills, categories }: SkillsProps) {
    */
   const groupedSkills = useMemo(() => {
     const sortedSkills = [...skills].sort((a, b) => {
-      if (a.competency !== b.competency) return b.competency - a.competency;
+      const byCompetency = (b.competency ?? 0) - (a.competency ?? 0);
+      if (byCompetency !== 0) return byCompetency;
       return a.title.localeCompare(b.title);
     });
 
@@ -78,16 +79,20 @@ export default function Skills({ skills, categories }: SkillsProps) {
   const visibleSkillCount = new Set(visibleSkills.map((skill) => skill.title))
     .size;
 
-  const noun = totalSkillCount === 1 ? 'skill' : 'skills';
+  const noun = totalSkillCount === 1 ? 'competência' : 'competências';
   const filterStatus =
     activeCategory === ALL_CATEGORY
-      ? `Showing all ${totalSkillCount} ${noun}.`
-      : `Showing ${visibleSkillCount} of ${totalSkillCount} ${noun} in ${activeCategory}.`;
+      ? totalSkillCount === 1
+        ? 'Mostrando 1 competência.'
+        : `Mostrando todas as ${totalSkillCount} ${noun}.`
+      : `Mostrando ${visibleSkillCount} de ${totalSkillCount} ${noun} em ${activeCategory}.`;
+  // The tier legend only means something once levels have been declared.
+  const hasTiers = skills.some((skill) => skill.competency !== undefined);
 
   return (
     <div className="skills">
       <div className="title">
-        <h2>Skills</h2>
+        <h2>Competências</h2>
       </div>
       <div className="skill-button-container">{buttonElements}</div>
       {/* Stays hidden: print.css un-hides every group, so a visible count
@@ -95,14 +100,16 @@ export default function Skills({ skills, categories }: SkillsProps) {
       <p className="sr-only" role="status">
         {filterStatus}
       </p>
-      <p className="skill-tier-legend">
-        <span className="skill-tier-legend-label">Knowledge</span>
-        <span className="skill-tag--deep">Deep</span>
-        <span aria-hidden="true">·</span>
-        <span className="skill-tag--working">Working</span>
-        <span aria-hidden="true">·</span>
-        <span className="skill-tag--familiar">Familiar</span>
-      </p>
+      {hasTiers ? (
+        <p className="skill-tier-legend">
+          <span className="skill-tier-legend-label">Domínio</span>
+          <span className="skill-tag--deep">Profundo</span>
+          <span aria-hidden="true">·</span>
+          <span className="skill-tag--working">Prático</span>
+          <span aria-hidden="true">·</span>
+          <span className="skill-tag--familiar">Familiar</span>
+        </p>
+      ) : null}
       <div className="skill-groups">
         {groupedSkills.map(({ category, skills: categorySkills }) => {
           const isVisible =
