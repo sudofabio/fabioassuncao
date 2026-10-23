@@ -85,7 +85,7 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
   );
   write(
     root,
-    'out/index.html',
+    'dist/client/index.html',
     htmlPage({
       canonical: siteRoot,
       siteRoot,
@@ -99,7 +99,7 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
   );
   write(
     root,
-    'out/about/index.html',
+    'dist/client/about/index.html',
     htmlPage({
       canonical: `${siteRoot}about/`,
       siteRoot,
@@ -112,7 +112,7 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
   );
   write(
     root,
-    'out/resume/index.html',
+    'dist/client/resume/index.html',
     htmlPage({
       canonical: `${siteRoot}resume/`,
       siteRoot,
@@ -125,7 +125,7 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
   );
   write(
     root,
-    'out/resume.json',
+    'dist/client/resume.json',
     `${JSON.stringify(
       {
         $schema:
@@ -146,14 +146,14 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
       2,
     )}\n`,
   );
-  write(root, 'out/og.png');
-  write(root, 'out/favicon.ico');
-  write(root, 'out/icon.png');
-  write(root, 'out/apple-icon.png');
-  write(root, 'out/images/icons/app.png');
+  write(root, 'dist/client/og.png');
+  write(root, 'dist/client/favicon.ico');
+  write(root, 'dist/client/icon.png');
+  write(root, 'dist/client/apple-icon.png');
+  write(root, 'dist/client/images/icons/app.png');
   write(
     root,
-    'out/manifest.json',
+    'dist/client/manifest.json',
     JSON.stringify({
       name: 'Fixture',
       start_url: '.',
@@ -161,10 +161,10 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
       icons: [{ src: 'images/icons/app.png' }],
     }),
   );
-  write(root, 'out/images/photo.png');
+  write(root, 'dist/client/images/photo.png');
   write(
     root,
-    'out/sitemap.xml',
+    'dist/client/sitemap.xml',
     `<?xml version="1.0"?>
 <urlset>
   <url><loc>${siteRoot}</loc></url>
@@ -174,7 +174,7 @@ function createFixture({ basePath = '', draftSlug = 'secret-draft' } = {}) {
   );
   write(
     root,
-    'out/feed.xml',
+    'dist/client/feed.xml',
     `<?xml version="1.0"?>
 <rss xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -242,7 +242,7 @@ describe('verify-export', () => {
 
   it('rejects links that escape a configured repository-site base path', () => {
     const root = createFixture({ basePath: '/personal-site' });
-    mutate(root, 'out/index.html', (html) =>
+    mutate(root, 'dist/client/index.html', (html) =>
       html.replace('href="about/#section"', 'href="/about/#section"'),
     );
 
@@ -255,7 +255,7 @@ describe('verify-export', () => {
 
   it('rejects a missing exported icon target', () => {
     const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
+    mutate(root, 'dist/client/index.html', (html) =>
       html.replace('href="https://example.com/icon.png"', 'href="/gone.png"'),
     );
 
@@ -268,7 +268,7 @@ describe('verify-export', () => {
 
   it('rejects a manifest icon outside the configured base path', () => {
     const root = createFixture({ basePath: '/personal-site' });
-    mutate(root, 'out/manifest.json', (json) =>
+    mutate(root, 'dist/client/manifest.json', (json) =>
       json.replace('images/icons/app.png', '/images/icons/app.png'),
     );
 
@@ -281,7 +281,7 @@ describe('verify-export', () => {
 
   it('rejects a manifest start URL outside the configured base path', () => {
     const root = createFixture({ basePath: '/personal-site' });
-    mutate(root, 'out/manifest.json', (json) =>
+    mutate(root, 'dist/client/manifest.json', (json) =>
       json.replace('"start_url":"."', '"start_url":"/"'),
     );
 
@@ -294,7 +294,7 @@ describe('verify-export', () => {
 
   it('rejects a missing same-page fragment', () => {
     const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
+    mutate(root, 'dist/client/index.html', (html) =>
       html.replace('href="#main-content"', 'href="#missing"'),
     );
 
@@ -307,7 +307,7 @@ describe('verify-export', () => {
 
   it('rejects a missing cross-page fragment', () => {
     const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
+    mutate(root, 'dist/client/index.html', (html) =>
       html.replace('about/#section', 'about/#missing'),
     );
 
@@ -335,7 +335,7 @@ describe('verify-export', () => {
     'rejects missing %s targets under a deployment base path',
     (_name, markup) => {
       const root = createFixture({ basePath: '/personal-site' });
-      mutate(root, 'out/index.html', (html) =>
+      mutate(root, 'dist/client/index.html', (html) =>
         html.replace('</body>', `${markup}</body>`),
       );
       const result = runVerifier(root);
@@ -348,8 +348,8 @@ describe('verify-export', () => {
 
   it('accepts existing relative media and external media under a base path', () => {
     const root = createFixture({ basePath: '/personal-site' });
-    write(root, 'out/media/demo.mp4');
-    mutate(root, 'out/index.html', (html) =>
+    write(root, 'dist/client/media/demo.mp4');
+    mutate(root, 'dist/client/index.html', (html) =>
       html.replace(
         '</body>',
         '<video src="media/demo.mp4" poster="images/photo.png"><source src="https://media.example/demo.webm"></video></body>',
@@ -373,7 +373,7 @@ describe('verify-export', () => {
         ],
       ])('rejects a missing %s', (_name, markup) => {
         const root = createFixture({ basePath });
-        mutate(root, 'out/index.html', (html) =>
+        mutate(root, 'dist/client/index.html', (html) =>
           html.replace('</body>', `${markup}</body>`),
         );
         const result = runVerifier(root);
@@ -385,7 +385,7 @@ describe('verify-export', () => {
 
       it('accepts existing, empty, and external submission targets', () => {
         const root = createFixture({ basePath });
-        mutate(root, 'out/index.html', (html) =>
+        mutate(root, 'dist/client/index.html', (html) =>
           html.replace(
             '</body>',
             `
@@ -405,7 +405,7 @@ describe('verify-export', () => {
 
   it('rejects missing relative routes and local image files', () => {
     const root = createFixture();
-    mutate(root, 'out/index.html', (html) =>
+    mutate(root, 'dist/client/index.html', (html) =>
       html
         .replace('about/#section', 'missing/')
         .replace('images/photo.png', 'images/missing.png'),
@@ -461,7 +461,7 @@ describe('verify-export', () => {
     },
   ])('rejects $name', ({ change, expected }) => {
     const root = createFixture();
-    mutate(root, 'out/about/index.html', change);
+    mutate(root, 'dist/client/about/index.html', change);
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
@@ -475,7 +475,7 @@ describe('verify-export', () => {
     ['Twitter creator', 'name="twitter:creator"', 'twitter:creator'],
   ])('rejects a missing %s', (_, attribute, tagName) => {
     const root = createFixture();
-    mutate(root, 'out/about/index.html', (html) =>
+    mutate(root, 'dist/client/about/index.html', (html) =>
       html.replace(new RegExp(`\\s*<meta ${attribute}[^>]*>`), ''),
     );
 
@@ -488,7 +488,7 @@ describe('verify-export', () => {
 
   it('rejects draft and missing routes in the sitemap', () => {
     const root = createFixture();
-    mutate(root, 'out/sitemap.xml', (xml) =>
+    mutate(root, 'dist/client/sitemap.xml', (xml) =>
       xml.replace(
         '</urlset>',
         '<url><loc>https://example.com/writing/secret-draft/</loc></url></urlset>',
@@ -504,7 +504,7 @@ describe('verify-export', () => {
 
   it('rejects draft routes in the RSS feed', () => {
     const root = createFixture();
-    mutate(root, 'out/feed.xml', (xml) =>
+    mutate(root, 'dist/client/feed.xml', (xml) =>
       xml.replace(
         '</channel>',
         '<item><link>https://example.com/writing/secret-draft/</link></item></channel>',
@@ -520,7 +520,7 @@ describe('verify-export', () => {
 
   it('rejects an export with no machine-readable resume', () => {
     const root = createFixture();
-    rmSync(join(root, 'out/resume.json'));
+    rmSync(join(root, 'dist/client/resume.json'));
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
@@ -529,7 +529,7 @@ describe('verify-export', () => {
 
   it('rejects a JSON primitive instead of accepting it as a resume document', () => {
     const root = createFixture();
-    write(root, 'out/resume.json', 'null\n');
+    write(root, 'dist/client/resume.json', 'null\n');
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
@@ -555,7 +555,7 @@ describe('verify-export', () => {
     },
   ])('rejects $name', ({ change, expected }) => {
     const root = createFixture();
-    mutate(root, 'out/resume.json', (json) => {
+    mutate(root, 'dist/client/resume.json', (json) => {
       const resume = JSON.parse(json) as ResumeFixture;
       change(resume);
       return JSON.stringify(resume);
@@ -568,7 +568,7 @@ describe('verify-export', () => {
 
   it('rejects a resume page that stops linking the artifact', () => {
     const root = createFixture();
-    mutate(root, 'out/resume/index.html', (html) =>
+    mutate(root, 'dist/client/resume/index.html', (html) =>
       html.replace('href="../resume.json"', 'href="/about/"'),
     );
 
@@ -581,7 +581,7 @@ describe('verify-export', () => {
 
   it('rejects a resume page that stops advertising the JSON alternate', () => {
     const root = createFixture();
-    mutate(root, 'out/resume/index.html', (html) =>
+    mutate(root, 'dist/client/resume/index.html', (html) =>
       html.replace(
         '<link rel="alternate" type="application/json" href="https://example.com/resume.json">',
         '',
@@ -632,7 +632,7 @@ describe('verify-export', () => {
     },
   ])('rejects $name', ({ change, expected }) => {
     const root = createFixture();
-    mutate(root, 'out/resume.json', change);
+    mutate(root, 'dist/client/resume.json', change);
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
@@ -645,7 +645,7 @@ describe('verify-export', () => {
   // and then fails the export in CI naming markup that was never there.
   it('accepts angle-bracket comparisons and generic types in resume prose', () => {
     const root = createFixture();
-    mutate(root, 'out/resume.json', (json) =>
+    mutate(root, 'dist/client/resume.json', (json) =>
       json.replace(
         'Did the work.',
         'latency < 50ms and throughput > 1k with Map<string, number>',
@@ -666,7 +666,7 @@ describe('verify-export', () => {
    */
   it('rejects a generated share card for a draft post', () => {
     const root = createFixture();
-    write(root, 'out/og/writing/secret-draft.png');
+    write(root, 'dist/client/og/writing/secret-draft.png');
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
@@ -677,7 +677,7 @@ describe('verify-export', () => {
 
   it('rejects any other export on a draft route', () => {
     const root = createFixture();
-    write(root, 'out/writing/secret-draft/notes.pdf');
+    write(root, 'dist/client/writing/secret-draft/notes.pdf');
 
     const result = runVerifier(root);
     expect(result.status).toBe(1);
@@ -690,7 +690,7 @@ describe('verify-export', () => {
     const root = createFixture();
     write(
       root,
-      'out/writing/secret-draft.html',
+      'dist/client/writing/secret-draft.html',
       '<!doctype html><html><head><meta name="robots" content="noindex"></head><body>Draft-derived page</body></html>',
     );
 
@@ -746,7 +746,7 @@ describe('verify-export', () => {
     ],
   ])('rejects a draft-only exported asset declared through %s', (_, body) => {
     const root = createFixture();
-    write(root, 'out/images/private.png');
+    write(root, 'dist/client/images/private.png');
     appendDraftBody(root, body);
 
     const result = runVerifier(root);
@@ -758,7 +758,7 @@ describe('verify-export', () => {
 
   it('resolves relative draft assets within a repository-site base path', () => {
     const root = createFixture({ basePath: '/personal-site' });
-    write(root, 'out/images/private.png');
+    write(root, 'dist/client/images/private.png');
     appendDraftBody(root, '![private](../../images/private.png)');
 
     const result = runVerifier(root);
@@ -770,8 +770,8 @@ describe('verify-export', () => {
 
   it('rejects every local candidate in a draft HTML srcset', () => {
     const root = createFixture();
-    write(root, 'out/images/private-small.webp');
-    write(root, 'out/images/private-large.webp');
+    write(root, 'dist/client/images/private-small.webp');
+    write(root, 'dist/client/images/private-large.webp');
     appendDraftBody(
       root,
       '<picture><source srcset="/images/private-small.webp 1x, /images/private-large.webp 2x"></picture>',
@@ -791,7 +791,7 @@ describe('verify-export', () => {
     [
       'an image input src',
       '<input type="image" src="/images/private.svg">',
-      'out/images/private.svg',
+      'dist/client/images/private.svg',
       'image',
     ],
   ])(
@@ -829,7 +829,7 @@ describe('verify-export', () => {
 
   it('rejects an exported attachment linked only from a draft', () => {
     const root = createFixture();
-    write(root, 'out/downloads/private-notes.pdf');
+    write(root, 'dist/client/downloads/private-notes.pdf');
     appendDraftBody(
       root,
       '[private notes][notes]\n\n[notes]: /downloads/private-notes.pdf',
@@ -844,7 +844,7 @@ describe('verify-export', () => {
 
   it('rejects a draft-only frontmatter image', () => {
     const root = createFixture();
-    write(root, 'out/images/private-frontmatter.png');
+    write(root, 'dist/client/images/private-frontmatter.png');
     mutate(root, 'content/writing/secret-draft.md', (markdown) =>
       markdown.replace(
         'draft: true # keep private',
@@ -914,7 +914,7 @@ describe('verify-export', () => {
 
   it('accepts generated share cards for published posts', () => {
     const root = createFixture();
-    write(root, 'out/og/writing/about.png');
+    write(root, 'dist/client/og/writing/about.png');
 
     const result = runVerifier(root);
     expect(result.status).toBe(0);
@@ -923,7 +923,7 @@ describe('verify-export', () => {
 
   it('requires the sitemap to cover every indexable route', () => {
     const root = createFixture();
-    mutate(root, 'out/sitemap.xml', (xml) =>
+    mutate(root, 'dist/client/sitemap.xml', (xml) =>
       xml.replace('  <url><loc>https://example.com/about/</loc></url>\n', ''),
     );
 

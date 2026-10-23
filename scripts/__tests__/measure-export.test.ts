@@ -130,23 +130,31 @@ function createFixture({
   }
 
   const documents = {
-    '/': write(root, 'out/index.html', htmlPage(basePath, 'Home page body')),
-    '/about/': write(root, 'out/about/index.html', htmlPage(basePath, 'About')),
+    '/': write(
+      root,
+      'dist/client/index.html',
+      htmlPage(basePath, 'Home page body'),
+    ),
+    '/about/': write(
+      root,
+      'dist/client/about/index.html',
+      htmlPage(basePath, 'About'),
+    ),
   };
 
-  write(root, 'out/_next/static/css/app.css', CSS);
-  write(root, 'out/_next/static/chunks/main.js', JS);
-  write(root, 'out/_next/static/media/font.woff2', FONT);
-  write(root, 'out/images/photo.png', IMAGE);
+  write(root, 'dist/client/_next/static/css/app.css', CSS);
+  write(root, 'dist/client/_next/static/chunks/main.js', JS);
+  write(root, 'dist/client/_next/static/media/font.woff2', FONT);
+  write(root, 'dist/client/images/photo.png', IMAGE);
 
   // Two spellings of the same RSC payload plus one route payload, matching what
   // Next writes beside a prerendered route.
-  write(root, 'out/index.txt', RSC_FULL);
-  write(root, 'out/__next._full.txt', RSC_FULL);
-  write(root, 'out/about/__next.about.__PAGE__.txt', RSC_PAGE);
+  write(root, 'dist/client/index.txt', RSC_FULL);
+  write(root, 'dist/client/__next._full.txt', RSC_FULL);
+  write(root, 'dist/client/about/__next.about.__PAGE__.txt', RSC_PAGE);
 
-  write(root, 'out/robots.txt', ROBOTS);
-  write(root, 'out/sitemap.xml', SITEMAP);
+  write(root, 'dist/client/robots.txt', ROBOTS);
+  write(root, 'dist/client/sitemap.xml', SITEMAP);
 
   return { root, documents };
 }
@@ -203,7 +211,11 @@ describe('measure-export', () => {
     const { root } = createFixture({
       budget: { ...GENEROUS_BUDGET, maxFileBytes: 40_000 },
     });
-    write(root, 'out/presentations/talk/slides.pdf', 'x'.repeat(200_000));
+    write(
+      root,
+      'dist/client/presentations/talk/slides.pdf',
+      'x'.repeat(200_000),
+    );
 
     const { status, report } = reportFor(root);
 
@@ -301,7 +313,7 @@ describe('measure-export', () => {
 
     expect(status).toBe(0);
     expect(report.basePath).toBe('/personal-site');
-    // Markup says /personal-site/_next/..., the file is at out/_next/...; a
+    // Markup says /personal-site/_next/..., the file is at dist/client/_next/...; a
     // hand-rolled prefix strip resolves nothing and reports 0 asset bytes.
     expect(routeIn(report, '/about/')?.linkedAssetBytes).toBe(
       LINKED_ASSET_BYTES,
@@ -310,7 +322,7 @@ describe('measure-export', () => {
 
   it('fails when a same-origin bootstrap asset is missing', () => {
     const { root } = createFixture();
-    rmSync(join(root, 'out/_next/static/css/app.css'));
+    rmSync(join(root, 'dist/client/_next/static/css/app.css'));
 
     const { status, output } = runMeasurer(root);
 
@@ -339,11 +351,11 @@ describe('measure-export', () => {
     for (let index = 0; index < 10; index += 1) {
       write(
         root,
-        `out/writing/post-${index}/index.html`,
+        `dist/client/writing/post-${index}/index.html`,
         htmlPage('', 'New post'),
       );
-      write(root, `out/writing/post-${index}/index.txt`, RSC_FULL);
-      write(root, `out/og/post-${index}.png`, IMAGE);
+      write(root, `dist/client/writing/post-${index}/index.txt`, RSC_FULL);
+      write(root, `dist/client/og/post-${index}.png`, IMAGE);
     }
     const { status, report } = reportFor(root);
     expect(status).toBe(0);
@@ -355,7 +367,7 @@ describe('measure-export', () => {
     const { root } = createFixture();
     write(
       root,
-      'out/writing/a-new-post/index.html',
+      'dist/client/writing/a-new-post/index.html',
       htmlPage('', 'A new post'),
     );
 
@@ -385,7 +397,7 @@ describe('measure-export', () => {
         distinctInlineSvgBytes: Buffer.byteLength(ICON),
       },
     });
-    write(root, 'out/icons/index.html', htmlPage('', SECOND_ICON));
+    write(root, 'dist/client/icons/index.html', htmlPage('', SECOND_ICON));
 
     const { status, output } = runMeasurer(root);
 
@@ -541,24 +553,24 @@ describe('measure-export', () => {
 
   it('fails when there is nothing to measure', () => {
     const { root } = createFixture();
-    rmSync(join(root, 'out'), { recursive: true, force: true });
+    rmSync(join(root, 'dist/client'), { recursive: true, force: true });
 
     const { status, output } = runMeasurer(root);
     expect(status).toBe(1);
-    expect(output).toContain('no files found in out/');
+    expect(output).toContain('no files found in dist/client/');
   });
 
   it('fails on an export that has assets but no HTML', () => {
     const { root } = createFixture();
-    rmSync(join(root, 'out/index.html'));
-    rmSync(join(root, 'out/about/index.html'));
+    rmSync(join(root, 'dist/client/index.html'));
+    rmSync(join(root, 'dist/client/about/index.html'));
 
     // Assets survive, so the empty-export guard does not fire. Every per-route
     // metric reads `?? 0` off an empty list, and the missing-bootstrap-asset
     // check only runs per document: without this guard the run reports success.
     const { status, output } = runMeasurer(root);
     expect(status).toBe(1);
-    expect(output).toContain('no HTML documents found in out/');
+    expect(output).toContain('no HTML documents found in dist/client/');
     expect(output).not.toContain('budget(s) within limits');
   });
 
@@ -589,12 +601,15 @@ describe('measure-export', () => {
 
   it('rejects a JSON report inside the export being measured', () => {
     const { root } = createFixture();
-    const destination = join(root, 'out/report.json');
+    const destination = join(root, 'dist/client/report.json');
 
-    const { status, output } = runMeasurer(root, ['--json', 'out/report.json']);
+    const { status, output } = runMeasurer(root, [
+      '--json',
+      'dist/client/report.json',
+    ]);
 
     expect(status).toBe(1);
-    expect(output).toContain('--json must write outside out/');
+    expect(output).toContain('--json must write outside dist/client/');
     expect(existsSync(destination)).toBe(false);
   });
 

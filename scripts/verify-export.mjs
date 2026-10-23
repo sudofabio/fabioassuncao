@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Post-build integrity gate for the static export in `out/`.
+ * Post-build integrity gate for the static export in `dist/client/`.
  *
  * This intentionally inspects the generated artifacts rather than React
  * components. Metadata inheritance, draft filtering, route generation, and
@@ -25,11 +25,16 @@ import {
   metaValues,
   tags,
 } from './lib/html.mjs';
-import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
+import {
+  EXPORT_DIR,
+  exportLayout,
+  readSiteConfig,
+  toUrlPath,
+} from './lib/site.mjs';
 import { POST_CARD_DIRECTORY } from './og-inputs.mjs';
 
 const ROOT = process.cwd();
-const OUT = resolve(ROOT, 'out');
+const OUT = resolve(ROOT, EXPORT_DIR);
 const CONTENT = resolve(ROOT, 'content/writing');
 
 const failures = [];
@@ -66,7 +71,9 @@ const {
 const pages = walk(OUT, (name) => name.endsWith('.html'));
 
 if (pages.length === 0) {
-  console.error('verify-export: no HTML found in out/. Did the build run?');
+  console.error(
+    `verify-export: no HTML found in ${EXPORT_DIR}/. Did the build run?`,
+  );
   process.exit(1);
 }
 
@@ -93,7 +100,7 @@ function isDraftPath(pathname) {
   );
 }
 
-/** `out/` holds no base path, so a public path maps to a file path directly. */
+/** The export directory holds no base path, so a public path maps to a file path directly. */
 const CARD_DIRECTORY = POST_CARD_DIRECTORY.replace(/^\/+/, '');
 
 /**
@@ -203,7 +210,7 @@ function localExportedResource(raw, baseRoute) {
 /**
  * Assets already used by an exported page are public independently of a
  * draft. The draft gate below targets the dangerous remainder: files copied
- * into `out/` that only unpublished Markdown asks the browser to fetch.
+ * into the export that only unpublished Markdown asks the browser to fetch.
  */
 function exportedPageAssets() {
   const assets = new Set();

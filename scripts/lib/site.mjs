@@ -40,6 +40,13 @@ export function readSiteConfig(root, label) {
   }
 }
 
+/**
+ * Where the static export lands, relative to the project root. `vinext build`
+ * writes `output: 'export'` to `dist/client/`; `scripts/finalize-export.mjs`
+ * completes it, the verifiers read it, and Cloudflare Pages serves it.
+ */
+export const EXPORT_DIR = 'dist/client';
+
 /** URLs always use forward slashes; `relative` uses the platform separator. */
 export const toUrlPath = (path) => path.split(sep).join('/');
 

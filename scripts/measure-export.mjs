@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Weighs the static export in `out/` and gates it against `scripts/budget.json`.
+ * Weighs the static export in `dist/client/` and gates it against `scripts/budget.json`.
  *
  * Bundle analysis reports the JavaScript graph. It says nothing about the rest
  * of what GitHub Pages actually serves, which here is mostly not JavaScript:
@@ -32,10 +32,15 @@ import {
 import { extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import { attribute, elements, tags } from './lib/html.mjs';
-import { exportLayout, readSiteConfig, toUrlPath } from './lib/site.mjs';
+import {
+  EXPORT_DIR,
+  exportLayout,
+  readSiteConfig,
+  toUrlPath,
+} from './lib/site.mjs';
 
 const ROOT = process.cwd();
-const OUT = resolve(ROOT, 'out');
+const OUT = resolve(ROOT, EXPORT_DIR);
 const BUDGET_PATH = resolve(ROOT, 'scripts/budget.json');
 
 const LABEL = 'measure-export';
@@ -95,7 +100,7 @@ const jsonDestination =
 
 if (jsonDestination && isInside(OUT, jsonDestination)) {
   die(
-    '--json must write outside out/ so the report cannot change the export ' +
+    `--json must write outside ${EXPORT_DIR}/ so the report cannot change the export ` +
       'it measures',
   );
 }
@@ -189,7 +194,7 @@ function walkFiles(dir) {
 
 const paths = walkFiles(OUT);
 if (paths.length === 0) {
-  die('no files found in out/. Did the build run?');
+  die(`no files found in ${EXPORT_DIR}/. Did the build run?`);
 }
 
 const site = readSiteConfig(ROOT, LABEL);
@@ -242,7 +247,7 @@ const bytesForGroup = (id) =>
  *
  * Resolving the direct references shares `exportLayout` with the integrity
  * gate because repository-site markup says `/repo/_next/...` while the file is
- * at `out/_next/...`; hand-rolled prefix stripping breaks in forks only.
+ * at `dist/client/_next/...`; hand-rolled prefix stripping breaks in forks only.
  */
 const BOOTSTRAP_RELS = new Set(['stylesheet', 'preload', 'modulepreload']);
 
@@ -288,7 +293,7 @@ if (documents.length === 0) {
   // Every per-route metric reads off this list, and the missing-bootstrap-asset
   // check only runs inside the loop below. An export with assets but no HTML
   // would otherwise report two gates at zero bytes and pass.
-  die('no HTML documents found in out/. Did the build finish?');
+  die(`no HTML documents found in ${EXPORT_DIR}/. Did the build finish?`);
 }
 
 const inlineSvgCounts = new Map();
@@ -562,7 +567,7 @@ function section(heading, rows, alignRight) {
 
 log(
   `\n${LABEL}: ${count(files.length)} files, ${count(totalBytes)} bytes ` +
-    `(${kib(totalBytes)} KiB) in out/`,
+    `(${kib(totalBytes)} KiB) in ${EXPORT_DIR}/`,
 );
 
 section(

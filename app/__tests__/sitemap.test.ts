@@ -5,8 +5,8 @@ import { SITE_URL } from '@/lib/utils';
 import sitemap from '../sitemap';
 
 describe('sitemap', () => {
-  it('uses trailing slashes for exported page routes', () => {
-    const entries = sitemap();
+  it('uses trailing slashes for exported page routes', async () => {
+    const entries = await sitemap();
 
     expect(entries).toEqual(
       expect.arrayContaining([
@@ -23,9 +23,9 @@ describe('sitemap', () => {
     );
   });
 
-  it('does not invent modification dates for static pages', () => {
+  it('does not invent modification dates for static pages', async () => {
     // Posts and talks are dated content; everything else is a static page.
-    const staticEntries = sitemap().filter(
+    const staticEntries = (await sitemap()).filter(
       (entry) =>
         !entry.url.startsWith(`${SITE_URL}/writing/`) &&
         !(
@@ -39,8 +39,8 @@ describe('sitemap', () => {
     ).toBe(true);
   });
 
-  it('uses trailing slashes for post routes', () => {
-    const entries = sitemap();
+  it('uses trailing slashes for post routes', async () => {
+    const entries = await sitemap();
     const postEntries = entries.filter(
       (entry) =>
         entry.url.startsWith(`${SITE_URL}/writing/`) &&
@@ -51,8 +51,8 @@ describe('sitemap', () => {
     expect(postEntries.every((entry) => entry.url.endsWith('/'))).toBe(true);
   });
 
-  it('lists every talk at its exact public URL, dated by the talk', () => {
-    const entries = sitemap();
+  it('lists every talk at its exact public URL, dated by the talk', async () => {
+    const entries = await sitemap();
 
     for (const talk of presentations) {
       const entry = entries.find(
@@ -67,8 +67,8 @@ describe('sitemap', () => {
     );
   });
 
-  it('no longer lists the removed stats page', () => {
-    expect(sitemap().map((entry) => entry.url)).not.toContain(
+  it('no longer lists the removed stats page', async () => {
+    expect((await sitemap()).map((entry) => entry.url)).not.toContain(
       `${SITE_URL}/stats/`,
     );
   });

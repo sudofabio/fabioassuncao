@@ -61,3 +61,4 @@ _apresentacoes/
 # Cloudflare
 .wrangler/
 .dev.vars
+.vinext/

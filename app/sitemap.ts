@@ -6,7 +6,12 @@ import { SITE_URL } from '@/lib/utils';
 
 export const dynamic = 'force-static';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // vinext prerenders a dynamic metadata route for `output: 'export'` only
+  // when it is a public "use cache" function; without this the export ships
+  // no sitemap.xml at all.
+  'use cache';
+
   // Generate entries for blog posts
   const posts = getAllPosts();
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
