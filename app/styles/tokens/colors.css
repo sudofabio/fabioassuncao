@@ -1,0 +1,99 @@
+/* ========================================
+   COLOR TOKENS
+   The brand palette ("caderno de engenheiro", social media project
+   08-producao/identidade-visual/tokens.json): ink on cool paper, a dark
+   ground poster, cobalt for solutions and calls to action, and the signal
+   yellow for one number or keyword at a time.
+   ======================================== */
+
+@theme {
+  /* ===================
+     CORE PALETTE
+     --color-bg     = raised surface (cards, header)
+     --color-bg-alt = page background
+     =================== */
+  --color-bg: #ffffff; /* ground-raised */
+  --color-bg-alt: #eef1f4; /* ground */
+  --color-fg: #0f1724; /* ink */
+  --color-fg-bold: #0f1724;
+  --color-fg-light: #4a5869; /* ink-muted */
+
+  /* ===================
+     ACCENT — cobalt
+     Solutions, links, calls to action.
+     =================== */
+  --color-accent: #2f5bff;
+  --color-accent-hover: #2449e0;
+
+  /* The poster is the dark ground in both themes, like the videos. Keep this
+     surface and its text separate from the control palette. */
+  --color-hero: #0f1724;
+  --color-on-hero: #f4f6f8;
+
+  /* Brand marks used on the dark poster only: the signal yellow for the one
+     highlighted word or number, and the dark-theme cobalt for its button. */
+  --color-brand-signal: #ffc531;
+  --color-on-brand-signal: #0f1724;
+  --color-brand-cobalt: #5b82ff;
+  --color-on-brand-cobalt: #0f1724;
+
+  /* Severity, for the "Alerta" series label only (brand book). */
+  --color-risk: #d23a2f;
+  --color-on-risk: #ffffff;
+
+  /* Filled controls need their own pair. A link accent is tuned for contrast
+     against the page; reusing it as a button background put white text on it,
+     which fails badly once the accent lightens for dark mode. */
+  --color-accent-fill: var(--color-accent);
+  --color-accent-fill-hover: var(--color-accent-hover);
+  --color-on-accent: #ffffff;
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
+
+  /* ===================
+     FOCUS RING
+     Blue for controls on paper; ink around blue-filled controls so
+     the ring remains distinct from the fill. Contrast is tested below.
+     =================== */
+  --color-focus-ring: var(--color-accent);
+  --color-focus-ring-fill: var(--color-fg-bold);
+
+  /* ===================
+     SIGNAL — amber
+     Reserved for live/measured values and the
+     current-position marker. Never decorative.
+     --color-signal      text-safe on page backgrounds
+     --color-signal-mark graphic use only (ticks, dots, rules)
+
+     "Present" also carries the state in text. Contrast tests hold the
+     redundant mark to 3:1 and text to 4.5:1 on both page surfaces.
+     =================== */
+  --color-signal: #8a5a00;
+  --color-signal-mark: #9a6700;
+
+  /* ===================
+     BORDER COLORS
+     Hairlines do the structural work here, so they are
+     tinted with the ink rather than pure black.
+     =================== */
+  --color-border: rgba(15, 23, 36, 0.14);
+  --color-border-bg: rgba(15, 23, 36, 0.08);
+
+  /* Quiet structural hairlines cannot be a control's only visible edge.
+     Interactive boundaries use a tested 3:1 floor on both page surfaces. */
+  --color-control-border: #6b7889;
+  --color-border-alt: rgba(15, 23, 36, 0.24);
+
+  /* ===================
+     SURFACE TOKENS
+     =================== */
+  --color-surface-subtle: rgba(15, 23, 36, 0.035);
+  --color-surface-hover: rgba(15, 23, 36, 0.06);
+  --color-fg-muted: rgba(15, 23, 36, 0.55);
+
+  /* ===================
+     SEMANTIC COLORS
+     =================== */
+  --color-overlay-darker: rgba(15, 23, 36, 0.45);
+}

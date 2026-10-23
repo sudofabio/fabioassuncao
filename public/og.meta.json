@@ -1,0 +1,91 @@
+{
+  "size": {
+    "width": 1200,
+    "height": 630
+  },
+  "fonts": [
+    {
+      "name": "Display",
+      "family": "Archivo",
+      "weight": 800,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTtDRZ9xds.ttf",
+      "sha256": "baefbbf2f0c97fa0cbaf921f02c3cf55bfb0077ebcc4ca618eb3840a628cfebf"
+    },
+    {
+      "name": "Mono",
+      "family": "IBM Plex Mono",
+      "weight": 500,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFhw.ttf",
+      "sha256": "f418db1714ac511f3ed5c785ccaa196feeb419eba51e604cfa66d983fd983995"
+    },
+    {
+      "name": "Body",
+      "family": "Archivo",
+      "weight": 400,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTNDNZ9xds.ttf",
+      "sha256": "40a9b9d99b3aae9a80a06e3f0c63e5392a0e969b6faccbd6f5e51ba3ce756209"
+    }
+  ],
+  "renderer": [
+    {
+      "name": "next",
+      "version": "16.3.8",
+      "integrity": "sha512-U7QEZaTini6wKrb8A8hqLLqYQyCetegKjCpJOyxk642vWoMoU1x5PyZCJFvgYgiptA8xc5j/9xYlZFO7w9Sjmw=="
+    },
+    {
+      "name": "react",
+      "version": "19.3.1",
+      "integrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw=="
+    },
+    {
+      "name": "sharp",
+      "version": "0.35.5",
+      "integrity": "sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g=="
+    }
+  ],
+  "profile": {
+    "name": "Fábio Assunção",
+    "role": "Engenheiro de Software",
+    "focus": "IA, desenvolvimento e segurança",
+    "computingSince": 2008,
+    "location": "São Luís/MA"
+  },
+  "colors": {
+    "ink": "#0f1724",
+    "paper": "#eef1f4",
+    "body": "#0f1724",
+    "graphite": "#4a5869",
+    "accent": "#2f5bff",
+    "hairline": "rgba(15, 23, 36, 0.14)"
+  },
+  "generatorDigest": "68556b87ee8926fa19bedcc82e9cad471c378aea17ae1792f8926eb185c5c369",
+  "imageDigest": "54cda6a4d24ac1cac61b269d15e0ff36cb9ca05d13e521e8ecdb4ae33f7466f1",
+  "posts": [
+    {
+      "slug": "alem-do-codigo-ia-e-o-novo-desenvolvedor",
+      "path": "/og/writing/alem-do-codigo-ia-e-o-novo-desenvolvedor.png",
+      "title": "Além do código: inteligência artificial e o novo desenvolvedor",
+      "description": "Resumo da palestra no 10º Talk do Vale do Pindaré Tech (IFMA Santa Inês): código virou commodity, do vibe coding ao SDD e o que o mercado mostra.",
+      "date": "2026-07-10",
+      "dateLabel": "10 de julho de 2026",
+      "readout": [
+        {
+          "label": "Palavras",
+          "value": "1.223"
+        },
+        {
+          "label": "Links externos",
+          "value": "1"
+        },
+        {
+          "label": "Tempo de leitura",
+          "value": "5 min"
+        }
+      ],
+      "imageDigest": "7648c4b7a66058bbb350cbba12b2493addc2550ace1dc00aa86a6e3411a23990"
+    }
+  ]
+}

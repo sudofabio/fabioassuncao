@@ -1,0 +1,4 @@
+Contact: mailto:contato@fabioassuncao.com
+Expires: 2027-10-22T23:59:59.000Z
+Preferred-Languages: pt, en
+Canonical: https://fabioassuncao.com/.well-known/security.txt

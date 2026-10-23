@@ -1,0 +1,422 @@
+/* ========================================
+   CONTENT PAGE STYLES
+   About and Not Found pages
+   ======================================== */
+
+/* ========================================
+   ABOUT PAGE
+   ======================================== */
+
+.about-page {
+  max-width: var(--measure-page);
+  margin: 0 auto;
+}
+
+.about-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.about-header .page-title {
+  margin-bottom: 0;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.about-content {
+  max-width: var(--measure-read);
+  line-height: 1.7;
+}
+
+/* Section index — mono labels on a rule, matching the resume. */
+.about-section-nav {
+  position: sticky;
+  top: var(--header-height);
+  z-index: var(--z-sticky);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: var(--spacing-10) 0 var(--spacing-6);
+  padding: 0.75rem 0;
+  border-top: var(--rule) solid var(--color-border);
+  border-bottom: var(--rule) solid var(--color-border);
+  border-radius: 0;
+  background: var(--color-bg-alt);
+  box-shadow: none;
+}
+
+.about-content .about-section-nav-link {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border-radius: 0;
+  color: var(--color-fg-light);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.about-content .about-section-nav-link:hover {
+  background: transparent;
+  color: var(--color-fg-bold);
+  text-decoration: none;
+}
+
+.about-section-nav-link:focus-visible {
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.about-section {
+  margin-top: var(--spacing-12);
+}
+
+.about-section h2 {
+  scroll-margin-top: calc(var(--header-height) + 5.5rem);
+  margin: 0 0 var(--spacing-5);
+  padding-top: var(--spacing-5);
+  border-top: var(--rule) solid var(--color-fg-bold);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-display);
+  color: var(--color-fg-bold);
+}
+
+.about-content .about-section-heading-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.about-content .about-section-heading-link:hover,
+.about-content .about-section-heading-link:focus-visible {
+  color: var(--color-fg-bold);
+  text-decoration: none;
+}
+
+.about-section-heading-link:focus-visible {
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--radius-xs);
+}
+
+.about-section-heading-hash {
+  opacity: 0;
+  color: var(--color-fg-muted);
+  transform: translateY(-1px);
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.about-section:hover .about-section-heading-hash,
+.about-content .about-section-heading-link:focus-visible .about-section-heading-hash {
+  opacity: 1;
+}
+
+.about-content p {
+  margin: 0 0 var(--spacing-5);
+  color: var(--color-fg);
+  text-wrap: pretty;
+}
+
+.about-content p:last-child {
+  margin-bottom: 0;
+}
+
+.about-intro p {
+  max-width: var(--measure-read);
+  font-size: clamp(1.04rem, 0.7vw + 0.95rem, 1.1rem);
+  line-height: 1.7;
+  color: var(--color-fg-bold);
+}
+
+.about-content ul {
+  margin: var(--spacing-4) 0 var(--spacing-6);
+  padding-left: 1.1rem;
+}
+
+.about-content li {
+  margin-bottom: 0.65rem;
+  color: var(--color-fg);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.about-content li::marker {
+  color: var(--color-fg-muted);
+}
+
+/* ========================================
+   ABOUT — LOG SECTIONS
+   The history and travel lists are a chronological record, so they
+   are set as log entries hanging off a spine rather than as bullets.
+   ======================================== */
+
+.about-section--log ul {
+  list-style: none;
+  margin: var(--spacing-5) 0 var(--spacing-6);
+  padding-left: 0;
+}
+
+/* Same gutter-then-spine-then-body arrangement as the resume, so the two
+   records on the site read as one device. */
+.about-section--log .log-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0 1.75rem;
+  margin-bottom: 1.1rem;
+  padding-left: 0;
+}
+
+/* Drawn per entry so the spine runs unbroken through the margin gaps. */
+.about-section--log .log-entry::before {
+  content: '';
+  position: absolute;
+  left: calc(4.5rem + 0.875rem);
+  top: 0;
+  bottom: -1.1rem;
+  width: var(--rule);
+  background: var(--color-border);
+}
+
+/* The record is open-ended, so the last segment fades rather than stops. */
+.about-section--log .log-entry:last-child::before {
+  bottom: auto;
+  height: 2.5em;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
+}
+
+/* One tick per entry. */
+.about-section--log .log-entry::after {
+  content: '';
+  position: absolute;
+  left: calc(4.5rem + 0.875rem);
+  top: 0.68em;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%);
+  border: var(--rule) solid var(--color-fg-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+}
+
+/* Ink, not amber: hovering an entry is not a live value, and spending the
+   signal colour on decoration is what stops it meaning anything elsewhere. */
+.about-section--log .log-entry:hover::after {
+  border-color: var(--color-fg-bold);
+  background: var(--color-fg-bold);
+}
+
+/* Empty for entries that carry no marker; the column still holds so the
+   spine stays straight down the list. When the prose explicitly states both
+   year and age, stack them so the pair fits without widening the gutter. */
+.log-entry-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1em;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-light);
+  text-align: right;
+  padding-top: 0.4em;
+  line-height: 1.4;
+}
+
+/* Give an explicitly stated year a little more ink than the secondary age. */
+.log-entry-year {
+  color: var(--color-fg);
+  font-weight: var(--font-weight-medium);
+}
+
+.log-entry-body {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .about-section--log .log-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+    padding-left: 1.5rem;
+  }
+
+  .about-section--log .log-entry::before,
+  .about-section--log .log-entry:last-child::before {
+    left: 0;
+  }
+
+  .about-section--log .log-entry::after {
+    left: 0;
+  }
+
+  /* No gutter column to stack inside, so a year-age pair sits on one line. */
+  .log-entry-marker {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0 0.5em;
+    text-align: left;
+    padding-top: 0;
+  }
+
+  .log-entry-marker:empty {
+    display: none;
+  }
+}
+
+.about-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-alt);
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition:
+    text-decoration-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.about-content a:hover {
+  text-decoration-color: var(--color-accent-underline-strong);
+  color: var(--color-fg-bold);
+}
+
+@media (max-width: 735px) {
+  .about-section-nav {
+    top: var(--header-height-mobile);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: var(--spacing-6) 0 var(--spacing-5);
+    padding: var(--spacing-3) 0;
+    border-radius: 0;
+    scrollbar-width: thin;
+  }
+
+  .about-section h2 {
+    scroll-margin-top: calc(var(--header-height-mobile) + 4.5rem);
+    padding-top: var(--spacing-4);
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 736px) {
+  .about-section--compact ul {
+    columns: 2;
+    column-gap: var(--spacing-10);
+  }
+
+  .about-section--compact li {
+    font-size: var(--text-base);
+    line-height: 1.5;
+    margin-bottom: 0.35rem;
+    break-inside: avoid;
+  }
+
+  .about-section--links ul {
+    columns: 3;
+    column-gap: var(--spacing-8);
+  }
+
+  .about-section--links li {
+    margin-bottom: 0.5rem;
+    break-inside: avoid;
+  }
+}
+
+@media (min-width: 980px) {
+  .about-header {
+    margin-bottom: var(--spacing-12);
+  }
+
+  .about-section {
+    margin-top: var(--spacing-16);
+  }
+
+  .about-section h2 {
+    margin-bottom: var(--spacing-5);
+  }
+}
+
+/* Screen reader only - visually hidden but accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ========================================
+   NOT FOUND PAGE (404)
+   ======================================== */
+
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-height) - 4rem);
+  padding: 2rem;
+  text-align: center;
+}
+
+.not-found-content {
+  max-width: 480px;
+}
+
+/* A 404 is a status code, so it is reported as one: mono, plain,
+   and no more prominent than the sentence explaining it. */
+.not-found-code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  /* A 404 is a static fact, not a live reading, so it stays in the
+     secondary ink rather than borrowing the signal colour. */
+  color: var(--color-fg-light);
+  line-height: 1;
+  background: none;
+  -webkit-text-fill-color: currentcolor;
+  margin-bottom: 1.25rem;
+}
+
+.not-found-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-fg-bold);
+  margin-bottom: 0.75rem;
+  letter-spacing: var(--tracking-display);
+}
+
+.not-found-message {
+  font-size: var(--text-md);
+  color: var(--color-fg-light);
+  line-height: var(--leading-snug);
+  margin-bottom: 2rem;
+}
+
+.not-found-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}

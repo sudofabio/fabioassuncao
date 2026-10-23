@@ -1,0 +1,179 @@
+/* ========================================
+   NAVIGATION
+   Desktop nav links and theme toggle
+   ======================================== */
+
+.site-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  gap: 0.5rem;
+  text-decoration: none;
+  background-image: none;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-bold);
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
+}
+
+/* Sentence-case display type keeps navigation distinct from data labels. */
+.nav-links {
+  display: none;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+@media screen and (min-width: 736px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-fg-light);
+  text-decoration: none;
+  background-image: none;
+  line-height: 1;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+/* The rule under an active item is the same hairline weight used
+   everywhere else, so navigation reads as part of the drawn grid. */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--rule-strong);
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--color-fg-bold);
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.nav-link:focus-visible {
+  color: var(--color-fg-bold);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+
+.nav-link.active {
+  color: var(--color-accent);
+}
+
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Theme Toggle — one control cycling light / dark / system.
+   The 44x44 box is the hit target and is reserved by the button itself, not by
+   a placeholder waiting on hydration. */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-fg);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+/* The parser-blocking bootstrap stamps the choice before the body paints.
+   Without that attribute JavaScript did not run, so the button would be inert
+   and its "switch" label would promise an action it cannot perform. The mobile
+   menu trigger is client-rendered for the same reason.
+
+   Both gates hide on the absence of the attribute rather than restoring on its
+   presence. A restore has to out-specify `.hamburger-button { display: flex }`
+   in header.css: at equal specificity the gate would be decided by @import
+   order alone, and at higher specificity it would silently outrank the desktop
+   hide further down this file. Hiding from `:not()` competes with neither.
+   `print.css` hides `.theme-toggle` with `!important`, so the `display: flex`
+   base above stays hidden on paper. */
+:root:not([data-theme-choice]) .theme-toggle {
+  display: none;
+}
+
+:root:not([data-theme-choice]) .hamburger-button {
+  display: none;
+}
+
+.theme-toggle:hover {
+  color: var(--color-fg-bold);
+  background: var(--color-bg-alt);
+}
+
+.theme-toggle:focus-visible {
+  color: var(--color-accent);
+  background: var(--color-bg-alt);
+  outline: var(--rule-strong) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* All three states ship in the HTML. `data-theme-choice` on <html> — stamped
+   by the head bootstrap before first paint — selects the visible one before
+   React hydrates. `data-theme` alone could not do this: it cannot tell a
+   forced dark theme from a followed one. */
+.theme-toggle-state {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+:root[data-theme-choice='system'] .theme-toggle-state[data-theme-state='system'],
+:root[data-theme-choice='light'] .theme-toggle-state[data-theme-state='light'],
+:root[data-theme-choice='dark'] .theme-toggle-state[data-theme-state='dark'] {
+  display: flex;
+}
+
+/* Hide hamburger on desktop */
+@media screen and (min-width: 736px) {
+  /* Match the logo rail even when no JavaScript means no theme control. */
+  .nav-actions {
+    min-width: 44px;
+  }
+
+  .hamburger-button {
+    display: none;
+  }
+}

@@ -1,0 +1,8 @@
+# Cloudflare Pages redirects. Query strings (the UTM tags of the social bios)
+# are carried over to the destination.
+# The old contact page and the bio link page both become the chat on /contato/
+# (social media project: one destination per bio, no link menu).
+/contact /contato/ 301
+/contact/ /contato/ 301
+/links /contato/ 301
+/links/ /contato/ 301

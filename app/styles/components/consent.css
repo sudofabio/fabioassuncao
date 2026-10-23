@@ -1,0 +1,63 @@
+/* ========================================
+   CONSENT BANNER
+   Non-modal: pinned to the bottom edge, never covering the page behind an
+   overlay, and below the header and mobile menu in the stacking order.
+   ======================================== */
+
+.consent-banner {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: var(--z-sticky);
+  max-width: 34rem;
+  margin-left: auto;
+  padding: 1rem 1.25rem;
+  background: var(--color-bg);
+  border: var(--rule) solid var(--color-border-alt);
+  border-radius: var(--radius-sm);
+  color: var(--color-fg);
+}
+
+.consent-title {
+  margin: 0 0 0.375rem;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-fg-bold);
+}
+
+.consent-text {
+  margin: 0 0 0.875rem;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+.consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.consent-actions .button {
+  min-height: 2.75rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .consent-banner {
+    animation: consent-in var(--duration-fast) var(--ease-out);
+  }
+}
+
+@keyframes consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@media print {
+  .consent-banner {
+    display: none;
+  }
+}

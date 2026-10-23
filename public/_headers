@@ -1,0 +1,23 @@
+# Cloudflare Pages response headers. See README.md, "Cabeçalhos de segurança".
+#
+# The Content-Security-Policy below is the base policy, with no measurement
+# tracker. `scripts/finalize-export.mjs` rewrites that line in the export from
+# `scripts/lib/csp.mjs`, adding only the origins of the trackers whose IDs are
+# set for the build; edit the policy there, not here.
+#
+# script-src keeps 'unsafe-inline': the static export inlines the pre-paint
+# theme bootstrap and Next's RSC payload scripts, which differ per page and
+# cannot be listed as hashes here. Everything else is locked to this origin,
+# plus Turnstile (quote form) and Cloudflare Web Analytics, which the Pages
+# dashboard can inject.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable

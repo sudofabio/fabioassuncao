@@ -1,35 +1,87 @@
 {
-	"name": "fabioassuncao",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"build": "nuxt build",
-		"dev": "nuxt dev",
-		"generate": "nuxt generate",
-		"preview": "npm run build && wrangler pages dev",
-		"postinstall": "nuxt prepare",
-		"deploy": "npm run build && wrangler pages deploy",
-		"cf-typegen": "wrangler types"
-	},
-	"dependencies": {
-		"@fontsource/inter": "^5.2.8",
-		"@fontsource/jetbrains-mono": "^5.2.8",
-		"@fontsource/space-grotesk": "^5.2.10",
-		"@zumer/snapdom": "^2.15.0",
-		"echarts": "^6.1.0",
-		"gsap": "^3.15.0",
-		"jspdf": "^4.2.1",
-		"lucide-vue-next": "^1.0.0",
-		"nuxt": "^4.3.1",
-		"qrcode.vue": "^3.10.0",
-		"vue": "^3.5.29",
-		"vue-router": "^4.6.4"
-	},
-	"devDependencies": {
-		"@nuxtjs/sitemap": "^7.6.0",
-		"@nuxtjs/tailwindcss": "^6.14.0",
-		"@types/node": "^25.3.5",
-		"nitro-cloudflare-dev": "^0.2.2",
-		"wrangler": "^4.71.0"
-	}
+  "name": "fabioassuncao",
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "https://fabioassuncao.com/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabioassuncao/fabioassuncao.git"
+  },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "dev": "vinext dev",
+    "build": "vinext build && node scripts/finalize-export.mjs",
+    "start": "vinext start",
+    "lint": "biome check .",
+    "type-check": "tsc --noEmit",
+    "format": "biome format --write . && prettier --write \"**/*.{md,css,scss}\"",
+    "format:check": "biome format . && prettier --check \"**/*.{md,css,scss}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "preview": "npm run build && wrangler pages dev dist/client --compatibility-date=2026-10-01 --compatibility-flags=nodejs_compat",
+    "deploy": "npm run build && wrangler pages deploy dist/client --project-name=fabioassuncao",
+    "og": "node scripts/generate-og.mjs",
+    "og:check": "npm run og:check:ledger && npm run og:check:render",
+    "og:check:ledger": "node scripts/check-og.mjs",
+    "og:check:render": "node scripts/generate-og.mjs --check",
+    "icons": "node scripts/generate-icons.mjs",
+    "verify-export": "node scripts/verify-export.mjs",
+    "measure-export": "node scripts/measure-export.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fortawesome/fontawesome-svg-core": "^7.3.1",
+    "@fortawesome/free-brands-svg-icons": "^7.3.1",
+    "@fortawesome/free-regular-svg-icons": "^7.3.1",
+    "@fortawesome/react-fontawesome": "^3.5.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "dayjs": "^1.11.23",
+    "gray-matter": "^4.0.3",
+    "markdown-to-jsx": "^9.10.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "vinext": "^1.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.15",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-rsc": "^0.5.38",
+    "@vitest/coverage-v8": "^5.0.3",
+    "jsdom": "^30.1.2",
+    "next": "^16.3.8",
+    "prettier": "^3.9.9",
+    "react-server-dom-webpack": "^19.3.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.152.0"
+  },
+  "overrides": {
+    "js-yaml": "^3.15.2",
+    "nanoid": "^3.3.18"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

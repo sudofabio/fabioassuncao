@@ -1,0 +1,45 @@
+{
+  "inputs": {
+    "accent": "#2f5bff",
+    "onAccent": "#ffffff",
+    "backgroundLight": "#eef1f4",
+    "backgroundDark": "#0f1724",
+    "monogram": "FA",
+    "name": "Fábio Assunção",
+    "font": {
+      "name": "Display",
+      "family": "Archivo",
+      "weight": 800,
+      "style": "normal",
+      "url": "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTtDRZ9xds.ttf",
+      "sha256": "baefbbf2f0c97fa0cbaf921f02c3cf55bfb0077ebcc4ca618eb3840a628cfebf"
+    },
+    "renderer": [
+      {
+        "name": "next",
+        "version": "16.3.8",
+        "integrity": "sha512-U7QEZaTini6wKrb8A8hqLLqYQyCetegKjCpJOyxk642vWoMoU1x5PyZCJFvgYgiptA8xc5j/9xYlZFO7w9Sjmw=="
+      },
+      {
+        "name": "react",
+        "version": "19.3.1",
+        "integrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw=="
+      },
+      {
+        "name": "sharp",
+        "version": "0.35.5",
+        "integrity": "sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g=="
+      }
+    ]
+  },
+  "generatorDigest": "baadd944bd52a3fa7b3a42cfd85cd0423c5b208d12167c393a8ef822fad98a16",
+  "files": {
+    "app/favicon.ico": "829bbc866513c2db51b6f0f91b306f7bdf2b4bd2a8376ef2ff31838ccd61c066",
+    "app/icon.png": "71dee6d8c774f85472c3257925fb65f6d25bd9b76bed56eb52b553df676b3895",
+    "app/apple-icon.png": "e713d8f0ff8784413169ce12c45ce7db69bb6df6be66d787980ab0c3c3b56b42",
+    "public/images/icons/icon-192.png": "dde6b1093713361d9f5e5f94396feff56a8082cbe7fe5a681fe0a99522e65fe5",
+    "public/images/icons/icon-512.png": "01858efbba7081f26ae5353fec16289b60ff04108f7e823b00b85879e7ea65af",
+    "public/images/icons/icon-maskable-512.png": "071e09b1bb4971d7fb739aba6ed081c16ad631982b36512e685fa9c8669b7c02",
+    "app/manifest.json": "cf5f954d1f1bba56ee348b7de25fdb2599816fbdf3595f30d26207f267fd9605"
+  }
+}
