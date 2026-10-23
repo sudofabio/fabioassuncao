@@ -59,12 +59,14 @@ describe.each(workflows)('$name credential boundaries', ({ workflow }) => {
       const permissions = job.permissions ?? workflow.permissions;
       expect(typeof permissions).toBe('object');
       if (id === 'deploy') {
-        // Privileged deployment consumes the validated artifact; it must not
-        // check out the repository or execute its scripts/dependencies.
+        // Deployment consumes the validated artifact; it must not check out
+        // the repository or execute its scripts/dependencies, and the only
+        // credential it holds is the Cloudflare token handed to Wrangler.
+        expect(Object.values(permissions ?? {})).not.toContain('write');
         for (const step of job.steps ?? []) {
           expect(step.run).toBeUndefined();
           expect(step.uses).toMatch(
-            /^actions\/(?:download-artifact|upload-pages-artifact|deploy-pages)@/,
+            /^(?:actions\/download-artifact|cloudflare\/wrangler-action)@/,
           );
         }
       } else {
@@ -76,15 +78,26 @@ describe.each(workflows)('$name credential boundaries', ({ workflow }) => {
     }
   });
 
-  it('configures the existing Pages site without enabling or changing it', () => {
+  it('builds with read-only permissions and no GitHub Pages actions', () => {
     const build = workflow.jobs.build;
-    expect(build.permissions).toEqual({ contents: 'read', pages: 'read' });
-    const configure = build.steps?.find((step) =>
-      step.uses?.startsWith('actions/configure-pages@'),
+    expect(build.permissions).toEqual({ contents: 'read' });
+    for (const job of Object.values(workflow.jobs)) {
+      for (const step of job.steps ?? []) {
+        expect(step.uses ?? '').not.toMatch(
+          /^actions\/(?:configure-pages|upload-pages-artifact|deploy-pages)@/,
+        );
+      }
+    }
+  });
+
+  it('deploys only to the existing Cloudflare Pages project, behind a switch', () => {
+    const deploy = workflow.jobs.deploy as Job & { if?: string };
+    expect(deploy.if).toContain("vars.CLOUDFLARE_DEPLOY == 'true'");
+    const wrangler = deploy.steps?.find((step) =>
+      step.uses?.startsWith('cloudflare/wrangler-action@'),
     );
-    expect(configure?.with).toMatchObject({
-      static_site_generator: 'next',
-      enablement: false,
-    });
+    expect(wrangler?.with?.command).toBe(
+      'pages deploy --project-name=fabioassuncao --branch=main',
+    );
   });
 });

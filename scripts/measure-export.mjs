@@ -121,6 +121,14 @@ const IMAGE_EXTENSIONS = new Set([
 ]);
 
 /**
+ * Documents offered for download (talk slides), never fetched by a page load.
+ * They are measured and listed, but kept out of the largest-file gate: a
+ * slide deck is legitimately megabytes, and gating it would only teach people
+ * to raise the limit that exists to catch an unoptimised page asset.
+ */
+const DOWNLOAD_EXTENSIONS = new Set(['.pdf']);
+
+/**
  * Next writes an RSC payload beside every prerendered route so client
  * navigation does not refetch the document. They are `.txt`, which `robots.txt`
  * also is, so match the naming Next uses rather than the extension alone.
@@ -151,6 +159,11 @@ const GROUPS = [
     id: 'images',
     label: 'Images',
     match: ({ extension }) => IMAGE_EXTENSIONS.has(extension),
+  },
+  {
+    id: 'downloads',
+    label: 'Downloadable documents',
+    match: ({ extension }) => DOWNLOAD_EXTENSIONS.has(extension),
   },
   { id: 'metadata', label: 'Feeds and metadata', match: () => true },
 ];
@@ -347,6 +360,9 @@ const report = {
     bytes,
     group,
   })),
+  // The largest file a page can actually load; downloads are listed above.
+  largestGatedFileBytes:
+    files.find(({ group }) => group !== 'downloads')?.bytes ?? 0,
   routes,
   inlineSvg,
 };
@@ -390,7 +406,7 @@ const BUDGET_METRICS = [
     id: 'maxFileBytes',
     label: 'largest single file',
     headroom: 0.2,
-    read: (data) => data.largestFiles[0]?.bytes ?? 0,
+    read: (data) => data.largestGatedFileBytes,
   },
   {
     id: 'maxRouteBootstrapBytes',

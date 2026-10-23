@@ -12,13 +12,12 @@ permissions:
 
 env:
   # The single build-matrix leg whose output is deployed. Named once so the
-  # Pages-configure gate and the artifact-upload gate cannot drift apart —
-  # they are a pair, and a mismatch produces a green CI run with nothing to
-  # deploy. Must stay in step with .nvmrc; the build job asserts that.
+  # artifact-upload gate and the deploy job cannot drift apart. Must stay in
+  # step with .nvmrc; the build job asserts that.
   DEPLOY_NODE: '26.x'
 
 # Supersede stale PR runs, but never cancel a main run that may already be
-# deploying. The Pages job below serializes main deployments.
+# deploying. The Cloudflare job below serializes main deployments.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
@@ -137,11 +136,8 @@ jobs:
     needs: install
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
-    # Configure Pages only reads the existing site metadata. Application and
-    # dependency code must never run with Pages write permissions.
     permissions:
       contents: read
-      pages: read
     strategy:
       fail-fast: false
       matrix:
@@ -186,26 +182,14 @@ jobs:
           fi
           echo "Deploy candidate Node $wanted matches .nvmrc."
 
-      # This matrix entry becomes the deployment candidate on main. Pages
-      # configuration has to run before Next builds so repository-site forks
-      # receive their basePath in generated links and assets.
-      - name: Configure GitHub Pages build
-        if: >-
-          matrix.os == 'ubuntu-latest' &&
-          matrix.node-version == env.DEPLOY_NODE &&
-          github.ref == 'refs/heads/main'
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
-        with:
-          static_site_generator: next
-          enablement: false
-
-      # Stats use the public API anonymously, with a labeled fallback on rate
-      # limits. Do not expose a job token to application/dependency code.
+      # Public build-time values only (repository variables, never secrets).
+      # Do not expose a job token to application/dependency code.
       - name: Build
         run: npm run build
         env:
           NODE_ENV: production
           NEXT_PUBLIC_GA_TRACKING_ID: ${{ vars.NEXT_PUBLIC_GA_TRACKING_ID }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
 
       - name: Verify static export
         shell: bash
@@ -229,6 +213,8 @@ jobs:
       - name: Measure export against size budget
         run: npm run measure-export
 
+      # The deploy candidate: the static export plus the Pages Functions and
+      # the Wrangler config, so the deploy job never checks out the repository.
       - name: Upload build artifacts
         if: >-
           matrix.os == 'ubuntu-latest' &&
@@ -237,7 +223,11 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: build-output
-          path: out/
+          path: |
+            out/
+            functions/
+            !functions/**/__tests__/
+            wrangler.jsonc
           include-hidden-files: true
           retention-days: 7
 
@@ -259,37 +249,36 @@ jobs:
           echo "All CI checks passed!"
 
   # Publish exactly the Linux/DEPLOY_NODE artifact that passed the complete CI
-  # graph. Manual runs are intentionally deployable only from main.
+  # graph to the existing Cloudflare Pages project. Disabled until the
+  # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets exist: flip
+  # `vars.CLOUDFLARE_DEPLOY` to 'true' to turn it on (see README.md).
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy to Cloudflare Pages
     needs: ci-success
     if: >-
+      vars.CLOUDFLARE_DEPLOY == 'true' &&
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: read
-      pages: write
-      id-token: write
     concurrency:
-      group: pages
+      group: cloudflare-pages
       cancel-in-progress: false
     environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      name: production
+      url: https://fabioassuncao.com
     steps:
       - name: Download validated build
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: build-output
-          path: out
+          path: .
 
-      - name: Package GitHub Pages artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
-          path: out
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy --project-name=fabioassuncao --branch=main

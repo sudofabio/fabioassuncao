@@ -36,9 +36,8 @@ updates:
     groups:
       # Producer/consumer pairs on the path that publishes the site. A
       # half-bumped pair fails only at deploy time, after CI reports success.
-      pages-artifacts:
+      deploy-artifacts:
         patterns:
           - 'actions/upload-artifact'
           - 'actions/download-artifact'
-          - 'actions/upload-pages-artifact'
-          - 'actions/deploy-pages'
+          - 'cloudflare/wrangler-action'

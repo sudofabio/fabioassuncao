@@ -34,9 +34,8 @@ const nextConfig = {
   },
 };
 
-// Keep the default export as a direct config identifier. GitHub's
-// configure-pages action edits this object before repository-site builds to
-// inject their basePath; it cannot see through a wrapping function call.
+// Served from the root of the Cloudflare Pages project `fabioassuncao`, so no
+// basePath is needed (see wrangler.jsonc).
 if (process.env.ANALYZE === 'true') {
   Object.assign(nextConfig, bundleAnalyzer({ enabled: true })(nextConfig));
 }

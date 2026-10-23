@@ -53,3 +53,11 @@ Thumbs.db
 .grunt/
 .lock-wscript
 nohup.out
+
+# Material bruto local (fora do controle de versão)
+_apresentacoes/
+.claude/settings.local.json
+
+# Cloudflare
+.wrangler/
+.dev.vars

@@ -56,6 +56,7 @@ type Report = {
   total: { files: number; bytes: number };
   groups: { id: string; files: number; bytes: number; share: number }[];
   largestFiles: { path: string; bytes: number; group: string }[];
+  largestGatedFileBytes: number;
   routes: {
     route: string;
     documentBytes: number;
@@ -198,6 +199,37 @@ afterEach(() => {
 });
 
 describe('measure-export', () => {
+  it('lists downloadable documents but keeps them out of the largest-file gate', () => {
+    const { root } = createFixture({
+      budget: { ...GENEROUS_BUDGET, maxFileBytes: 40_000 },
+    });
+    write(root, 'out/presentations/talk/slides.pdf', 'x'.repeat(200_000));
+
+    const { status, report } = reportFor(root);
+
+    expect(status).toBe(0);
+    expect(groupIn(report, 'downloads')).toMatchObject({
+      files: 1,
+      bytes: 200_000,
+    });
+    expect(report.largestFiles[0]).toMatchObject({
+      path: 'presentations/talk/slides.pdf',
+      group: 'downloads',
+    });
+    expect(report.largestGatedFileBytes).toBeLessThan(40_000);
+  });
+
+  it('still gates the largest page asset', () => {
+    const { root } = createFixture({
+      budget: { ...GENEROUS_BUDGET, maxFileBytes: 16 },
+    });
+
+    const { status, report } = reportFor(root);
+
+    expect(status).not.toBe(0);
+    expect(checkIn(report, 'maxFileBytes')?.ok).toBe(false);
+  });
+
   it('groups the export by subsystem and passes a generous budget', () => {
     const { root, documents } = createFixture();
     const { status, output, report } = reportFor(root);
