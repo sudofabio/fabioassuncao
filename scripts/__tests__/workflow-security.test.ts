@@ -97,7 +97,7 @@ describe.each(workflows)('$name credential boundaries', ({ workflow }) => {
       step.uses?.startsWith('cloudflare/wrangler-action@'),
     );
     expect(wrangler?.with?.command).toBe(
-      'pages deploy --project-name=fabioassuncao --branch=main',
+      'pages deploy dist/client --project-name=fabioassuncao --branch=main',
     );
   });
 });

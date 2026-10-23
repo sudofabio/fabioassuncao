@@ -13,14 +13,23 @@ updates:
         patterns:
           - 'vitest'
           - '@vitest/*'
+      # The build toolchain: vinext peers on Vite 8 and @vitejs/plugin-rsc.
+      vinext:
+        patterns:
+          - 'vinext'
+          - 'vite'
+          - '@vitejs/plugin-rsc'
+      # Kept for next/og (share cards), types, and Google Analytics.
       next:
         patterns:
           - 'next'
           - '@next/*'
+      # react-server-dom-webpack must match the React version exactly.
       react:
         patterns:
           - 'react'
           - 'react-dom'
+          - 'react-server-dom-webpack'
           - '@types/react'
           - '@types/react-dom'
       # Each package carries its own copy of fontawesome-common-types, whose

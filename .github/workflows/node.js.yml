@@ -194,11 +194,11 @@ jobs:
       - name: Verify static export
         shell: bash
         run: |
-          if [ ! -d "out" ]; then
-            echo "Error: 'out' directory not found. Static export may have failed."
+          if [ ! -d "dist/client" ]; then
+            echo "Error: 'dist/client' directory not found. Static export may have failed."
             exit 1
           fi
-          echo "Static export successful. Found $(find out -type f | wc -l) files."
+          echo "Static export successful. Found $(find dist/client -type f | wc -l) files."
 
       # Checks generated HTML/XML itself: leaked drafts, robots, duplicate ids,
       # fragment and route targets, canonical/share metadata, local images, and
@@ -213,8 +213,9 @@ jobs:
       - name: Measure export against size budget
         run: npm run measure-export
 
-      # The deploy candidate: the static export plus the Pages Functions and
-      # the Wrangler config, so the deploy job never checks out the repository.
+      # The deploy candidate: the static export plus the Pages Functions, so the
+      # deploy job never checks out the repository. There is no wrangler.jsonc:
+      # vinext treats one as a Workers project, so Pages settings are flags.
       - name: Upload build artifacts
         if: >-
           matrix.os == 'ubuntu-latest' &&
@@ -224,10 +225,9 @@ jobs:
         with:
           name: build-output
           path: |
-            out/
+            dist/client/
             functions/
             !functions/**/__tests__/
-            wrangler.jsonc
           include-hidden-files: true
           retention-days: 7
 
@@ -281,4 +281,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy --project-name=fabioassuncao --branch=main
+          command: pages deploy dist/client --project-name=fabioassuncao --branch=main
