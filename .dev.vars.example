@@ -7,10 +7,17 @@
 # NEXT_PUBLIC_TURNSTILE_SITE_KEY at build time (e.g. in `.env.local`).
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 
-# Resend API key (https://resend.com). Left empty, /api/orcamento answers 503
-# once the submission validates — enough to exercise the form locally.
+# Resend API key (https://resend.com). Left empty, /api/lead and /api/orcamento
+# answer 503 once the submission validates — enough to exercise them locally.
 RESEND_API_KEY=
 
 # Optional sender; must be on a domain verified in Resend.
 # Default: Site Fábio Assunção <orcamento@fabioassuncao.com>
 # QUOTE_FROM_EMAIL=Site Fábio Assunção <orcamento@fabioassuncao.com>
+
+# Optional sender for /api/lead (chat leads); falls back to QUOTE_FROM_EMAIL,
+# then to Site Fábio Assunção <contato@fabioassuncao.com>.
+# LEAD_FROM_EMAIL=Site Fábio Assunção <contato@fabioassuncao.com>
+
+# Optional: also POST every chat lead as JSON to a sheet, n8n or CRM webhook.
+# LEAD_WEBHOOK_URL=
