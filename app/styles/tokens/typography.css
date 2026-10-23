@@ -1,8 +1,8 @@
 /* ========================================
    TYPOGRAPHY TOKENS
-   Three voices:
-     display — Inter, names, headings, and controls
-     body    — Newsreader, prose and reading
+   Two families, three roles — sober and technical:
+     display — JetBrains Mono, names, headings, and controls
+     body    — Inter, prose and reading
      mono    — JetBrains Mono, data, labels, measurements
    ======================================== */
 
@@ -10,13 +10,13 @@
   /* ===================
      FONT FAMILIES
      =================== */
-  --font-display: var(--font-inter), 'Helvetica Neue', sans-serif;
-  --font-body: var(--font-newsreader), Georgia, serif;
+  --font-display: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
+  --font-body: var(--font-inter), 'Helvetica Neue', Arial, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
 
   /* ===================
      FONT WEIGHTS
-     All three families are variable, so every step below
+     Both families are variable, so every step below
      renders as a real weight rather than a synthesized one.
      =================== */
   --font-weight-normal: 400;
@@ -50,8 +50,8 @@
      Display is set tight; mono labels are set wide so they
      read as instrument annotation rather than as copy.
      =================== */
-  --tracking-display: -0.035em;
-  --tracking-tight: -0.015em;
+  --tracking-display: -0.02em;
+  --tracking-tight: -0.01em;
   --tracking-normal: 0;
   --tracking-wide: 0.02em;
   --tracking-label: 0.14em;

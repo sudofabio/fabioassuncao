@@ -16,16 +16,6 @@ export const inter = localFont({
   adjustFontFallback: 'Arial',
 });
 
-export const newsreader = localFont({
-  src: '../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2',
-  variable: '--font-newsreader',
-  weight: '200 800',
-  style: 'normal',
-  display: 'swap',
-  fallback: ['Georgia', 'Times New Roman'],
-  adjustFontFallback: 'Times New Roman',
-});
-
 export const jetbrainsMono = localFont({
   src: '../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2',
   variable: '--font-jetbrains',
@@ -38,16 +28,16 @@ export const jetbrainsMono = localFont({
 
 /**
  * Long-form writing is the only current surface that uses authored italics.
- * Its separate route-level instance avoids preloading a 64 KB face on every
+ * Its separate route-level instance avoids preloading the italic face on every
  * page while preserving a real italic rather than browser synthesis.
  */
-export const newsreaderItalic = localFont({
-  src: '../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2',
-  variable: '--font-newsreader-italic',
-  weight: '200 800',
+export const interItalic = localFont({
+  src: '../node_modules/@fontsource-variable/inter/files/inter-latin-wght-italic.woff2',
+  variable: '--font-inter-italic',
+  weight: '100 900',
   style: 'italic',
   display: 'swap',
   preload: false,
-  fallback: ['Georgia', 'Times New Roman'],
-  adjustFontFallback: 'Times New Roman',
+  fallback: ['Helvetica Neue', 'Arial'],
+  adjustFontFallback: 'Arial',
 });

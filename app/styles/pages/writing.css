@@ -390,13 +390,13 @@
   padding-left: 1.25rem;
   margin: 1.5rem 0;
   color: var(--color-fg-light);
-  font-family: var(--font-newsreader-italic), var(--font-body);
+  font-family: var(--font-inter-italic), var(--font-body);
   font-style: italic;
 }
 
 .prose em,
 .prose i {
-  font-family: var(--font-newsreader-italic), var(--font-body);
+  font-family: var(--font-inter-italic), var(--font-body);
 }
 
 .prose code {
@@ -527,5 +527,34 @@
 @media screen and (min-width: 980px) {
   .prose-figure {
     width: min(var(--figure-width, 100%), 100%);
+  }
+}
+
+/* Every post ends on the one action a reader who agreed with it can take. */
+.post-cta {
+  max-width: var(--measure-read);
+  margin: 3.5rem 0 0;
+  padding-top: 1.5rem;
+  border-top: var(--rule-strong) solid var(--color-fg-bold);
+}
+
+.post-cta-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-fg-bold);
+}
+
+.post-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media print {
+  .post-cta {
+    display: none;
   }
 }

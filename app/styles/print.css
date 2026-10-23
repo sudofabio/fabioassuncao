@@ -118,7 +118,6 @@
   }
 
   .resume-title,
-  .stats-title,
   .page-title {
     font-size: 22pt;
   }
@@ -210,10 +209,6 @@
     font-size: 10pt;
   }
 
-  .stat-table-value {
-    font-size: 14pt;
-  }
-
   /* Section headers should not be stranded at the foot of a page. */
   .resume-section,
   .about-section {
@@ -221,8 +216,7 @@
   }
 
   .resume-page .title h2,
-  .about-section h2,
-  .stats-section-title {
+  .about-section h2 {
     break-after: avoid;
     page-break-after: avoid;
   }
