@@ -1,0 +1,86 @@
+/* ========================================
+   COLOR TOKENS
+   Porcelain paper, neutral ink, and a single ink-blue poster field.
+   Amber remains reserved for live or in-progress values.
+   ======================================== */
+
+@theme {
+  /* ===================
+     CORE PALETTE
+     --color-bg     = raised surface (cards, header)
+     --color-bg-alt = page background
+     =================== */
+  --color-bg: #faf7f1;
+  --color-bg-alt: #f6f3ed;
+  --color-fg: #292a2e;
+  --color-fg-bold: #292a2e;
+  --color-fg-light: #646269;
+
+  /* ===================
+     ACCENT — ink blue
+     Structure, links, active state.
+     =================== */
+  --color-accent: #36559a;
+  --color-accent-hover: #29447f;
+
+  /* The poster stays deep blue in both themes; page links lighten at night.
+     Keep this surface and its text separate from the control palette. */
+  --color-hero: #36559a;
+  --color-on-hero: #faf7ef;
+
+  /* Filled controls need their own pair. A link accent is tuned for contrast
+     against the page; reusing it as a button background put white text on it,
+     which fails badly once the accent lightens for dark mode. */
+  --color-accent-fill: var(--color-accent);
+  --color-accent-fill-hover: var(--color-accent-hover);
+  --color-on-accent: #ffffff;
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 32%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
+
+  /* ===================
+     FOCUS RING
+     Blue for controls on paper; ink around blue-filled controls so
+     the ring remains distinct from the fill. Contrast is tested below.
+     =================== */
+  --color-focus-ring: var(--color-accent);
+  --color-focus-ring-fill: var(--color-fg-bold);
+
+  /* ===================
+     SIGNAL — amber
+     Reserved for live/measured values and the
+     current-position marker. Never decorative.
+     --color-signal      text-safe on page backgrounds
+     --color-signal-mark graphic use only (ticks, dots, rules)
+
+     "Present" also carries the state in text. Contrast tests hold the
+     redundant mark to 3:1 and text to 4.5:1 on both page surfaces.
+     =================== */
+  --color-signal: #9a5600;
+  --color-signal-mark: #bc770a;
+
+  /* ===================
+     BORDER COLORS
+     Hairlines do the structural work here, so they are
+     tinted with the ink rather than pure black.
+     =================== */
+  --color-border: rgba(35, 39, 46, 0.14);
+  --color-border-bg: rgba(35, 39, 46, 0.08);
+
+  /* Quiet structural hairlines cannot be a control's only visible edge.
+     Interactive boundaries use a tested 3:1 floor on both page surfaces. */
+  --color-control-border: #74747c;
+  --color-border-alt: rgba(35, 39, 46, 0.24);
+
+  /* ===================
+     SURFACE TOKENS
+     =================== */
+  --color-surface-subtle: rgba(35, 39, 46, 0.035);
+  --color-surface-hover: rgba(35, 39, 46, 0.06);
+  --color-fg-muted: rgba(35, 39, 46, 0.55);
+
+  /* ===================
+     SEMANTIC COLORS
+     =================== */
+  --color-overlay-darker: rgba(14, 17, 22, 0.45);
+}

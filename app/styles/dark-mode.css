@@ -1,0 +1,96 @@
+/* ========================================
+   DARK MODE
+   Supports both system preference and manual toggle
+   ======================================== */
+
+/* Neutral charcoal surrounds the same deep-blue poster after dark. */
+[data-theme='dark'] {
+  /* Core colors */
+  --color-bg: #2b2c33;
+  --color-bg-alt: #222329;
+  --color-fg: #ece9e3;
+  --color-fg-bold: #f4f0e9;
+  --color-fg-light: #bebac0;
+
+  /* Overlay colors for dark mode */
+  --color-overlay-darker: rgba(0, 0, 0, 0.6);
+
+  /* Links and filled controls keep separate, contrast-tested color pairs. */
+  --color-accent: #b8c9ee;
+  --color-accent-hover: #d0dcf6;
+
+  --color-hero: #304b83;
+  --color-on-hero: #f3eee5;
+
+  --color-accent-fill: #b8c9ee;
+  --color-accent-fill-hover: #d0dcf6;
+  --color-on-accent: #1b2a52;
+  --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
+
+  /* Amber remains reserved for live or in-progress values. */
+  --color-signal: #f0a202;
+  --color-signal-mark: #f0a202;
+
+  /* Interactive boundaries meet the same 3:1 floor as the light theme. */
+  --color-control-border: #8b929c;
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-bg: rgba(255, 255, 255, 0.07);
+  --color-border-alt: rgba(255, 255, 255, 0.2);
+
+  /* Semantic surface tokens */
+  --color-surface-subtle: rgba(255, 255, 255, 0.04);
+  --color-surface-hover: rgba(255, 255, 255, 0.07);
+  --color-fg-muted: rgba(255, 255, 255, 0.5);
+}
+
+/* Header, navigation, hero, and the experience spine read their
+   dark values straight from the tokens above — no overrides needed. */
+
+[data-theme='dark'] .site-footer-new {
+  background: var(--color-bg-alt);
+}
+
+/* Keep the portrait in color while softening its white field at night. */
+[data-theme='dark'] :where(.theme-portrait) img {
+  filter: brightness(0.9);
+}
+
+/* Course rows, skill tags, and the contact readout are all transparent and
+   hairline-bounded in the base styles now, and the tokens above already carry
+   their dark values. The filled backgrounds and heavy tag borders that used
+   to live here contradicted that, so they are gone rather than re-tuned.
+   `.daterange` and `.school` likewise inherit --color-fg-light directly. */
+
+/* Misc dark mode overrides */
+[data-theme='dark'] code {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-bg);
+}
+
+[data-theme='dark'] blockquote {
+  border-left-color: var(--color-border-alt);
+}
+
+/* Link underlines — scoped to `p` to match base/links.css */
+[data-theme='dark'] p a {
+  background-image: linear-gradient(
+    transparent calc(100% - 1.5px),
+    var(--color-accent-underline) 1.5px
+  );
+}
+
+[data-theme='dark'] p a:hover {
+  background-image: linear-gradient(transparent calc(100% - 1.5px), var(--color-accent) 1.5px);
+}
+
+/* Prose links use text-decoration only, no background-image */
+[data-theme='dark'] .prose a,
+[data-theme='dark'] .prose p a,
+[data-theme='dark'] .prose a:hover,
+[data-theme='dark'] .prose p a:hover {
+  background-image: none;
+}

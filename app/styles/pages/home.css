@@ -1,0 +1,250 @@
+/* One ink-blue field, a square portrait, and a quiet editorial register. */
+.hero {
+  --color-focus-ring: var(--color-on-hero);
+  --color-focus-ring-fill: var(--color-on-hero);
+  --color-accent-fill: var(--color-on-hero);
+  --color-accent-fill-hover: var(--color-on-hero);
+  --color-on-accent: var(--color-hero);
+  padding: 2rem 2.25rem 2.25rem;
+  background: var(--color-hero);
+  color: var(--color-on-hero);
+}
+
+.hero-kicker {
+  margin: 0 0 1.375rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+}
+
+.hero-title {
+  margin: 0 0 1.625rem;
+  color: inherit;
+}
+
+.hero-name {
+  display: block;
+  max-width: 10ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6.5vw, 4rem);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.06em;
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-primary {
+  min-width: 0;
+}
+
+.hero-tagline {
+  max-width: 35ch;
+  margin: 0 0 1.125rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: var(--leading-snug);
+}
+
+.hero-summary {
+  max-width: 40ch;
+  margin: 0 0 1.75rem;
+  font-size: 1.1875rem;
+  line-height: 1.45;
+}
+
+/* Explicit underline rather than the page's blue gradient: page-link blue
+   disappears into the poster, especially under the dark-theme overrides. */
+.hero .hero-highlight,
+.hero .hero-highlight:hover {
+  color: inherit;
+  background-image: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.hero .hero-highlight:hover {
+  text-decoration-thickness: 2px;
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-resume-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  font-weight: var(--font-weight-medium);
+  color: inherit;
+  background-image: none;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.hero-resume-link:hover {
+  color: inherit;
+  text-decoration-thickness: 2px;
+}
+
+.hero-portrait {
+  width: min(100%, 13.75rem);
+  margin: 0;
+  justify-self: center;
+}
+
+.hero-portrait .theme-portrait,
+.hero-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hero-portrait img {
+  border-radius: var(--radius-xs);
+}
+
+.hero-portrait figcaption {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  text-align: center;
+}
+
+.home-writing {
+  display: grid;
+  grid-template-columns: 23% minmax(0, 1fr);
+  gap: 9%;
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: var(--rule-strong) solid var(--color-fg-bold);
+}
+
+.home-writing h2 {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-display);
+}
+
+.home-writing-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  margin-top: 0.25rem;
+  font-family: var(--font-display);
+  font-size: var(--text-ui);
+  color: var(--color-fg-light);
+  background-image: none;
+}
+
+.home-writing-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1rem;
+  gap: 0.5rem 1rem;
+  min-width: 0;
+  padding: 1.25rem 0;
+  color: inherit;
+  text-decoration: none;
+  background-image: none;
+}
+
+.home-writing-item:first-child {
+  padding-top: 0;
+}
+
+.home-writing-item + .home-writing-item {
+  border-top: var(--rule) solid var(--color-border);
+}
+
+.home-writing-meta {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-fg-light);
+}
+
+.home-writing-copy {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.home-writing-item h3 {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+
+.home-writing-arrow {
+  grid-column: 2;
+  grid-row: 2;
+  color: var(--color-fg-light);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+}
+
+.home-writing-item:hover h3,
+.home-writing-item:focus-visible h3 {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .hero-name {
+    font-size: clamp(2.375rem, 9vw, 3.25rem);
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.1875rem;
+  }
+
+  .hero-portrait {
+    width: min(100%, 11rem);
+  }
+
+  .home-writing {
+    display: block;
+    margin-top: 2rem;
+  }
+
+  .home-writing-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .home-writing-all {
+    margin-top: 0;
+  }
+}
