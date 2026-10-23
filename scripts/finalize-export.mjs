@@ -15,14 +15,19 @@
  *    executed once here through Vite, exactly as the export would have, with
  *    its GET response written to the matching path.
  *
+ * It also writes the Content-Security-Policy in `dist/client/_headers` from the
+ * trackers enabled for this build (`scripts/lib/csp.mjs`), so an analytics or
+ * ads origin is allowed only when its ID is set.
+ *
  * Fails closed: a route handler that is not force-static, a non-200 response,
  * or a file that already exists stops the build rather than shipping a guess.
  * `npm run verify-export` then checks the result like any other export.
  */
 import { existsSync, readdirSync, renameSync } from 'node:fs';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 
+import { buildCsp, enabledTrackerKinds, rewriteCspHeader } from './lib/csp.mjs';
 import { EXPORT_DIR } from './lib/site.mjs';
 
 const ROOT = process.cwd();
@@ -119,8 +124,20 @@ if (handlers.length > 0) {
   }
 }
 
+// 3. Content-Security-Policy for the trackers this build enables.
+const headersPath = join(OUT, '_headers');
+if (!existsSync(headersPath)) die(`${EXPORT_DIR}/_headers not found`);
+const trackers = enabledTrackerKinds();
+try {
+  const headers = await readFile(headersPath, 'utf8');
+  await writeFile(headersPath, rewriteCspHeader(headers, buildCsp(trackers)));
+} catch (error) {
+  die(error.message);
+}
+
 console.log(
   `finalize-export: ${[...renamed, ...emitted].length} file(s) completed in ${EXPORT_DIR}/` +
+    `\n  CSP trackers: ${trackers.length ? trackers.join(', ') : 'none'}` +
     (renamed.length ? `\n  metadata routes: ${renamed.join(', ')}` : '') +
     (emitted.length ? `\n  route handlers: ${emitted.join(', ')}` : ''),
 );

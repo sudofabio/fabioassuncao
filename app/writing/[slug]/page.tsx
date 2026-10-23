@@ -197,11 +197,11 @@ export default async function PostPage({ params }: PageProps) {
             Quer ajuda com isso no seu time ou projeto?
           </h2>
           <div className="post-cta-actions">
-            <Link href="/trabalhe-comigo/#orcamento" className="button">
-              Pedir orçamento
-            </Link>
-            <Link href="/contact" className="button button-secondary">
+            <Link href="/contato/" className="button">
               Fale comigo
+            </Link>
+            <Link href="/trabalhe-comigo/" className="button button-secondary">
+              Ver o que eu faço
             </Link>
           </div>
         </aside>

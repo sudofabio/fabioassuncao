@@ -1,6 +1,9 @@
 import Link from 'next/link';
 
 import ContactIcons from '@/components/Contact/ContactIcons';
+import WhatsappLink from '@/components/Contact/WhatsappLink';
+import { WHATSAPP_DISPLAY } from '@/data/contact';
+import profile from '@/data/profile.json';
 import work from '@/data/resume/work';
 import routes from '@/data/routes';
 import { currentPosition } from '@/lib/career';
@@ -13,6 +16,23 @@ export default function Footer() {
 
   return (
     <footer className="site-footer-new">
+      {/* The fixed closing of every page (site-fabio.md §7). */}
+      <section className="footer-cta" aria-labelledby="footer-cta-title">
+        <h2 id="footer-cta-title" className="footer-cta-title">
+          Vamos conversar?
+        </h2>
+        <div className="footer-cta-actions">
+          <Link href="/contato/" className="button">
+            Fale comigo
+          </Link>
+          <WhatsappLink className="footer-cta-link">
+            WhatsApp {WHATSAPP_DISPLAY}
+          </WhatsappLink>
+          <a href={`mailto:${profile.email}`} className="footer-cta-link">
+            {profile.email}
+          </a>
+        </div>
+      </section>
       <div className="footer-content">
         <div className="footer-identity">
           <Link href="/" className="footer-avatar">
@@ -36,7 +56,8 @@ export default function Footer() {
               >
                 Código-fonte
                 <span className="sr-only"> (abre em nova aba)</span>
-              </a>
+              </a>{' '}
+              · <Link href="/privacidade/">Privacidade</Link>
             </p>
           </div>
         </div>

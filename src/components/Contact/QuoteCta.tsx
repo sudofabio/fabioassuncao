@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { whatsappLink } from '@/data/contact';
+import WhatsappLink from './WhatsappLink';
 
 interface QuoteCtaProps {
   title?: string;
@@ -10,7 +10,7 @@ interface QuoteCtaProps {
 /** The closing call to action shared by talks and the contact surfaces. */
 export default function QuoteCta({
   title = 'Vamos conversar?',
-  text = 'Consultoria, palestra ou mentoria para o seu time: conte o contexto e eu respondo com os próximos passos.',
+  text = 'Projeto, consultoria, palestra ou mentoria: conte o contexto e eu te indico o caminho certo.',
 }: QuoteCtaProps) {
   return (
     <aside className="quote-cta" aria-labelledby="quote-cta-title">
@@ -19,18 +19,12 @@ export default function QuoteCta({
       </h2>
       <p className="quote-cta-text">{text}</p>
       <div className="quote-cta-actions">
-        <Link href="/trabalhe-comigo/#orcamento" className="button">
-          Pedir orçamento
+        <Link href="/contato/" className="button">
+          Fale comigo
         </Link>
-        <a
-          href={whatsappLink()}
-          className="button button-secondary"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <WhatsappLink className="button button-secondary">
           WhatsApp
-          <span className="sr-only"> (abre em nova aba)</span>
-        </a>
+        </WhatsappLink>
       </div>
     </aside>
   );

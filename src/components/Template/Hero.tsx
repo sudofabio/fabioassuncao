@@ -1,23 +1,36 @@
 import Link from 'next/link';
 
-import { whatsappLink } from '@/data/contact';
 import profile from '@/data/profile.json';
 
 import ThemePortrait from './ThemePortrait';
 
 /**
+ * Approved proof points (social media project, `01-contexto/fabio.md`). The
+ * 600+ projects belong to the Codions, and the line says so.
+ */
+export const HERO_PROOFS = [
+  '+15 anos programando',
+  'Tech Lead do Portal QEdu (9,5 mi+ usuários)',
+  'Fundador da Codions, com 600+ projetos entregues',
+] as const;
+
+/**
  * The landing for every social-bio click, which almost always arrives on a
- * phone inside an in-app browser. At 375px the portrait, name, one line of
- * authority, and both calls to action must sit above the fold, so the mobile
- * layout puts a small portrait beside the name and the large one is shown
- * only where there is room for it.
+ * phone inside an in-app browser. At 375px the name, the one-line promise,
+ * what Fábio does, and both calls to action sit above the fold; the proof
+ * line and the large portrait follow where there is room.
+ *
+ * Copy: `05-perfis/site-fabio.md` §2 of the social media project.
  */
 export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-grid">
         <div className="hero-primary">
-          <p className="hero-kicker">Backend · Arquitetura · Cloud</p>
+          <p className="hero-kicker">
+            Engenheiro de software desde {profile.computingSince} ·{' '}
+            {profile.location}
+          </p>
           <div className="hero-identity">
             <span className="hero-avatar">
               <ThemePortrait width={72} height={72} priority />
@@ -27,43 +40,37 @@ export default function Hero() {
             </h1>
           </div>
           <p className="hero-tagline">
-            Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15
-            anos de experiência em backend, arquitetura de sistemas, cloud
-            computing e liderança técnica.
+            IA, código e segurança.{' '}
+            <strong className="hero-signal">Sem hype</strong>, com 15 anos de
+            estrada.
           </p>
 
           <p className="hero-summary">
-            Atuo na construção de soluções escaláveis, conectando engenharia,
-            produto e negócio.
+            Eu ajudo empresas a construir, modernizar e proteger sistemas, e a
+            usar IA onde ela realmente faz diferença.
           </p>
 
           <div className="hero-cta">
-            <Link href="/trabalhe-comigo/#orcamento" className="button">
-              Pedir orçamento
+            <Link href="/contato/" className="button">
+              Fale comigo
             </Link>
-            <a
-              href={whatsappLink()}
-              className="button button-secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp
-              <span className="sr-only"> (abre em nova aba)</span>
-            </a>
-          </div>
-          <div className="hero-more">
-            <Link href="/about" className="hero-resume-link">
-              Sobre mim
-            </Link>
-            <Link href="/resume" className="hero-resume-link">
-              Currículo
+            <Link href="/trabalhe-comigo/" className="button button-secondary">
+              Ver o que eu faço
             </Link>
           </div>
+
+          <ul className="hero-proofs" aria-label="Experiência">
+            {HERO_PROOFS.map((proof) => (
+              <li key={proof}>{proof}</li>
+            ))}
+          </ul>
         </div>
 
         <figure className="hero-portrait">
           <ThemePortrait width={320} height={320} priority />
-          <figcaption>{profile.location}</figcaption>
+          <figcaption>
+            {profile.name} · {profile.location}
+          </figcaption>
         </figure>
       </div>
     </section>

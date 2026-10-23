@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import Pillars from '@/components/Home/Pillars';
 import { SchemaGraph } from '@/components/Schema';
+import ServiceGroups from '@/components/Services/ServiceGroups';
 import Hero from '@/components/Template/Hero';
 import PageWrapper from '@/components/Template/PageWrapper';
 import { presentationPath, sortedPresentations } from '@/data/presentations';
-import { shipped } from '@/data/projects';
 import { HOME_URL, profilePageNode } from '@/lib/schema';
 import {
   AUTHOR_NAME,
@@ -117,27 +118,32 @@ export default function HomePage() {
       title: talk.title,
     }));
 
-  const highlights: HomeItem[] = shipped.slice(0, 3).map((project) => ({
-    href: project.link ?? '/projects/',
-    meta: project.subtitle ?? 'Projeto',
-    title: project.title,
-    description: project.desc,
-    external: Boolean(project.link),
-  }));
-
   return (
     <PageWrapper mainClassName="page-main--hero">
       <SchemaGraph
         nodes={[profilePageNode({ url: HOME_URL, name: AUTHOR_NAME })]}
       />
       <Hero />
-      <HomeSection
-        id="home-writing-title"
-        title="Artigos recentes"
-        allHref="/writing/"
-        allLabel="Todos os artigos"
-        items={recentWriting}
-      />
+      <Pillars />
+      <section className="home-block" aria-labelledby="home-services-title">
+        <header className="home-block-header">
+          <p className="section-label">Trabalho</p>
+          <h2 id="home-services-title">O que eu faço</h2>
+          <p className="home-block-lede">
+            Eu ajudo empresas a construir, modernizar e proteger sistemas, e a
+            usar IA onde ela realmente faz diferença.
+          </p>
+        </header>
+        <ServiceGroups compact />
+        <div className="home-block-actions">
+          <Link href="/contato/" className="button">
+            Fale comigo
+          </Link>
+          <Link href="/trabalhe-comigo/" className="button button-secondary">
+            Ver os detalhes
+          </Link>
+        </div>
+      </section>
       <HomeSection
         id="home-talks-title"
         title="Palestras"
@@ -146,11 +152,11 @@ export default function HomePage() {
         items={talks}
       />
       <HomeSection
-        id="home-projects-title"
-        title="Projetos em destaque"
-        allHref="/projects/"
-        allLabel="Todos os projetos"
-        items={highlights}
+        id="home-writing-title"
+        title="Artigos recentes"
+        allHref="/writing/"
+        allLabel="Todos os artigos"
+        items={recentWriting}
       />
     </PageWrapper>
   );

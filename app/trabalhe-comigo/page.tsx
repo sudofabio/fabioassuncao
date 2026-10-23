@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import QuoteForm from '@/components/Contact/QuoteForm';
 import { SchemaGraph } from '@/components/Schema';
+import ServiceGroups from '@/components/Services/ServiceGroups';
 import PageWrapper from '@/components/Template/PageWrapper';
-import { whatsappLink } from '@/data/contact';
+import { STANDARD } from '@/data/pillars';
 import { createPageMetadata } from '@/lib/metadata';
 import { breadcrumbNode, HOME_URL, SITE_URL, webPageNode } from '@/lib/schema';
 import { AUTHOR_NAME } from '@/lib/utils';
 
 const PAGE_URL = `${SITE_URL}/trabalhe-comigo/`;
-const PAGE_TITLE = 'Trabalhe comigo';
-const PAGE_DESCRIPTION = `Consultoria, palestras e mentoria com ${AUTHOR_NAME} em backend, arquitetura de software, cloud e liderança técnica. Peça um orçamento.`;
+const PAGE_TITLE = 'O que eu faço';
+const PAGE_DESCRIPTION = `${AUTHOR_NAME} ajuda empresas a construir, modernizar e proteger sistemas, e a usar IA onde ela realmente faz diferença: desenvolvimento sob medida, segurança, IA, CTO sob demanda e mentoria.`;
 
 export const metadata: Metadata = createPageMetadata({
   title: PAGE_TITLE,
@@ -22,29 +22,10 @@ export const metadata: Metadata = createPageMetadata({
 /** Situations a prospective client recognises before reading anything else. */
 const PAINS = [
   'O sistema cresceu, ficou lento ou instável, e cada mudança parece arriscada.',
-  'O time entrega, mas as decisões de arquitetura foram se acumulando sem um norte.',
-  'A conta da cloud sobe todo mês e ninguém sabe exatamente por quê.',
-  'Você quer usar IA no desenvolvimento sem trocar qualidade por velocidade.',
+  'Saiu uma falha na notícia e você não sabe se o seu sistema está exposto.',
+  'O app foi feito com IA, funciona, mas você não sabe se está seguro para cliente de verdade.',
+  'Você quer usar IA no negócio sem trocar qualidade por velocidade, e sem cair no hype.',
   'Precisa de alguém experiente para revisar uma decisão antes de investir nela.',
-];
-
-/**
- * Engagement formats. TODO(fabio): confirmar formatos, duração, entregáveis e
- * como cada um é cobrado; o texto abaixo descreve só o escopo de cada um.
- */
-const FORMATS = [
-  {
-    title: 'Consultoria e diagnóstico técnico',
-    text: 'Uma análise do sistema, da arquitetura e da infraestrutura, com um diagnóstico claro dos riscos e um plano priorizado do que atacar primeiro.',
-  },
-  {
-    title: 'Acompanhamento e mentoria',
-    text: 'Encontros recorrentes com você ou com o seu time para tomar decisões de arquitetura, revisar código e destravar a evolução do produto.',
-  },
-  {
-    title: 'Palestras e workshops',
-    text: 'Conteúdo sobre desenvolvimento de software, arquitetura, cloud e o papel do desenvolvedor na era da IA, para eventos, empresas e instituições de ensino.',
-  },
 ];
 
 export default function WorkWithMePage() {
@@ -66,10 +47,11 @@ export default function WorkWithMePage() {
       />
       <article className="work-page">
         <header className="work-header">
+          <p className="section-label">Trabalhe comigo</p>
           <h1 className="page-title">{PAGE_TITLE}</h1>
           <p className="page-subtitle">
-            Ajudo empresas e times a construir e evoluir software com segurança:
-            backend, arquitetura de sistemas, cloud e liderança técnica.
+            Eu ajudo empresas a construir, modernizar e proteger sistemas, e a
+            usar IA onde ela realmente faz diferença.
           </p>
         </header>
 
@@ -83,43 +65,54 @@ export default function WorkWithMePage() {
             ))}
           </ul>
           <p className="work-note">
-            Se alguma dessas frases soou familiar, vale uma conversa.
+            Se alguma dessas frases soou familiar, vale uma conversa. Se não
+            fizer sentido pro seu caso, fica o aprendizado.
           </p>
-        </section>
-
-        <section className="work-section" aria-labelledby="work-formats">
-          <h2 id="work-formats" className="work-section-title">
-            Como posso ajudar
-          </h2>
-          <ol className="work-formats">
-            {FORMATS.map((format) => (
-              <li key={format.title} className="work-format">
-                <h3>{format.title}</h3>
-                <p>{format.text}</p>
-              </li>
-            ))}
-          </ol>
         </section>
 
         <section
-          id="orcamento"
-          className="work-section work-quote"
-          aria-labelledby="work-quote-title"
+          className="work-section work-section--wide"
+          aria-labelledby="work-services"
         >
-          <h2 id="work-quote-title" className="work-section-title">
-            Pedir orçamento
+          <h2 id="work-services" className="work-section-title">
+            Como eu posso ajudar
           </h2>
-          <p className="work-note">
-            Conte o contexto do projeto e eu retorno por e-mail. Prefere
-            conversar direto?{' '}
-            <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
-              Chame no WhatsApp
-              <span className="sr-only"> (abre em nova aba)</span>
-            </a>
-            .
-          </p>
-          <QuoteForm />
+          <ServiceGroups />
         </section>
+
+        <section className="work-section" aria-labelledby="work-standard">
+          <h2 id="work-standard" className="work-section-title">
+            Como eu trabalho
+          </h2>
+          <ol className="work-formats">
+            {STANDARD.map((item) => (
+              <li key={item.title} className="work-format">
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="work-note">
+            Uso IA todos os dias na engenharia, com revisão humana em tudo. E
+            quando a resposta honesta é "depende" ou "nem sempre vale", é isso
+            que eu digo.
+          </p>
+        </section>
+
+        <aside className="quote-cta" aria-labelledby="work-cta-title">
+          <h2 id="work-cta-title" className="quote-cta-title">
+            Vamos conversar?
+          </h2>
+          <p className="quote-cta-text">
+            Responda algumas perguntas rápidas e eu te indico o caminho certo.
+            Menos de dois minutos.
+          </p>
+          <div className="quote-cta-actions">
+            <Link href="/contato/" className="button">
+              Fale comigo
+            </Link>
+          </div>
+        </aside>
 
         <section className="work-section" aria-labelledby="work-later">
           <h2 id="work-later" className="work-section-title">
@@ -127,8 +120,8 @@ export default function WorkWithMePage() {
           </h2>
           <p className="work-note">
             Sem problema. Leia os <Link href="/writing/">artigos</Link>, veja as{' '}
-            <Link href="/presentations/">palestras</Link> ou acompanhe pelas
-            redes em <Link href="/links/">fabioassuncao.com/links</Link>.
+            <Link href="/presentations/">palestras</Link> ou acompanhe o que eu
+            publico nas redes.
           </p>
         </section>
       </article>

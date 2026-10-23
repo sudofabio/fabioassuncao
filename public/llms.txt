@@ -1,36 +1,46 @@
 # Fábio Assunção
 
-> Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência em backend, arquitetura de sistemas, cloud computing e liderança técnica. Atua na construção de soluções escaláveis, conectando engenharia, produto e negócio. Baseado no Brasil; site em português (pt-BR).
+> Fábio Assunção | IA, Código e Segurança. Engenheiro de software com mais de 15 anos de estrada que fala de IA, programação e segurança sem hype, com a régua de quem constrói e mantém sistema de verdade. São Luís/MA, Brasil. Site em português (pt-BR).
 
-Programa profissionalmente desde 2008, com experiência em PHP, Go, Node.js/TypeScript, Python e Rust, DevOps, infraestrutura cloud (AWS, GCP e Cloudflare) e arquitetura de microsserviços. Entusiasta de open source. Atende empresas e times com consultoria, mentoria e palestras.
+Programa desde 2008, com stack principal em PHP, Node.js e Python, além de Go, Rust, AWS, GCP, Cloudflare, Docker, Kubernetes e Terraform. Liderou a tecnologia do Portal QEdu (Iede, 2024–2025), com mais de 9,5 milhões de usuários, em projetos com o MEC que impactaram mais de 3 milhões de estudantes e 57 mil docentes. Fez auditoria técnica de arquitetura, código, segurança e escalabilidade (VAT Tecnologia) e fundou a Codions (codions.com), onde conduz projetos de software, segurança e modernização com a equipe. Usa IA todos os dias na engenharia, com revisão humana.
+
+Este não é o ator homônimo.
 
 ## Temas
 
-- Desenvolvimento backend e APIs
-- Arquitetura de software e sistemas distribuídos
-- Cloud computing (AWS, GCP, Cloudflare) e DevOps
-- Microsserviços, Domain-Driven Design e arquitetura orientada a eventos
-- Liderança técnica
-- Inteligência artificial aplicada ao desenvolvimento de software e Spec-Driven Development
+- IA na prática: o que muda de verdade com cada novidade e onde a IA ainda erra
+- Segurança de software: falhas e incidentes explicados, a parte técnica da LGPD e o que fazer
+- Software e negócios: custo, contratação, legado, nuvem e MVP
+- Carreira e engenharia para devs e tech leads
+
+## O que ele faz
+
+- Desenvolvimento sob medida e Blueprint (discovery técnico)
+- Diagnóstico de IA, agentes e automações, palestras e workshops
+- Raio-X de Segurança, revisão de app feito com IA, atualização emergencial e modernização de legado
+- CTO sob demanda e mentoria 1:1
+
+Projetos executados com a equipe da Codions, com proposta por escrito e NDA. Código e documentação ficam com o cliente.
 
 ## Páginas principais
 
-- [Início](https://fabioassuncao.com/): apresentação e destaques
+- [Início](https://fabioassuncao.com/)
 - [Sobre](https://fabioassuncao.com/about/): trajetória desde 2008
-- [Currículo](https://fabioassuncao.com/resume/): experiência e competências ([JSON Resume](https://fabioassuncao.com/resume.json))
-- [Projetos](https://fabioassuncao.com/projects/): projetos open source
-- [Artigos](https://fabioassuncao.com/writing/): textos ([RSS](https://fabioassuncao.com/feed.xml))
-- [Palestras](https://fabioassuncao.com/presentations/): palestras com slides
-- [Trabalhe comigo](https://fabioassuncao.com/trabalhe-comigo/): formatos de trabalho e pedido de orçamento
-- [Contato](https://fabioassuncao.com/contact/): e-mail, WhatsApp e redes
+- [O que eu faço](https://fabioassuncao.com/trabalhe-comigo/): serviços
+- [Fale comigo](https://fabioassuncao.com/contato/): chat de contato
+- [Palestras](https://fabioassuncao.com/presentations/)
+- [Artigos](https://fabioassuncao.com/writing/) ([RSS](https://fabioassuncao.com/feed.xml))
+- [Projetos](https://fabioassuncao.com/projects/): open source e produtos da Codions
+- [Currículo](https://fabioassuncao.com/resume/) ([JSON Resume](https://fabioassuncao.com/resume.json))
 
 ## Contato
 
 - E-mail: contato@fabioassuncao.com
-- Pedido de orçamento: https://fabioassuncao.com/trabalhe-comigo/#orcamento
-- GitHub: https://github.com/fabioassuncao
+- WhatsApp: +55 98 98564-3922
 - LinkedIn: https://www.linkedin.com/in/fabioassuncao
+- GitHub: https://github.com/fabioassuncao
 - YouTube: https://www.youtube.com/@fabioassuncaohq
 - Instagram: https://www.instagram.com/fabioassuncaohq
 - TikTok: https://www.tiktok.com/@fabioassuncaohq
+- Threads: https://www.threads.com/@fabioassuncaohq
 - X: https://x.com/fabioassuncaohq

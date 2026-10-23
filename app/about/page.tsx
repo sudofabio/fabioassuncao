@@ -16,7 +16,7 @@ import { AUTHOR_NAME } from '@/lib/utils';
 
 const ABOUT_URL = `${SITE_URL}/about/`;
 
-const ABOUT_DESCRIPTION = `Conheça ${AUTHOR_NAME}: ${profile.role.toLowerCase()} com mais de 15 anos de experiência em backend, arquitetura de sistemas e cloud computing.`;
+const ABOUT_DESCRIPTION = `Conheça ${AUTHOR_NAME}: ${profile.role.toLowerCase()} desde 2008, ex-Tech Lead do Portal QEdu e fundador da Codions. IA, código e segurança sem hype.`;
 
 export const metadata: Metadata = createPageMetadata({
   title: 'Sobre',

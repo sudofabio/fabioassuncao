@@ -1,5 +1,10 @@
 # Cloudflare Pages response headers. See README.md, "Cabeçalhos de segurança".
 #
+# The Content-Security-Policy below is the base policy, with no measurement
+# tracker. `scripts/finalize-export.mjs` rewrites that line in the export from
+# `scripts/lib/csp.mjs`, adding only the origins of the trackers whose IDs are
+# set for the build; edit the policy there, not here.
+#
 # script-src keeps 'unsafe-inline': the static export inlines the pre-paint
 # theme bootstrap and Next's RSC payload scripts, which differ per page and
 # cannot be listed as hashes here. Everything else is locked to this origin,
