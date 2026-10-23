@@ -4,8 +4,8 @@
     "onAccent": "#ffffff",
     "backgroundLight": "#f6f3ed",
     "backgroundDark": "#222329",
-    "monogram": "MD",
-    "name": "Michael D'Angelo",
+    "monogram": "FA",
+    "name": "Fábio Assunção",
     "font": {
       "name": "Display",
       "family": "Inter",
@@ -32,14 +32,14 @@
       }
     ]
   },
-  "generatorDigest": "b5ba298936bd719b74059ac2a1991f1b22814634e4299597bb2dae2774b6fa28",
+  "generatorDigest": "eb73e022917f1fd0339837ae70511babf3ce2820736a45aa053556eb13cd4f35",
   "files": {
-    "app/favicon.ico": "1a36375860b595f54b960ae03580627b62b72e20f44f0fb82066686e10ec41e1",
-    "app/icon.png": "43291a11cdaa0d3333e6ec55216c112f7a0e5cb3c34c1b05869e00fc98057b5e",
-    "app/apple-icon.png": "199c982a9393dbb7103edb219d0c77cb043e8196f04a1c61c91a94b0022f098b",
-    "public/images/icons/icon-192.png": "f36da26102fefc11421fcc5e5f7c446b275ceb02cfce8d80d172e3e956b5561c",
-    "public/images/icons/icon-512.png": "70de66a2f3cd873a32573d0a5fa47770b33e96521deba51d50fa8fc44d56b10b",
-    "public/images/icons/icon-maskable-512.png": "dcfffad9804202211a36cc6a70331263bdc8a7f494fd2e9f0dcc83d81a65f84f",
-    "app/manifest.json": "3a1c7ffdf7fc6e03045a78d74b80b67708488ff035fb42eee788a7a38f23fd07"
+    "app/favicon.ico": "ecc8332c940d89d815af0dc0ccdfedf3ae326643b15ac957f14ec4e2a34f3476",
+    "app/icon.png": "1c777c20cdf12d28fe5939f8924962c2d04f21aaf16fc60d7e3435ce6f52253a",
+    "app/apple-icon.png": "f929ad489c83f57be5ad314dfd950302e5c547530dd6117b11a213174d80352a",
+    "public/images/icons/icon-192.png": "49a45764a817c4113e46e310a8a2629909ac0466c4543c9276fe06e1a1b1c88f",
+    "public/images/icons/icon-512.png": "ed7d26f10429149650efd492d2f6273902bb6ec7be2d8857d746cd03aa7f2a35",
+    "public/images/icons/icon-maskable-512.png": "f819d26d701240fb3e7bc392f8f576098405059edc81e903d8146246e39403d0",
+    "app/manifest.json": "104a8ebf77010b47bf34f3b3e68f2a40b783817d69d47427f5b4674484b00e97"
   }
 }

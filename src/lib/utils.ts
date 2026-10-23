@@ -5,17 +5,18 @@
 import profile from '@/data/profile.json';
 
 // Site configuration
-export const SITE_URL = 'https://mldangelo.com';
+export const SITE_URL = 'https://fabioassuncao.com';
 export const AUTHOR_NAME = profile.name;
-export const TWITTER_HANDLE = '@dangelosaurus';
+export const TWITTER_HANDLE = '@fabioassuncaohq';
 /**
  * The portrait. Used for JSON-LD `image`, where the value should be a picture
  * of the person, not a designed card.
+ * TODO(fabio): trocar por um retrato em alta resolução (mínimo 1024×1024).
  */
 export const SITE_IMAGE_PATH = '/images/me.jpg';
 export const SITE_IMAGE_DIMENSIONS = {
-  width: 1024,
-  height: 1024,
+  width: 460,
+  height: 460,
 } as const;
 
 /**
@@ -35,7 +36,7 @@ export const SHARE_IMAGE_DIMENSIONS = {
 
 // Canonical one-line bio, shared across page metadata, OpenGraph, and JSON-LD.
 export const SITE_DESCRIPTION =
-  'Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security. Co-founded Promptfoo before it joined OpenAI in 2026.';
+  'Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência em backend, arquitetura de sistemas, cloud computing e liderança técnica.';
 
 // Image dimension constants
 export const PROJECT_IMAGE = {
@@ -54,7 +55,7 @@ export function formatDate(dateStr: string): string {
   if (!dateStr) return '';
   // Parse as UTC to avoid timezone shifts
   const date = new Date(`${dateStr}T12:00:00`);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('pt-BR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

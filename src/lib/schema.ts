@@ -1,4 +1,5 @@
-import contact from '@/data/contact';
+import { profileLinks } from '@/data/contact';
+import profile from '@/data/profile.json';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import { currentPosition } from '@/lib/career';
@@ -29,13 +30,30 @@ export const PERSON_ID = `${SITE_URL}/#person`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const BLOG_ID = `${SITE_URL}/writing/#blog`;
 
-export const SITE_LANGUAGE = 'en-US';
+export const SITE_LANGUAGE = 'pt-BR';
 export const SITE_IMAGE = `${SITE_URL}${SITE_IMAGE_PATH}`;
 export const HOME_URL = `${SITE_URL}/`;
 
 // Shared so the /writing metadata and the Blog node stay in sync.
 export const WRITING_DESCRIPTION =
-  'Articles on AI security, LLM red teaming, and trust & safety.';
+  'Artigos sobre engenharia de software, arquitetura, cloud e o papel do desenvolvedor na era da IA.';
+
+/**
+ * Topics the person is known for, for the JSON-LD `knowsAbout` property. Kept
+ * to what the about page, résumé, and talks actually cover.
+ */
+export const KNOWS_ABOUT = [
+  'Desenvolvimento backend',
+  'Arquitetura de software',
+  'Sistemas distribuídos',
+  'Cloud computing',
+  'Microsserviços',
+  'DevOps',
+  'Liderança técnica',
+  'Inteligência artificial aplicada ao desenvolvimento de software',
+  'PHP',
+  'Go',
+] as const;
 
 type SchemaNode = Record<string, unknown>;
 
@@ -59,12 +77,8 @@ export const blogRef = () => ({ '@id': BLOG_ID });
  * repeating its properties.
  */
 export function personNode(): SchemaNode {
-  const socialLinks = contact
-    .filter((item) => !item.link.startsWith('mailto:'))
-    .map((item) => item.link);
-
-  const emailItem = contact.find((item) => item.link.startsWith('mailto:'));
-  const email = emailItem?.link.replace('mailto:', '');
+  const socialLinks = profileLinks.map((item) => item.link);
+  const email = profile.email;
 
   const currentJob = currentPosition(work);
 
@@ -87,21 +101,26 @@ export function personNode(): SchemaNode {
       caption: AUTHOR_NAME,
     },
     description: SITE_DESCRIPTION,
-    ...(currentJob && { jobTitle: currentJob.position }),
+    jobTitle: profile.role,
     ...(email && { email }),
+    knowsAbout: [...KNOWS_ABOUT],
     sameAs: socialLinks,
-    ...(currentJob && {
+    address: { '@type': 'PostalAddress', addressCountry: 'BR' },
+    // Only an employer the data actually names is published.
+    ...(currentJob?.name && {
       worksFor: {
         '@type': 'Organization',
         name: currentJob.name,
-        url: currentJob.url,
+        ...(currentJob.url ? { url: currentJob.url } : {}),
       },
     }),
-    alumniOf: degrees.map((degree) => ({
-      '@type': 'CollegeOrUniversity',
-      name: degree.school,
-      url: degree.link,
-    })),
+    ...(degrees.length > 0 && {
+      alumniOf: degrees.map((degree) => ({
+        '@type': 'CollegeOrUniversity',
+        name: degree.school,
+        url: degree.link,
+      })),
+    }),
   };
 }
 
@@ -115,7 +134,7 @@ export function websiteNode(): SchemaNode {
     '@id': WEBSITE_ID,
     url: HOME_URL,
     name: AUTHOR_NAME,
-    alternateName: ['mldangelo.com', 'mldangelo'],
+    alternateName: ['fabioassuncao.com', 'fabioassuncaohq'],
     description: SITE_DESCRIPTION,
     inLanguage: SITE_LANGUAGE,
     publisher: personRef(),
@@ -209,7 +228,7 @@ export function blogNode(dateModified?: string): SchemaNode {
     '@id': BLOG_ID,
     isPartOf: websiteRef(),
     mainEntityOfPage: { '@id': `${SITE_URL}/writing/#webpage` },
-    name: `${AUTHOR_NAME}'s Writing`,
+    name: `Artigos de ${AUTHOR_NAME}`,
     description: WRITING_DESCRIPTION,
     inLanguage: SITE_LANGUAGE,
     ...(dateModified ? { dateModified } : {}),
@@ -258,5 +277,67 @@ export function buildGraph(nodes: SchemaNode[]): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@graph': nodes,
+  };
+}
+
+interface TalkNodeOptions {
+  url: string;
+  name: string;
+  description: string;
+  date: string;
+  event: string;
+  venue: string;
+  city: string;
+  slidesUrl?: string;
+}
+
+/**
+ * A talk, as an Event the person performed at. The slides, when published,
+ * are attached as the event's `workPerformed` document.
+ */
+export function talkEventNode({
+  url,
+  name,
+  description,
+  date,
+  event,
+  venue,
+  city,
+  slidesUrl,
+}: TalkNodeOptions): SchemaNode {
+  return {
+    '@type': 'Event',
+    '@id': `${url}#event`,
+    url,
+    name,
+    description,
+    startDate: date,
+    inLanguage: SITE_LANGUAGE,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    superEvent: { '@type': 'Event', name: event },
+    location: {
+      '@type': 'Place',
+      name: venue,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: city,
+        addressCountry: 'BR',
+      },
+    },
+    performer: personRef(),
+    organizer: { '@type': 'Organization', name: event },
+    ...(slidesUrl
+      ? {
+          workPerformed: {
+            '@type': 'PresentationDigitalDocument',
+            name,
+            url: slidesUrl,
+            author: personRef(),
+            inLanguage: SITE_LANGUAGE,
+            encodingFormat: 'application/pdf',
+          },
+        }
+      : {}),
   };
 }

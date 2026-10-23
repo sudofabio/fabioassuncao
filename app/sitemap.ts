@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 
+import presentations, { presentationPath } from '@/data/presentations';
 import { getAllPosts } from '@/lib/posts';
 import { SITE_URL } from '@/lib/utils';
 
@@ -13,6 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.date),
     changeFrequency: 'monthly',
     priority: 0.6,
+  }));
+
+  const talkEntries: MetadataRoute.Sitemap = presentations.map((talk) => ({
+    url: `${SITE_URL}${presentationPath(talk)}`,
+    lastModified: new Date(talk.date),
+    changeFrequency: 'yearly',
+    priority: 0.7,
   }));
 
   return [
@@ -42,15 +50,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/stats/`,
-      changeFrequency: 'weekly',
-      priority: 0.5,
+      url: `${SITE_URL}/presentations/`,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/trabalhe-comigo/`,
+      changeFrequency: 'monthly',
+      priority: 0.9,
     },
     {
       url: `${SITE_URL}/contact/`,
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    {
+      url: `${SITE_URL}/links/`,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    ...talkEntries,
     ...postEntries,
   ];
 }

@@ -13,7 +13,7 @@ import {
 } from '@/lib/theme';
 import { readColorToken } from '@/lib/tokens';
 import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
-import { inter, jetbrainsMono, newsreader } from './fonts';
+import { inter, jetbrainsMono } from './fonts';
 import './tailwind.css';
 
 /**
@@ -76,15 +76,15 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     AUTHOR_NAME,
-    'OpenAI',
-    'Promptfoo',
-    'Codex Security',
-    'AI security',
-    'application security',
-    'LLM security',
-    'machine learning',
-    'startup founder',
-    'YC',
+    'desenvolvedor de software',
+    'tech lead',
+    'backend',
+    'arquitetura de software',
+    'sistemas distribuídos',
+    'cloud computing',
+    'microsserviços',
+    'DevOps',
+    'consultoria em software',
   ],
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
@@ -125,8 +125,8 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
-      className={`${inter.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+      lang="pt-BR"
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -154,7 +154,7 @@ export default function RootLayout({
             are thousands of pixels long, so tabbing past the nav to reach
             content is otherwise the only route in. */}
         <a href={`#${MAIN_CONTENT_ID}`} className="skip-link">
-          Skip to content
+          Pular para o conteúdo
         </a>
         <ScrollToTop />
         <div className="site-wrapper">

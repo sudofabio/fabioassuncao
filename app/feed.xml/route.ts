@@ -70,10 +70,10 @@ export async function GET() {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${escapeXml(AUTHOR_NAME)} - Writing</title>
+    <title>${escapeXml(AUTHOR_NAME)} - Artigos</title>
     <link>${SITE_URL}/writing/</link>
-    <description>Articles on AI security, LLM red teaming, and trust &amp; safety by ${escapeXml(AUTHOR_NAME)}.</description>
-    <language>en-us</language>
+    <description>Artigos de ${escapeXml(AUTHOR_NAME)} sobre engenharia de software, arquitetura, cloud e o papel do desenvolvedor na era da IA.</description>
+    <language>pt-br</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>${rssItems}
   </channel>

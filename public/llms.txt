@@ -1,0 +1,36 @@
+# Fábio Assunção
+
+> Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência em backend, arquitetura de sistemas, cloud computing e liderança técnica. Atua na construção de soluções escaláveis, conectando engenharia, produto e negócio. Baseado no Brasil; site em português (pt-BR).
+
+Programa profissionalmente desde 2008, com experiência em PHP, Go, Node.js/TypeScript, Python e Rust, DevOps, infraestrutura cloud (AWS, GCP e Cloudflare) e arquitetura de microsserviços. Entusiasta de open source. Atende empresas e times com consultoria, mentoria e palestras.
+
+## Temas
+
+- Desenvolvimento backend e APIs
+- Arquitetura de software e sistemas distribuídos
+- Cloud computing (AWS, GCP, Cloudflare) e DevOps
+- Microsserviços, Domain-Driven Design e arquitetura orientada a eventos
+- Liderança técnica
+- Inteligência artificial aplicada ao desenvolvimento de software e Spec-Driven Development
+
+## Páginas principais
+
+- [Início](https://fabioassuncao.com/): apresentação e destaques
+- [Sobre](https://fabioassuncao.com/about/): trajetória desde 2008
+- [Currículo](https://fabioassuncao.com/resume/): experiência e competências ([JSON Resume](https://fabioassuncao.com/resume.json))
+- [Projetos](https://fabioassuncao.com/projects/): projetos open source
+- [Artigos](https://fabioassuncao.com/writing/): textos ([RSS](https://fabioassuncao.com/feed.xml))
+- [Palestras](https://fabioassuncao.com/presentations/): palestras com slides
+- [Trabalhe comigo](https://fabioassuncao.com/trabalhe-comigo/): formatos de trabalho e pedido de orçamento
+- [Contato](https://fabioassuncao.com/contact/): e-mail, WhatsApp e redes
+
+## Contato
+
+- E-mail: contato@fabioassuncao.com
+- Pedido de orçamento: https://fabioassuncao.com/trabalhe-comigo/#orcamento
+- GitHub: https://github.com/fabioassuncao
+- LinkedIn: https://www.linkedin.com/in/fabioassuncao
+- YouTube: https://www.youtube.com/@fabioassuncaohq
+- Instagram: https://www.instagram.com/fabioassuncaohq
+- TikTok: https://www.tiktok.com/@fabioassuncaohq
+- X: https://x.com/fabioassuncaohq

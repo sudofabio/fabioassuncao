@@ -56,8 +56,8 @@ const { ImageResponse } = createRequire(import.meta.url)('next/og');
 
 const root = process.cwd();
 
-// The stats page reads the same profile file, so the cards cannot silently
-// drift from the public facts elsewhere on the site.
+// The pages read the same profile file, so the cards cannot silently drift
+// from the public facts elsewhere on the site.
 const {
   profile,
   profileSnapshot,
@@ -92,9 +92,9 @@ await requireSharp();
  * makes a later edit to a published post require regeneration.
  */
 const READOUT = [
-  { label: 'Countries visited', value: String(profile.countriesVisited) },
-  { label: 'Computing since', value: String(profile.computingSince) },
-  { label: 'Based in', value: profile.currentCity },
+  { label: 'Programando desde', value: String(profile.computingSince) },
+  { label: 'Foco', value: 'Backend · Cloud' },
+  { label: 'Base', value: profile.location },
 ];
 
 const [FIRST_NAME, ...REST_OF_NAME] = profile.name.split(' ');
@@ -245,7 +245,10 @@ function siteCard() {
       h('span', {}, FIRST_NAME),
       h('span', {}, REST_OF_NAME.join(' ').replace("'", '’')),
     ),
-    monoLine(profile.employer, profile.focus, { marginTop: 34 }),
+    // The full role does not fit beside the focus on one 25px mono line, and
+    // satori neither wraps nor reports the overflow, so the card names the
+    // shorter half of it.
+    monoLine('Tech Lead', profile.focus, { marginTop: 34 }),
   );
 }
 

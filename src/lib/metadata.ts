@@ -18,10 +18,10 @@ interface PageMetadataOptions {
 /**
  * The share card is a fixed design that does not render the page title, so
  * the alt text describes the card rather than claiming the title appears in
- * the image. Role and employer come from the profile so they change in one
- * place, just as the stats page and OG script read shared profile facts.
+ * the image. The role comes from the profile so it changes in one place, just
+ * as the OG script reads shared profile facts.
  */
-export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — ${profile.role} at ${profile.employer}`;
+export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — ${profile.role}`;
 
 /**
  * The OpenGraph and Twitter blocks every page needs.
@@ -31,7 +31,7 @@ export const SHARE_IMAGE_ALT = `${AUTHOR_NAME} — ${profile.role} at ${profile.
  * Callers that build their own metadata (blog posts) should spread these.
  */
 export const sharedOpenGraph: Metadata['openGraph'] = {
-  locale: 'en_US',
+  locale: 'pt_BR',
   siteName: AUTHOR_NAME,
   images: [
     {

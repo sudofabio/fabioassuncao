@@ -14,32 +14,42 @@ const routes: Route[] = [
     path: '/',
   },
   {
-    label: 'About',
+    label: 'Sobre',
     path: '/about',
   },
   {
-    label: 'Resume',
+    label: 'Currículo',
     path: '/resume',
   },
   // Was labelled "Archive" and kept out of the nav, which left the register of
   // shipped work reachable only through the footer — and `/contact` hides the
   // footer, so from there it was unreachable entirely.
   {
-    label: 'Projects',
+    label: 'Projetos',
     path: '/projects',
   },
   {
-    label: 'Writing',
+    label: 'Artigos',
     path: '/writing',
   },
+  // Antes escondida no rodapé; palestras são parte da autoridade pública.
   {
-    label: 'Stats',
-    path: '/stats',
-    primary: false,
+    label: 'Palestras',
+    path: '/presentations',
   },
   {
-    label: 'Contact',
+    label: 'Trabalhe comigo',
+    path: '/trabalhe-comigo',
+  },
+  {
+    label: 'Contato',
     path: '/contact',
+  },
+  // A página de bio é o destino dos links das redes sociais, não da navegação.
+  {
+    label: 'Links',
+    path: '/links',
+    primary: false,
   },
 ];
 

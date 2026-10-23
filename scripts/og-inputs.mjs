@@ -297,7 +297,7 @@ export function countUniqueExternalLinks(markdown) {
  * `src/lib/utils.ts` parses at noon. A test pins the two together.
  */
 export function formatCardDate(date) {
-  return new Date(`${date}T12:00:00`).toLocaleDateString('en-US', {
+  return new Date(`${date}T12:00:00`).toLocaleDateString('pt-BR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -307,21 +307,20 @@ export function formatCardDate(date) {
 /**
  * The measured readout for a post.
  *
- * These are counted from the post itself for the same reason `/stats` counts
- * its own source: a number typed into a card is a number that goes stale
- * without anything failing.
+ * These are counted from the post itself: a number typed into a card is a
+ * number that goes stale without anything failing.
  */
 export function measurePost(markdown) {
   const words = countProseWords(markdown);
 
   return [
-    { label: 'Words', value: words.toLocaleString('en-US') },
+    { label: 'Palavras', value: words.toLocaleString('pt-BR') },
     {
-      label: 'Unique external links',
+      label: 'Links externos',
       value: String(countUniqueExternalLinks(markdown)),
     },
     {
-      label: 'Reading time',
+      label: 'Tempo de leitura',
       value: `${Math.max(1, Math.round(words / READING_WORDS_PER_MINUTE))} min`,
     },
   ];
