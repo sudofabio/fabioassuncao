@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { WHATSAPP_NUMBER } from '@/data/contact';
 import profile from '@/data/profile.json';
 import work from '@/data/resume/work';
 import { currentPosition } from '@/lib/career';
@@ -15,22 +16,48 @@ describe('Footer', () => {
     expect(footer).toBeInTheDocument();
   });
 
-  it('displays the name and role', () => {
+  it('displays the name and the current role with its company', () => {
     render(<Footer />);
 
     expect(screen.getByText(profile.name)).toBeInTheDocument();
-    // No employer is published yet, so the role stands on its own rather
-    // than reading "… at undefined".
     const current = currentPosition(work);
-    expect(current?.name).toBeUndefined();
-    expect(screen.getByText(current?.position ?? '')).toBeInTheDocument();
+    expect(current?.name).toBe('Codions');
+    expect(
+      screen.getByText(`${current?.position} · ${current?.name}`),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/undefined|\bat\b/)).not.toBeInTheDocument();
   });
 
-  it('does not introduce unrelated headings into the page outline', () => {
+  it('closes every page with "Vamos conversar?" as its only heading', () => {
     render(<Footer />);
 
-    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    const headings = screen.getAllByRole('heading');
+    expect(headings).toHaveLength(1);
+    expect(headings[0]).toHaveTextContent('Vamos conversar?');
+  });
+
+  it('offers the chat, WhatsApp and the public e-mail in that closing', () => {
+    const { container } = render(<Footer />);
+    const cta = container.querySelector('.footer-cta') as HTMLElement;
+
+    const talk = within(cta).getByRole('link', { name: 'Fale comigo' });
+    expect(talk.getAttribute('href')).toMatch(/^\/contato\/?$/);
+
+    const whatsapp = within(cta).getByRole('link', { name: /whatsapp/i });
+    expect(whatsapp).toHaveTextContent('WhatsApp (98) 98564-3922');
+    expect(whatsapp.getAttribute('href')).toMatch(
+      new RegExp(`^https://wa\\.me/${WHATSAPP_NUMBER}\\?text=`),
+    );
+
+    const email = within(cta).getByRole('link', { name: profile.email });
+    expect(email).toHaveAttribute('href', 'mailto:contato@fabioassuncao.com');
+  });
+
+  it('links the privacy policy', () => {
+    render(<Footer />);
+
+    const privacy = screen.getByRole('link', { name: 'Privacidade' });
+    expect(privacy.getAttribute('href')).toMatch(/^\/privacidade\/?$/);
   });
 
   it('displays the current year in copyright', () => {
@@ -63,8 +90,11 @@ describe('Footer', () => {
     );
     expect(screen.getByRole('link', { name: /^contato$/i })).toHaveAttribute(
       'href',
-      '/contact',
+      '/contato',
     );
+    expect(
+      screen.getByRole('link', { name: /^o que eu faço$/i }),
+    ).toHaveAttribute('href', '/trabalhe-comigo');
   });
 
   it('renders contact icons section', () => {

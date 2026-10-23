@@ -1,129 +1,84 @@
 import { render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
+
+import { STANDARD } from '@/data/pillars';
+import { SERVICES_NOTE, serviceGroups } from '@/data/services';
 
 import WorkWithMePage from '../trabalhe-comigo/page';
 
-describe('trabalhe comigo page', () => {
-  afterEach(() => {
-    vi.unstubAllEnvs();
-    vi.resetModules();
-  });
+/** jsdom never applies `trailingSlash`, so the slash is normalised away. */
+const route = (href: string | null) => href?.replace(/\/$/, '') ?? '';
 
-  it('opens on the client pains, then the formats, then the quote form', () => {
-    render(<WorkWithMePage />);
-
-    const headings = screen
-      .getAllByRole('heading', { level: 2 })
-      .map((heading) => heading.textContent);
+describe('trabalhe comigo page ("O que eu faço")', () => {
+  it('opens on the client pains, then the services, the method and the CTA', () => {
+    const { container } = render(<WorkWithMePage />);
+    const page = within(container.querySelector('article') as HTMLElement);
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Trabalhe comigo' }),
+      page.getByRole('heading', { level: 1, name: 'O que eu faço' }),
     ).toBeInTheDocument();
-    expect(headings).toEqual([
+    expect(
+      page
+        .getAllByRole('heading', { level: 2 })
+        .map((heading) => heading.textContent),
+    ).toEqual([
       'Isso é você?',
-      'Como posso ajudar',
-      'Pedir orçamento',
+      'Como eu posso ajudar',
+      'Como eu trabalho',
+      'Vamos conversar?',
       'Ainda não é a hora?',
     ]);
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(3);
   });
 
-  it('anchors the quote section at #orcamento, where every CTA points', () => {
+  it('lists the five service groups and every service from the data', () => {
     const { container } = render(<WorkWithMePage />);
 
-    const section = container.querySelector('section#orcamento');
-    expect(section).not.toBeNull();
-    expect(section).toHaveAttribute('aria-labelledby', 'work-quote-title');
-    expect(section?.querySelector('form.quote-form')).not.toBeNull();
-  });
+    const groups = container.querySelectorAll('.service-group');
+    expect(groups).toHaveLength(serviceGroups.length);
+    expect(serviceGroups).toHaveLength(5);
 
-  it('labels every field the server validates', () => {
-    render(<WorkWithMePage />);
-
-    const form = screen.getByRole('group', { name: 'Pedido de orçamento' });
-    const fields = [
-      ['Nome', 'name'],
-      ['E-mail', 'email'],
-      ['WhatsApp (opcional)', 'whatsapp'],
-      ['Tipo de trabalho', 'type'],
-      ['Descrição do escopo', 'scope'],
-      ['Prazo', 'deadline'],
-      ['Faixa de investimento (opcional)', 'budget'],
-    ] as const;
-
-    for (const [label, name] of fields) {
-      expect(within(form).getByLabelText(label)).toHaveAttribute('name', name);
+    for (const group of serviceGroups) {
+      const node = container.querySelector(`#${group.id}`);
+      expect(node, group.id).not.toBeNull();
+      const scope = within(node as HTMLElement);
+      expect(scope.getByText(group.need)).toBeInTheDocument();
+      for (const service of group.services) {
+        expect(scope.getByText(service.name)).toBeInTheDocument();
+        expect(scope.getByText(service.summary)).toBeInTheDocument();
+      }
     }
-    for (const required of ['Nome', 'E-mail', 'Tipo de trabalho', 'Prazo']) {
-      expect(within(form).getByLabelText(required)).toBeRequired();
-    }
-    expect(within(form).getByLabelText('Descrição do escopo')).toBeRequired();
-    expect(
-      within(form).getByLabelText('WhatsApp (opcional)'),
-    ).not.toBeRequired();
   });
 
-  it('offers exactly the four work types', () => {
-    render(<WorkWithMePage />);
-
-    const select = screen.getByLabelText('Tipo de trabalho');
-    const options = within(select)
-      .getAllByRole('option')
-      .filter((option) => option.getAttribute('value') !== '')
-      .map((option) => [option.getAttribute('value'), option.textContent]);
-
-    expect(options).toEqual([
-      ['consultoria', 'Consultoria'],
-      ['palestra', 'Palestra'],
-      ['mentoria', 'Mentoria'],
-      ['outro', 'Outro'],
-    ]);
-  });
-
-  it('posts through script only, so the static export has no dead form target', () => {
+  it('publishes no price while none is decided', () => {
     const { container } = render(<WorkWithMePage />);
 
-    expect(container.querySelector('form')).not.toHaveAttribute('action');
+    expect(container.querySelector('.service-price')).toBeNull();
+    expect(container.textContent).not.toMatch(/R\$\s?\d/);
   });
 
-  it('disables the form without a Turnstile site key and points to e-mail and WhatsApp', async () => {
-    // The key is read when the module loads, so load it fresh without one.
-    vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', '');
-    vi.resetModules();
-    const { default: Page } = await import('../trabalhe-comigo/page');
-    const { container } = render(<Page />);
+  it('prints the commitments under the services', () => {
+    render(<WorkWithMePage />);
 
-    const fieldset = screen.getByRole('group', { name: 'Pedido de orçamento' });
-    expect(fieldset).toBeDisabled();
-
-    const notice = container.querySelector('#quote-disabled');
-    expect(notice).not.toBeNull();
-    expect(
-      within(notice as HTMLElement).getByRole('link', {
-        name: 'contato@fabioassuncao.com',
-      }),
-    ).toHaveAttribute('href', 'mailto:contato@fabioassuncao.com');
-    expect(
-      within(notice as HTMLElement)
-        .getByRole('link', { name: /whatsapp/i })
-        .getAttribute('href'),
-    ).toMatch(/^https:\/\/wa\.me\/5598985643922\?text=/);
-    expect(container.querySelector('.quote-turnstile')).toBeNull();
+    expect(screen.getByText(SERVICES_NOTE)).toBeInTheDocument();
   });
 
-  it('enables the form and mounts the Turnstile slot when a site key is built in', async () => {
-    vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', '1x00000000000000000000AA');
-    vi.resetModules();
-    const { default: Page } = await import('../trabalhe-comigo/page');
-    const { container } = render(<Page />);
+  it('explains how Fábio works with the three-part standard', () => {
+    render(<WorkWithMePage />);
 
-    expect(
-      screen.getByRole('group', { name: 'Pedido de orçamento' }),
-    ).not.toBeDisabled();
-    expect(container.querySelector('#quote-disabled')).toBeNull();
-    expect(container.querySelector('.quote-turnstile')).not.toBeNull();
-    expect(
-      screen.getByRole('button', { name: 'Enviar pedido' }),
-    ).toHaveAttribute('type', 'submit');
+    for (const item of STANDARD) {
+      expect(
+        screen.getByRole('heading', { level: 3, name: item.title }),
+      ).toBeInTheDocument();
+    }
+  });
+
+  it('sends every call to action to the chat and carries no form', () => {
+    const { container } = render(<WorkWithMePage />);
+    const page = within(container.querySelector('article') as HTMLElement);
+
+    const cta = page.getByRole('link', { name: 'Fale comigo' });
+    expect(route(cta.getAttribute('href'))).toBe('/contato');
+    expect(container.querySelector('form')).toBeNull();
+    expect(container.querySelector('#orcamento')).toBeNull();
   });
 });

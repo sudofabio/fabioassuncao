@@ -1,16 +1,40 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { archive, shipped } from '@/data/projects';
+import { archive, codionsProducts, shipped } from '@/data/projects';
 import routes from '@/data/routes';
 import ProjectsPage from '../projects/page';
 
 describe('projects page', () => {
+  it('presents the Codions products as their own labelled group', () => {
+    render(<ProjectsPage />);
+
+    const productsSection = screen.getByRole('region', {
+      name: 'Produtos da Codions',
+    });
+    expect(
+      within(productsSection).getAllByRole('heading', { level: 3 }),
+    ).toHaveLength(codionsProducts.length);
+    for (const product of codionsProducts) {
+      expect(
+        within(productsSection).getByRole('link', { name: product.title }),
+      ).toHaveAttribute('href', product.url);
+    }
+  });
+
+  it('points client cases to the Codions site instead of restating them', () => {
+    render(<ProjectsPage />);
+
+    expect(
+      screen.getByRole('link', { name: 'site da Codions' }),
+    ).toHaveAttribute('href', 'https://codions.com/cases-de-sucesso');
+  });
+
   it('presents selected work and the archive as separate, labelled groups', () => {
     render(<ProjectsPage />);
 
     const shippedSection = screen.getByRole('region', {
-      name: 'Em destaque',
+      name: 'Open source',
     });
     const archiveSection = screen.getByRole('region', { name: 'Anteriores' });
 

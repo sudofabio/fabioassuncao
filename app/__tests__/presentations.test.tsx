@@ -27,6 +27,20 @@ async function renderTalk() {
   );
 }
 
+/** The shared closing call to action (`QuoteCta`): the chat, then WhatsApp. */
+function expectQuoteCta() {
+  const cta = screen.getByRole('complementary', {
+    name: /vamos conversar|palestra/i,
+  });
+  const talk = within(cta).getByRole('link', { name: 'Fale comigo' });
+  expect(talk.getAttribute('href')).toMatch(/^\/contato\/?$/);
+  const whatsapp = within(cta).getByRole('link', { name: /whatsapp/i });
+  expect(whatsapp.getAttribute('href')).toMatch(/^https:\/\/wa\.me\//);
+  expect(whatsapp).toHaveAttribute('target', '_blank');
+  expect(whatsapp).toHaveTextContent('(abre em nova aba)');
+  expect(within(cta).queryByText(/orçamento/i)).not.toBeInTheDocument();
+}
+
 describe('presentations index', () => {
   it('lists the talk, linking to its permanent URL', () => {
     render(<PresentationsPage />);
@@ -41,14 +55,10 @@ describe('presentations index', () => {
     expect(link).toHaveTextContent('10º Talk — Vale do Pindaré Tech');
   });
 
-  it('closes with the quote call to action', () => {
+  it('closes with the call to the chat and WhatsApp', () => {
     render(<PresentationsPage />);
 
-    expect(
-      screen
-        .getByRole('link', { name: 'Pedir orçamento' })
-        .getAttribute('href'),
-    ).toMatch(/^\/trabalhe-comigo\/?#orcamento$/);
+    expectQuoteCta();
   });
 });
 
@@ -106,10 +116,6 @@ describe('talk page', () => {
     expect(
       within(contacts).getByRole('link', { name: 'E-mail' }),
     ).toHaveAttribute('href', 'mailto:contato@fabioassuncao.com');
-    expect(
-      screen
-        .getByRole('link', { name: 'Pedir orçamento' })
-        .getAttribute('href'),
-    ).toMatch(/^\/trabalhe-comigo\/?#orcamento$/);
+    expectQuoteCta();
   });
 });

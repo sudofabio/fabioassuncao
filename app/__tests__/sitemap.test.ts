@@ -17,10 +17,17 @@ describe('sitemap', () => {
         expect.objectContaining({ url: `${SITE_URL}/writing/` }),
         expect.objectContaining({ url: `${SITE_URL}/presentations/` }),
         expect.objectContaining({ url: `${SITE_URL}/trabalhe-comigo/` }),
-        expect.objectContaining({ url: `${SITE_URL}/contact/` }),
-        expect.objectContaining({ url: `${SITE_URL}/links/` }),
+        expect.objectContaining({ url: `${SITE_URL}/contato/` }),
+        expect.objectContaining({ url: `${SITE_URL}/privacidade/` }),
       ]),
     );
+  });
+
+  it('leaves out the pages that now redirect to the chat', async () => {
+    const urls = (await sitemap()).map((entry) => entry.url);
+
+    expect(urls).not.toContain(`${SITE_URL}/contact/`);
+    expect(urls).not.toContain(`${SITE_URL}/links/`);
   });
 
   it('does not invent modification dates for static pages', async () => {

@@ -1,10 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { WHATSAPP_NUMBER } from '@/data/contact';
 import profile from '@/data/profile.json';
 
-import Hero from '../../Template/Hero';
+import Hero, { HERO_PROOFS } from '../../Template/Hero';
 
 describe('Hero', () => {
   it('renders the hero section', () => {
@@ -21,11 +20,34 @@ describe('Hero', () => {
     expect(heading).toHaveTextContent(profile.name);
   });
 
-  it('states the authority line from the speaker bio', () => {
+  it('opens with the technical label: years and place', () => {
     const { container } = render(<Hero />);
 
-    expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      'Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência em backend, arquitetura de sistemas, cloud computing e liderança técnica.',
+    expect(container.querySelector('.hero-kicker')).toHaveTextContent(
+      `Engenheiro de software desde ${profile.computingSince} · ${profile.location}`,
+    );
+    expect(container.querySelector('.hero-kicker')).toHaveTextContent(
+      'Engenheiro de software desde 2008 · São Luís/MA',
+    );
+  });
+
+  it('states the brand line with "Sem hype" as the one highlighted word', () => {
+    const { container } = render(<Hero />);
+
+    const tagline = container.querySelector('.hero-tagline');
+    expect(tagline).toHaveTextContent(
+      'IA, código e segurança. Sem hype, com 15 anos de estrada.',
+    );
+    const highlighted = tagline?.querySelectorAll('.hero-signal');
+    expect(highlighted).toHaveLength(1);
+    expect(highlighted?.[0]).toHaveTextContent('Sem hype');
+  });
+
+  it('says what Fábio does in one sentence', () => {
+    const { container } = render(<Hero />);
+
+    expect(container.querySelector('.hero-summary')).toHaveTextContent(
+      'Eu ajudo empresas a construir, modernizar e proteger sistemas, e a usar IA onde ela realmente faz diferença.',
     );
   });
 
@@ -50,37 +72,32 @@ describe('Hero', () => {
     expect(container.querySelector('.hero-chips')).not.toBeInTheDocument();
   });
 
-  it('leads with the quote request and WhatsApp as the two calls to action', () => {
+  it('leads with "Fale comigo" and "Ver o que eu faço" as the two actions', () => {
     render(<Hero />);
 
-    const quote = screen.getByRole('link', { name: 'Pedir orçamento' });
     // jsdom never applies `trailingSlash`, so the slash is normalised away.
-    expect(quote.getAttribute('href')).toMatch(
-      /^\/trabalhe-comigo\/?#orcamento$/,
-    );
-    expect(quote).toHaveClass('button');
-    expect(quote).not.toHaveClass('button-secondary');
+    const talk = screen.getByRole('link', { name: 'Fale comigo' });
+    expect(talk.getAttribute('href')).toMatch(/^\/contato\/?$/);
+    expect(talk).toHaveClass('button');
+    expect(talk).not.toHaveClass('button-secondary');
 
-    const whatsapp = screen.getByRole('link', { name: /whatsapp/i });
-    expect(whatsapp.getAttribute('href')).toMatch(
-      new RegExp(`^https://wa\\.me/${WHATSAPP_NUMBER}\\?text=`),
-    );
-    expect(whatsapp).toHaveClass('button', 'button-secondary');
-    expect(whatsapp).toHaveAttribute('target', '_blank');
-    expect(whatsapp).toHaveAttribute('rel', 'noopener noreferrer');
-    expect(whatsapp).toHaveTextContent('(abre em nova aba)');
+    const services = screen.getByRole('link', { name: 'Ver o que eu faço' });
+    expect(services.getAttribute('href')).toMatch(/^\/trabalhe-comigo\/?$/);
+    expect(services).toHaveClass('button', 'button-secondary');
   });
 
-  it('keeps the about and résumé links quieter than the actions', () => {
-    render(<Hero />);
+  it('lists the approved proofs, crediting the 600+ projects to the Codions', () => {
+    const { container } = render(<Hero />);
 
-    const about = screen.getByRole('link', { name: 'Sobre mim' });
-    expect(about).toHaveAttribute('href', '/about');
-    expect(about).not.toHaveClass('button');
-
-    const resume = screen.getByRole('link', { name: 'Currículo' });
-    expect(resume).toHaveAttribute('href', '/resume');
-    expect(resume).toHaveClass('hero-resume-link');
-    expect(resume).not.toHaveClass('button');
+    const items = [...container.querySelectorAll('.hero-proofs li')].map(
+      (item) => item.textContent,
+    );
+    expect(items).toEqual([...HERO_PROOFS]);
+    const projects = HERO_PROOFS.find((proof) => proof.includes('600+'));
+    expect(projects).toMatch(/Codions/);
+    expect(projects).toMatch(/600\+ projetos/);
+    expect(
+      screen.getByRole('list', { name: 'Experiência' }),
+    ).toBeInTheDocument();
   });
 });

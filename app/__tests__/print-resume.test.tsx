@@ -181,15 +181,19 @@ describe('print: resume link data', () => {
   const companyLinks = work
     .map((job) => job.url)
     .filter((url): url is string => url !== undefined);
+  // A school link is optional too, until the institution confirms one.
+  const schoolLinks = degrees
+    .map((degree) => degree.link)
+    .filter((url): url is string => url !== undefined);
   const links = [
     ...companyLinks,
-    ...degrees.map((degree) => degree.link),
+    ...schoolLinks,
     ...courses.map((course) => course.link),
   ];
 
   it('gives every company, school and course an absolute http(s) URL', () => {
     expect(links.length).toBe(
-      companyLinks.length + degrees.length + courses.length,
+      companyLinks.length + schoolLinks.length + courses.length,
     );
     for (const link of links) {
       const url = new URL(link);

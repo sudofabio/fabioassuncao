@@ -122,27 +122,31 @@ Lead paragraph.
       history?.querySelectorAll('.log-entry') ?? [],
     ) as HTMLElement[];
 
-    expect(entries).toHaveLength(8);
+    expect(entries).toHaveLength(10);
     expect(
       entries.map((entry) => ({
         year: entry.querySelector('.log-entry-year')?.textContent ?? null,
         age: entry.querySelector('.log-entry-age')?.textContent ?? null,
       })),
-    ).toEqual([
-      { year: '2008–2010', age: null },
-      { year: '2010–2012', age: null },
-      { year: '2012–2014', age: null },
-      { year: '2014–2016', age: null },
-      { year: '2016–2019', age: null },
-      { year: '2019–2022', age: null },
-      { year: '2022', age: null },
-      { year: '2026', age: null },
-    ]);
+    ).toEqual(
+      [
+        '2008–2012',
+        '2012–2016',
+        '2016–2017',
+        '2016–2022',
+        '2017–2021',
+        '2021–2022',
+        '2022–2023',
+        '2023',
+        '2024–2025',
+        '2026',
+      ].map((year) => ({ year, age: null })),
+    );
 
     // Every marker is a leading one, lifted out of the sentence and therefore
     // still exposed: the body no longer repeats it.
     expect(entries[0].querySelector('.log-entry-body')?.textContent).toMatch(
-      /^Como estagiário de desenvolvimento/,
+      /^Comecei a carreira como desenvolvedor web freelancer/,
     );
     for (const entry of entries) {
       expect(entry.querySelector('.log-entry-marker')).not.toHaveAttribute(

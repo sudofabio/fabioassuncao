@@ -243,10 +243,14 @@ describe('json resume document', () => {
 
   it('omits endDate for the current role rather than inventing one', () => {
     expect(resume.work[0]).not.toHaveProperty('endDate');
-    expect(resume.work[0].startDate).toBe('2022');
+    expect(resume.work[0]).toMatchObject({
+      name: 'Codions',
+      startDate: '2023',
+    });
     expect(resume.work[1]).toMatchObject({
-      startDate: '2019',
-      endDate: '2022',
+      name: 'Iede (Portal QEdu)',
+      startDate: '2024',
+      endDate: '2025',
     });
   });
 
@@ -313,12 +317,36 @@ describe('json resume document', () => {
       if (position.endDate) expect(position.endDate).toMatch(ISO8601);
     }
     for (const entry of resume.education) {
-      expect(entry.endDate).toMatch(ISO8601);
+      if (entry.endDate !== undefined) expect(entry.endDate).toMatch(ISO8601);
     }
   });
 
   it('carries exactly the published education', () => {
     expect(resume.education).toHaveLength(degrees.length);
+  });
+
+  it('leaves out the education fields the data does not state', () => {
+    expect(resume.education).toEqual([
+      {
+        institution: 'Faculdade Pitágoras',
+        area: 'Bacharelado em Ciência da Computação',
+      },
+    ]);
+    for (const entry of resume.education) {
+      expect(entry).not.toHaveProperty('url');
+      expect(entry).not.toHaveProperty('endDate');
+    }
+  });
+
+  it('omits the institution too when a degree names no school', async () => {
+    const built = await buildWith({
+      degrees: [{ degree: 'Bacharelado em Ciência da Computação' }],
+      courses: [],
+    });
+
+    expect(built.education).toEqual([
+      { area: 'Bacharelado em Ciência da Computação' },
+    ]);
   });
 
   it('splits the degree string into studyType and area', async () => {

@@ -220,7 +220,7 @@ describe('the about page log', () => {
   const history = sectionEntries('Desde 2008');
 
   it('annotates every career entry with only its stated years', () => {
-    expect(history).toHaveLength(8);
+    expect(history).toHaveLength(10);
 
     expect(
       history.map((entry) => {
@@ -228,13 +228,15 @@ describe('the about page log', () => {
         return [year, age].filter(Boolean).join(' / ');
       }),
     ).toEqual([
-      '2008–2010',
-      '2010–2012',
-      '2012–2014',
-      '2014–2016',
-      '2016–2019',
-      '2019–2022',
-      '2022',
+      '2008–2012',
+      '2012–2016',
+      '2016–2017',
+      '2016–2022',
+      '2017–2021',
+      '2021–2022',
+      '2022–2023',
+      '2023',
+      '2024–2025',
       '2026',
     ]);
   });

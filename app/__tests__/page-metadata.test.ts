@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import profile from '@/data/profile.json';
 import { sharedOpenGraph } from '@/lib/metadata';
@@ -10,20 +10,28 @@ import {
   AUTHOR_NAME,
   SHARE_IMAGE_DIMENSIONS,
   SHARE_IMAGE_PATH,
+  SITE_TITLE,
   SITE_URL,
   TWITTER_HANDLE,
 } from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
-import { metadata as contactMetadata } from '../contact/page';
-import { metadata as linksMetadata } from '../links/page';
+import { metadata as contactMetadata } from '../contato/page';
+import { metadata as rootMetadata } from '../layout';
 import { metadata as notFoundMetadata } from '../not-found';
 import { generateMetadata as generateTalkMetadata } from '../presentations/[slug]/page';
 import { metadata as presentationsMetadata } from '../presentations/page';
+import { metadata as privacyMetadata } from '../privacidade/page';
 import { metadata as projectsMetadata } from '../projects/page';
 import { metadata as resumeMetadata } from '../resume/page';
 import { metadata as workWithMeMetadata } from '../trabalhe-comigo/page';
 import { generateMetadata as generatePostMetadata } from '../writing/[slug]/page';
 import { metadata as writingMetadata } from '../writing/page';
+
+// `next/font/local` only exists as a build-time transform; the root layout
+// is imported for its metadata, so the font loader is stubbed (hoisted).
+vi.mock('next/font/local', () => ({
+  default: () => ({ variable: 'font-mock', className: 'font-mock', style: {} }),
+}));
 
 const TALK_SLUG =
   'alem-do-codigo-inteligencia-artificial-e-o-novo-desenvolvedor';
@@ -33,11 +41,11 @@ const talkMetadata = () =>
 /** Every page with a stable URL, and the canonical it must declare. */
 const PAGES = [
   ['about', aboutMetadata, `${SITE_URL}/about/`],
-  ['contact', contactMetadata, `${SITE_URL}/contact/`],
+  ['contato', contactMetadata, `${SITE_URL}/contato/`],
   ['archive', projectsMetadata, `${SITE_URL}/projects/`],
   ['resume', resumeMetadata, `${SITE_URL}/resume/`],
   ['writing', writingMetadata, `${SITE_URL}/writing/`],
-  ['links', linksMetadata, `${SITE_URL}/links/`],
+  ['privacidade', privacyMetadata, `${SITE_URL}/privacidade/`],
   ['trabalhe-comigo', workWithMeMetadata, `${SITE_URL}/trabalhe-comigo/`],
   ['presentations', presentationsMetadata, `${SITE_URL}/presentations/`],
 ] as const;
@@ -47,8 +55,25 @@ const PAGES_WITHOUT_URL = PAGES.map(
 );
 
 describe('page metadata', () => {
-  it('builds the contact description from the shared profile email', () => {
-    expect(contactMetadata.description).toContain(profile.email);
+  it('names the contact page after the chat and the shared profile', () => {
+    expect(contactMetadata.title).toBe('Fale comigo');
+    expect(contactMetadata.description).toContain(profile.name);
+  });
+
+  it('names the services page "O que eu faço"', () => {
+    expect(workWithMeMetadata.title).toBe('O que eu faço');
+  });
+
+  it('uses the approved default title and template at the root', () => {
+    expect(SITE_TITLE).toBe(
+      'Fábio Assunção | Engenheiro de Software · IA, Desenvolvimento e Segurança',
+    );
+    expect(rootMetadata.title).toEqual({
+      default: SITE_TITLE,
+      template: `%s | ${AUTHOR_NAME}`,
+    });
+    expect(rootMetadata.openGraph?.title).toBe(SITE_TITLE);
+    expect(rootMetadata.twitter?.title).toBe(SITE_TITLE);
   });
 
   it.each(PAGES)(

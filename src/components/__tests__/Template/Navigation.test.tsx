@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Navigation from '../../Template/Navigation';
@@ -45,23 +45,24 @@ describe('Navigation', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders only primary navigation routes', () => {
+  it('renders the primary routes in their order', () => {
     render(<Navigation />);
 
-    expect(screen.getByRole('link', { name: /^sobre$/i })).toBeInTheDocument();
+    const nav = screen.getByRole('navigation', { name: 'Principal' });
     expect(
-      screen.getByRole('link', { name: /currículo/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /artigos/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /contato/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /projetos/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /palestras/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /trabalhe comigo/i }),
-    ).toBeInTheDocument();
-    // The bio page is a destination for social links, not navigation.
+      within(nav)
+        .getAllByRole('link')
+        .map((link) => [link.textContent, link.getAttribute('href')]),
+    ).toEqual([
+      ['Sobre', '/about'],
+      ['O que eu faço', '/trabalhe-comigo'],
+      ['Palestras', '/presentations'],
+      ['Artigos', '/writing'],
+      ['Projetos', '/projects'],
+      ['Currículo', '/resume'],
+      ['Contato', '/contato'],
+    ]);
+    // The old bio page now redirects to the chat; it is not navigation.
     expect(
       screen.queryByRole('link', { name: /^links$/i }),
     ).not.toBeInTheDocument();

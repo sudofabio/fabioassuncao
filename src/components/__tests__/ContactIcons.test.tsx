@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import contact from '@/data/contact';
+import contact, { SOCIAL_HANDLE } from '@/data/contact';
 
 import ContactIcons from '../Contact/ContactIcons';
 
@@ -26,14 +26,28 @@ describe('ContactIcons', () => {
     );
   });
 
-  it('renders one link per contact entry, skipping unconfirmed ones', () => {
+  it('renders one link per contact entry, Threads included', () => {
     render(<ContactIcons />);
     const links = screen.getAllByRole('link');
     expect(links).toHaveLength(contact.length);
-    // Threads has no confirmed profile yet, so it is not published.
-    expect(
-      screen.queryByRole('link', { name: /threads/i }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /threads/i })).toHaveAttribute(
+      'href',
+      `https://www.threads.com/@${SOCIAL_HANDLE}`,
+    );
+  });
+
+  it('builds every social profile from the one shared handle', () => {
+    render(<ContactIcons />);
+
+    for (const [name, href] of [
+      [/instagram/i, `https://www.instagram.com/${SOCIAL_HANDLE}`],
+      [/youtube/i, `https://www.youtube.com/@${SOCIAL_HANDLE}`],
+      [/tiktok/i, `https://www.tiktok.com/@${SOCIAL_HANDLE}`],
+      [/^x /i, `https://x.com/${SOCIAL_HANDLE}`],
+    ] as const) {
+      expect(screen.getByRole('link', { name })).toHaveAttribute('href', href);
+    }
+    expect(SOCIAL_HANDLE).toBe('fabioassuncaohq');
   });
 
   it('announces off-site links as opening in a new tab', () => {

@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import contact from '@/data/contact';
+import profile from '@/data/profile.json';
 import degrees from '@/data/resume/degrees';
 import work from '@/data/resume/work';
 import { currentPosition } from '@/lib/career';
@@ -141,7 +142,8 @@ describe('personNode', () => {
   it('states the role, topics, public email, and country', () => {
     const node = personNode();
 
-    expect(node.jobTitle).toBe('Desenvolvedor de software e Tech Lead');
+    expect(node.jobTitle).toBe(profile.role);
+    expect(node.jobTitle).toBe('Engenheiro de Software');
     expect(node.email).toBe('contato@fabioassuncao.com');
     expect(node.knowsAbout).toEqual([...KNOWS_ABOUT]);
     expect(KNOWS_ABOUT.length).toBeGreaterThanOrEqual(5);
@@ -152,13 +154,60 @@ describe('personNode', () => {
     });
   });
 
-  it('publishes no employer or school the data does not name', () => {
+  it('names the current employer the data publishes, with its link', () => {
     const node = personNode();
+    const current = currentPosition(work);
 
-    expect(currentPosition(work)?.name).toBeUndefined();
-    expect(node).not.toHaveProperty('worksFor');
-    expect(degrees).toHaveLength(0);
-    expect(node).not.toHaveProperty('alumniOf');
+    expect(current?.name).toBe('Codions');
+    expect(node.worksFor).toEqual({
+      '@type': 'Organization',
+      name: 'Codions',
+      url: 'https://codions.com',
+    });
+  });
+
+  it('lists only schools the data names, without inventing a link', () => {
+    const node = personNode();
+    const named = degrees.filter((degree) => degree.school);
+
+    expect(named.length).toBeGreaterThan(0);
+    expect(node.alumniOf).toEqual(
+      named.map((degree) => ({
+        '@type': 'CollegeOrUniversity',
+        name: degree.school,
+        ...(degree.link ? { url: degree.link } : {}),
+      })),
+    );
+  });
+});
+
+describe('personNode with partial data', () => {
+  afterEach(() => {
+    vi.doUnmock('@/data/resume/degrees');
+    vi.doUnmock('@/data/resume/work');
+    vi.resetModules();
+  });
+
+  it('omits alumniOf when no degree names its school', async () => {
+    vi.resetModules();
+    vi.doMock('@/data/resume/degrees', () => ({
+      default: [{ degree: 'Bacharelado em Ciência da Computação' }],
+    }));
+    const { personNode: freshPersonNode } = await import('@/lib/schema');
+
+    expect(freshPersonNode()).not.toHaveProperty('alumniOf');
+  });
+
+  it('omits worksFor when the current role names no employer', async () => {
+    vi.resetModules();
+    vi.doMock('@/data/resume/work', () => ({
+      default: [
+        { position: 'Engenheiro de Software', startDate: '2023-02-01' },
+      ],
+    }));
+    const { personNode: freshPersonNode } = await import('@/lib/schema');
+
+    expect(freshPersonNode()).not.toHaveProperty('worksFor');
   });
 });
 

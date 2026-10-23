@@ -21,7 +21,7 @@ describe('References', () => {
     const link = screen.getByRole('link', {
       name: /fale comigo/i,
     });
-    expect(link).toHaveAttribute('href', '/contact');
+    expect(link).toHaveAttribute('href', '/contato');
   });
 
   it('displays as minimal inline text', () => {

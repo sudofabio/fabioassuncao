@@ -100,15 +100,16 @@ describe('generated icon set', () => {
   it('pins the exact supported font bytes used by the generator', () => {
     const fontUrl = new URL(meta.inputs.font.url);
 
+    // The brand's display face (social media project, identidade-visual).
     expect(meta.inputs.font).toMatchObject({
       name: 'Display',
-      family: 'Inter',
-      weight: 500,
+      family: 'Archivo',
+      weight: 800,
       style: 'normal',
     });
     expect(fontUrl.protocol).toBe('https:');
     expect(fontUrl.hostname).toBe('fonts.gstatic.com');
-    expect(fontUrl.pathname).toMatch(/^\/s\/inter\/v\d+\/[^/]+\.ttf$/);
+    expect(fontUrl.pathname).toMatch(/^\/s\/archivo\/v\d+\/[^/]+\.ttf$/);
     expect(meta.inputs.font.sha256).toMatch(/^[0-9a-f]{64}$/);
   });
 

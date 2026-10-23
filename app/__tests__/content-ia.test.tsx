@@ -1,6 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { pillars } from '@/data/pillars';
+import { serviceGroups } from '@/data/services';
 import { getWritingItems } from '@/lib/writing';
 import HomePage from '../page';
 import WritingPage from '../writing/page';
@@ -96,7 +98,69 @@ describe('writing information architecture', () => {
     });
   });
 
-  it('follows writing with talks and highlighted projects on the homepage', () => {
+  it('orders the homepage: hero, pillars, services, talks, writing', () => {
+    const { container } = render(<HomePage />);
+    const main = container.querySelector('main') as HTMLElement;
+
+    expect(
+      within(main)
+        .getAllByRole('heading', { level: 2 })
+        .map((heading) => heading.textContent),
+    ).toEqual([
+      'Sobre o que eu falo',
+      'O que eu faço',
+      'Palestras',
+      'Artigos recentes',
+    ]);
+    expect(main.querySelector('.hero')).not.toBeNull();
+    // The project register lives on /projects/, not on the homepage.
+    expect(
+      screen.queryByRole('region', { name: 'Projetos em destaque' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows the six content pillars with their series labels', () => {
+    render(<HomePage />);
+
+    const pillarsSection = screen.getByRole('region', {
+      name: 'Sobre o que eu falo',
+    });
+    const cards = pillarsSection.querySelectorAll('.pillar-card');
+    expect(cards).toHaveLength(pillars.length);
+    expect(pillars).toHaveLength(6);
+    for (const pillar of pillars) {
+      expect(
+        within(pillarsSection).getByText(pillar.series),
+      ).toBeInTheDocument();
+    }
+  });
+
+  it('summarises the services by name only and links to the details', () => {
+    render(<HomePage />);
+
+    const services = screen.getByRole('region', { name: 'O que eu faço' });
+    expect(services.querySelector('.service-groups--compact')).not.toBeNull();
+    expect(services.querySelector('.service-summary')).toBeNull();
+    for (const group of serviceGroups) {
+      expect(within(services).getByText(group.need)).toBeInTheDocument();
+    }
+    expect(
+      stripTrailingSlash(
+        within(services)
+          .getByRole('link', { name: 'Fale comigo' })
+          .getAttribute('href'),
+      ),
+    ).toBe('/contato');
+    expect(
+      stripTrailingSlash(
+        within(services)
+          .getByRole('link', { name: 'Ver os detalhes' })
+          .getAttribute('href'),
+      ),
+    ).toBe('/trabalhe-comigo');
+  });
+
+  it('lists the talk on the homepage', () => {
     render(<HomePage />);
 
     const talks = screen.getByRole('region', { name: 'Palestras' });
@@ -104,9 +168,6 @@ describe('writing information architecture', () => {
       within(talks).getByRole('link', {
         name: /Além do código: Inteligência artificial e o novo desenvolvedor/,
       }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('region', { name: 'Projetos em destaque' }),
     ).toBeInTheDocument();
   });
 });
