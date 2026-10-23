@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { SiteSchema } from '@/components/Schema';
-import GoogleAnalytics from '@/components/Template/GoogleAnalytics';
+import Consent from '@/components/Template/Consent';
 import Navigation from '@/components/Template/Navigation';
 import { MAIN_CONTENT_ID } from '@/components/Template/PageWrapper';
 import ScrollToTop from '@/components/Template/ScrollToTop';
@@ -12,8 +12,13 @@ import {
   themeInitScript,
 } from '@/lib/theme';
 import { readColorToken } from '@/lib/tokens';
-import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/utils';
-import { inter, jetbrainsMono } from './fonts';
+import {
+  AUTHOR_NAME,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+} from '@/lib/utils';
+import { archivo, plexMono } from './fonts';
 import './tailwind.css';
 
 /**
@@ -70,20 +75,20 @@ const NO_SCRIPT_THEME_COLOR = `<meta name="theme-color" content="${CHROME_COLORS
  */
 export const metadata: Metadata = {
   title: {
-    default: AUTHOR_NAME,
+    default: SITE_TITLE,
     template: `%s | ${AUTHOR_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
     AUTHOR_NAME,
-    'desenvolvedor de software',
-    'tech lead',
-    'backend',
-    'arquitetura de software',
-    'sistemas distribuídos',
-    'cloud computing',
-    'microsserviços',
-    'DevOps',
+    'engenheiro de software',
+    'inteligência artificial',
+    'IA na prática',
+    'segurança de software',
+    'cibersegurança',
+    'desenvolvimento sob medida',
+    'modernização de sistemas legados',
+    'CTO sob demanda',
     'consultoria em software',
   ],
   authors: [{ name: AUTHOR_NAME }],
@@ -97,12 +102,12 @@ export const metadata: Metadata = {
     ...sharedOpenGraph,
     type: 'website',
     url: `${SITE_URL}/`,
-    title: AUTHOR_NAME,
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
   twitter: {
     ...sharedTwitter,
-    title: AUTHOR_NAME,
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
   // Only the snippet/preview hints are declared globally. `index, follow` is
@@ -126,7 +131,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${archivo.variable} ${plexMono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -161,7 +166,7 @@ export default function RootLayout({
           <Navigation />
           {children}
         </div>
-        <GoogleAnalytics />
+        <Consent />
       </body>
     </html>
   );

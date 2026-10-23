@@ -6,27 +6,27 @@
   "fonts": [
     {
       "name": "Display",
-      "family": "Inter",
-      "weight": 500,
+      "family": "Archivo",
+      "weight": 800,
       "style": "normal",
-      "url": "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf",
-      "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63"
+      "url": "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTtDRZ9xds.ttf",
+      "sha256": "baefbbf2f0c97fa0cbaf921f02c3cf55bfb0077ebcc4ca618eb3840a628cfebf"
     },
     {
       "name": "Mono",
-      "family": "JetBrains Mono",
+      "family": "IBM Plex Mono",
       "weight": 500,
       "style": "normal",
-      "url": "https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf",
-      "sha256": "3386a05f6ece969e4537de6be894170d20558e82f7d56c8c5d332972ef172160"
+      "url": "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFhw.ttf",
+      "sha256": "f418db1714ac511f3ed5c785ccaa196feeb419eba51e604cfa66d983fd983995"
     },
     {
       "name": "Body",
-      "family": "Newsreader",
+      "family": "Archivo",
       "weight": 400,
       "style": "normal",
-      "url": "https://fonts.gstatic.com/s/newsreader/v26/cY9qfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBCzBDXXD9JVF438weI_ADA.ttf",
-      "sha256": "b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a"
+      "url": "https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTNDNZ9xds.ttf",
+      "sha256": "40a9b9d99b3aae9a80a06e3f0c63e5392a0e969b6faccbd6f5e51ba3ce756209"
     }
   ],
   "renderer": [
@@ -48,21 +48,21 @@
   ],
   "profile": {
     "name": "Fábio Assunção",
-    "role": "Desenvolvedor de software e Tech Lead",
-    "focus": "Backend, arquitetura de sistemas e cloud computing",
+    "role": "Engenheiro de Software",
+    "focus": "IA, desenvolvimento e segurança",
     "computingSince": 2008,
-    "location": "Brasil"
+    "location": "São Luís/MA"
   },
   "colors": {
-    "ink": "#292a2e",
-    "paper": "#f6f3ed",
-    "body": "#292a2e",
-    "graphite": "#646269",
-    "accent": "#36559a",
-    "hairline": "rgba(35, 39, 46, 0.14)"
+    "ink": "#0f1724",
+    "paper": "#eef1f4",
+    "body": "#0f1724",
+    "graphite": "#4a5869",
+    "accent": "#2f5bff",
+    "hairline": "rgba(15, 23, 36, 0.14)"
   },
-  "generatorDigest": "758ca6dcb9daa200856a6d849577dfa9bf313a59c14ce88957123b08604f8b7a",
-  "imageDigest": "900abf6fc41acc8989ca0c4858d9044457ead0afd68bbbc23e2f01f218bf3db5",
+  "generatorDigest": "68556b87ee8926fa19bedcc82e9cad471c378aea17ae1792f8926eb185c5c369",
+  "imageDigest": "54cda6a4d24ac1cac61b269d15e0ff36cb9ca05d13e521e8ecdb4ae33f7466f1",
   "posts": [
     {
       "slug": "alem-do-codigo-ia-e-o-novo-desenvolvedor",
@@ -74,7 +74,7 @@
       "readout": [
         {
           "label": "Palavras",
-          "value": "1.224"
+          "value": "1.223"
         },
         {
           "label": "Links externos",
@@ -85,7 +85,7 @@
           "value": "5 min"
         }
       ],
-      "imageDigest": "73164f0d668df8176318f2a4e4520490374ee32fc92aad648126fbd857c204f7"
+      "imageDigest": "7648c4b7a66058bbb350cbba12b2493addc2550ace1dc00aa86a6e3411a23990"
     }
   ]
 }

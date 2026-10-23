@@ -1,24 +1,30 @@
-/* One ink-blue field, a square portrait, and a quiet technical register. */
+/* The dark ground poster of the brand ("caderno de engenheiro"): a mono label,
+   the name, one keyword in signal yellow, and a cobalt call to action. */
 .hero {
   --color-focus-ring: var(--color-on-hero);
   --color-focus-ring-fill: var(--color-on-hero);
-  --color-accent-fill: var(--color-on-hero);
+  --color-accent-fill: var(--color-brand-cobalt);
   --color-accent-fill-hover: var(--color-on-hero);
-  --color-on-accent: var(--color-hero);
+  --color-on-accent: var(--color-on-brand-cobalt);
   padding: 2rem 2.25rem 2.25rem;
   background: var(--color-hero);
   color: var(--color-on-hero);
+  border-radius: var(--radius-card);
 }
 
+/* The technical label of the brand book: mono, uppercase, wide. */
 .hero-kicker {
   margin: 0 0 1.375rem;
-  font-family: var(--font-display);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-wide);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-brand-signal);
 }
 
 .hero-title {
-  margin: 0 0 1.625rem;
+  margin: 0 0 1.25rem;
   color: inherit;
 }
 
@@ -26,10 +32,10 @@
   display: block;
   max-width: 10ch;
   font-family: var(--font-display);
-  font-size: clamp(2.25rem, 5.5vw, 3.5rem);
-  font-weight: var(--font-weight-semibold);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: var(--font-weight-black);
   letter-spacing: var(--tracking-display);
-  line-height: 1.05;
+  line-height: 1;
   overflow-wrap: anywhere;
 }
 
@@ -50,7 +56,7 @@
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 50%;
-  border: var(--rule-strong) solid var(--color-on-hero);
+  border: var(--rule-strong) solid var(--color-brand-signal);
 }
 
 .hero-grid {
@@ -65,34 +71,27 @@
 }
 
 .hero-tagline {
-  max-width: 40ch;
-  margin: 0 0 1.125rem;
-  font-family: var(--font-body);
-  font-size: 1.25rem;
-  font-weight: var(--font-weight-medium);
-  line-height: var(--leading-snug);
+  max-width: 32ch;
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.2;
+}
+
+/* One highlighted word per line, as in the video captions. */
+.hero-signal {
+  color: var(--color-brand-signal);
+  font-weight: inherit;
 }
 
 .hero-summary {
-  max-width: 40ch;
+  max-width: 44ch;
   margin: 0 0 1.75rem;
-  font-size: 1.1875rem;
-  line-height: 1.45;
-}
-
-/* Explicit underline rather than the page's blue gradient: page-link blue
-   disappears into the poster, especially under the dark-theme overrides. */
-.hero .hero-highlight,
-.hero .hero-highlight:hover {
-  color: inherit;
-  background-image: none;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
-}
-
-.hero .hero-highlight:hover {
-  text-decoration-thickness: 2px;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--color-on-hero) 88%, transparent);
 }
 
 .hero-cta {
@@ -102,7 +101,13 @@
   flex-wrap: wrap;
 }
 
-/* The unfilled button on the blue field takes the field's own ink pair. */
+.hero .button {
+  min-height: 3rem;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+}
+
+/* The unfilled button on the poster takes the poster's own ink pair. */
 .hero .button-secondary,
 .hero .button-secondary:hover {
   border-color: var(--color-on-hero);
@@ -113,28 +118,24 @@
   background: color-mix(in srgb, var(--color-on-hero) 12%, transparent);
 }
 
-.hero-more {
+/* Proof points, set like the "FONTE" labels on the videos. */
+.hero-proofs {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 1.75rem 0 0;
+  padding: 1rem 0 0;
+  list-style: none;
+  border-top: var(--rule) solid color-mix(in srgb, var(--color-on-hero) 22%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: color-mix(in srgb, var(--color-on-hero) 80%, transparent);
 }
 
-.hero-resume-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  font-family: var(--font-display);
-  font-size: var(--text-ui);
-  font-weight: var(--font-weight-medium);
-  color: inherit;
-  background-image: none;
-  text-decoration: underline;
-  text-underline-offset: 0.3rem;
-}
-
-.hero-resume-link:hover {
-  color: inherit;
-  text-decoration-thickness: 2px;
+.hero-proofs li::before {
+  content: '■ ';
+  content: '■ ' / '';
+  color: var(--color-brand-signal);
 }
 
 .hero-portrait {
@@ -285,14 +286,19 @@
   }
 
   .hero-tagline {
-    margin-bottom: 1.25rem;
-    font-size: 1.0625rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
   }
 
-  /* Above the fold on a phone: identity, authority, two buttons. The second
-     sentence is the first thing that can wait. */
+  /* Above the fold on a phone: label, identity, promise, what he does, and
+     both buttons. The proof line is the first thing that can wait. */
   .hero-summary {
-    display: none;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .hero-proofs {
+    flex-direction: column;
   }
 
   .hero-cta .button {

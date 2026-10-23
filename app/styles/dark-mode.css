@@ -3,35 +3,40 @@
    Supports both system preference and manual toggle
    ======================================== */
 
-/* Neutral charcoal surrounds the same deep-blue poster after dark. */
+/* The brand's dark theme, the default of the videos: ground, raised cards,
+   and the same cobalt and signal yellow. */
 [data-theme='dark'] {
   /* Core colors */
-  --color-bg: #2b2c33;
-  --color-bg-alt: #222329;
-  --color-fg: #ece9e3;
-  --color-fg-bold: #f4f0e9;
-  --color-fg-light: #bebac0;
+  --color-bg: #182233; /* ground-raised */
+  --color-bg-alt: #0f1724; /* ground */
+  --color-fg: #f4f6f8; /* ink */
+  --color-fg-bold: #ffffff;
+  --color-fg-light: #9aa8bc; /* ink-muted */
 
   /* Overlay colors for dark mode */
   --color-overlay-darker: rgba(0, 0, 0, 0.6);
 
   /* Links and filled controls keep separate, contrast-tested color pairs. */
-  --color-accent: #b8c9ee;
-  --color-accent-hover: #d0dcf6;
+  --color-accent: #5b82ff;
+  --color-accent-hover: #8aa6ff;
 
-  --color-hero: #304b83;
-  --color-on-hero: #f3eee5;
+  /* The page is already the ground, so the poster rises one step. */
+  --color-hero: #182233;
+  --color-on-hero: #f4f6f8;
 
-  --color-accent-fill: #b8c9ee;
-  --color-accent-fill-hover: #d0dcf6;
-  --color-on-accent: #1b2a52;
+  --color-accent-fill: #5b82ff;
+  --color-accent-fill-hover: #8aa6ff;
+  --color-on-accent: #0f1724;
   --color-accent-light: color-mix(in srgb, var(--color-accent) 18%, transparent);
   --color-accent-underline: color-mix(in srgb, var(--color-accent) 40%, transparent);
   --color-accent-underline-strong: color-mix(in srgb, var(--color-accent) 55%, transparent);
 
-  /* Amber remains reserved for live or in-progress values. */
-  --color-signal: #f0a202;
-  --color-signal-mark: #f0a202;
+  --color-risk: #ff5a4e;
+  --color-on-risk: #0f1724;
+
+  /* The signal yellow is text-safe on the dark ground. */
+  --color-signal: #ffc531;
+  --color-signal-mark: #ffc531;
 
   /* Interactive boundaries meet the same 3:1 floor as the light theme. */
   --color-control-border: #8b929c;

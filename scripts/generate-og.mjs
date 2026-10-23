@@ -93,7 +93,7 @@ await requireSharp();
  */
 const READOUT = [
   { label: 'Programando desde', value: String(profile.computingSince) },
-  { label: 'Foco', value: 'Backend · Cloud' },
+  { label: 'Tech Lead', value: 'Portal QEdu' },
   { label: 'Base', value: profile.location },
 ];
 
@@ -233,9 +233,9 @@ function siteCard() {
       {
         style: {
           fontFamily: 'Display',
-          fontSize: 128,
-          fontWeight: 500,
-          letterSpacing: '-0.045em',
+          fontSize: 112,
+          fontWeight: 800,
+          letterSpacing: '-0.035em',
           lineHeight: 0.92,
           color: ink,
           display: 'flex',
@@ -245,10 +245,9 @@ function siteCard() {
       h('span', {}, FIRST_NAME),
       h('span', {}, REST_OF_NAME.join(' ').replace("'", '’')),
     ),
-    // The full role does not fit beside the focus on one 25px mono line, and
-    // satori neither wraps nor reports the overflow, so the card names the
-    // shorter half of it.
-    monoLine('Tech Lead', profile.focus, { marginTop: 34 }),
+    // satori neither wraps nor reports overflow, so this stays one short
+    // 25px mono line: the brand's display qualifier and its promise.
+    monoLine('IA, Código e Segurança', 'sem hype', { marginTop: 34 }),
   );
 }
 
@@ -271,7 +270,7 @@ function postCard(post) {
           marginTop: TITLE_GAP,
           fontFamily: 'Display',
           fontSize: titleFontSize(post, size),
-          fontWeight: 500,
+          fontWeight: 800,
           letterSpacing: `${TITLE_TRACKING}em`,
           lineHeight: TITLE_LINE_HEIGHT,
           color: ink,

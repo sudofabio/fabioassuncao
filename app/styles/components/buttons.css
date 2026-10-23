@@ -9,7 +9,7 @@
     appearance: none;
     background: var(--color-accent-fill);
     border: var(--rule) solid var(--color-accent-fill);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-tag);
     box-shadow: none;
     color: var(--color-on-accent);
     cursor: pointer;

@@ -11,6 +11,60 @@
   margin-top: auto;
 }
 
+/* "Vamos conversar?": the closing call to action of every page. */
+.footer-cta {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--measure-page);
+  margin: 0 auto 2.5rem;
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius-card);
+  background: var(--color-hero);
+  color: var(--color-on-hero);
+  --color-accent-fill: var(--color-brand-cobalt);
+  --color-accent-fill-hover: var(--color-on-hero);
+  --color-on-accent: var(--color-on-brand-cobalt);
+  --color-focus-ring: var(--color-on-hero);
+  --color-focus-ring-fill: var(--color-on-hero);
+}
+
+.footer-cta-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-display);
+  color: inherit;
+}
+
+.footer-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+}
+
+.footer-cta-actions .button {
+  min-height: 3rem;
+  font-size: var(--text-base);
+}
+
+.footer-cta .footer-cta-link,
+.footer-cta .footer-cta-link:hover {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: inherit;
+  background-image: none;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+@media print {
+  .footer-cta {
+    display: none;
+  }
+}
+
 /* Footer content - 2-column signature card layout */
 .footer-content {
   box-sizing: border-box;
@@ -221,6 +275,10 @@
 }
 
 @media screen and (max-width: 640px) {
+  .footer-cta {
+    padding: 1.25rem 1rem;
+  }
+
   .site-footer-new {
     padding: 1.75rem 1rem 1.5rem;
   }

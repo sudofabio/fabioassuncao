@@ -1,18 +1,18 @@
 /* ========================================
    TYPOGRAPHY TOKENS
-   Two families, three roles — sober and technical:
-     display — JetBrains Mono, names, headings, and controls
-     body    — Inter, prose and reading
-     mono    — JetBrains Mono, data, labels, measurements
+   The brand's two families ("caderno de engenheiro"):
+     display — Archivo, heavy, for names, headings, and controls
+     body    — Archivo, regular, for prose and reading
+     mono    — IBM Plex Mono, for technical labels, sources, and dates
    ======================================== */
 
 @theme {
   /* ===================
      FONT FAMILIES
      =================== */
-  --font-display: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
-  --font-body: var(--font-inter), 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', monospace;
+  --font-display: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
+  --font-body: var(--font-archivo), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', monospace;
 
   /* ===================
      FONT WEIGHTS

@@ -60,11 +60,11 @@ const META_OUTPUT = join(root, 'scripts', 'icons.meta.json');
  */
 const ICON_FONT = Object.freeze({
   name: 'Display',
-  family: 'Inter',
-  weight: 500,
+  family: 'Archivo',
+  weight: 800,
   style: 'normal',
-  url: 'https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf',
-  sha256: '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63',
+  url: 'https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTtDRZ9xds.ttf',
+  sha256: 'baefbbf2f0c97fa0cbaf921f02c3cf55bfb0077ebcc4ca618eb3840a628cfebf',
 });
 
 /**

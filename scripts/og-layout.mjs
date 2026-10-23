@@ -20,10 +20,11 @@ export const READOUT_RULE = 2;
  * only the pixels decide where the row actually begins: satori resolves its own
  * default line box for the label and the value. This was 122 — 22px short of
  * the real row, which quietly spent half of `BOTTOM_GAP` before any title was
- * measured. `readoutTop` is now checked against every rendered card in
+ * measured. IBM Plex Mono's line box is 1px shorter than JetBrains Mono's,
+ * so the brand fonts measure 141. `readoutTop` is now checked against every rendered card in
  * `og-measure.mjs`, and a test pins it against the committed ones.
  */
-export const READOUT_HEIGHT = 142;
+export const READOUT_HEIGHT = 141;
 /** Mono 25 at satori's default line height. */
 export const BYLINE_HEIGHT = 30;
 export const TITLE_GAP = 28;

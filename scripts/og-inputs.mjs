@@ -37,29 +37,31 @@ export const LEDGER_PATH = '/og.meta.json';
  * hard failure instead of silently redrawing every committed card.
  */
 export const CARD_FONTS = [
+  // The brand's families (social media project, identidade-visual): Archivo
+  // heavy for names and titles, Archivo regular for prose, Plex Mono for labels.
   {
     name: 'Display',
-    family: 'Inter',
-    weight: 500,
+    family: 'Archivo',
+    weight: 800,
     style: 'normal',
-    url: 'https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf',
-    sha256: '8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63',
+    url: 'https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTtDRZ9xds.ttf',
+    sha256: 'baefbbf2f0c97fa0cbaf921f02c3cf55bfb0077ebcc4ca618eb3840a628cfebf',
   },
   {
     name: 'Mono',
-    family: 'JetBrains Mono',
+    family: 'IBM Plex Mono',
     weight: 500,
     style: 'normal',
-    url: 'https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf',
-    sha256: '3386a05f6ece969e4537de6be894170d20558e82f7d56c8c5d332972ef172160',
+    url: 'https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFhw.ttf',
+    sha256: 'f418db1714ac511f3ed5c785ccaa196feeb419eba51e604cfa66d983fd983995',
   },
   {
     name: 'Body',
-    family: 'Newsreader',
+    family: 'Archivo',
     weight: 400,
     style: 'normal',
-    url: 'https://fonts.gstatic.com/s/newsreader/v26/cY9qfjOCX1hbuyalUrK49dLac06G1ZGsZBtoBCzBDXXD9JVF438weI_ADA.ttf',
-    sha256: 'b8f5e0a8bdd6a12c722ca5635d9da87e77ccbb2d0172112e34e00c4e55f2cd5a',
+    url: 'https://fonts.gstatic.com/s/archivo/v25/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTNDNZ9xds.ttf',
+    sha256: '40a9b9d99b3aae9a80a06e3f0c63e5392a0e969b6faccbd6f5e51ba3ce756209',
   },
 ];
 
