@@ -35,6 +35,7 @@
 @import './styles/pages/resume.css';
 @import './styles/pages/writing.css';
 @import './styles/pages/content.css';
+@import './styles/pages/work.css';
 
 /* Theme Overrides */
 @import './styles/dark-mode.css';

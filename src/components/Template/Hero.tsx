@@ -1,56 +1,69 @@
 import Link from 'next/link';
 
+import { whatsappLink } from '@/data/contact';
 import profile from '@/data/profile.json';
 
 import ThemePortrait from './ThemePortrait';
 
+/**
+ * The landing for every social-bio click, which almost always arrives on a
+ * phone inside an in-app browser. At 375px the portrait, name, one line of
+ * authority, and both calls to action must sit above the fold, so the mobile
+ * layout puts a small portrait beside the name and the large one is shown
+ * only where there is room for it.
+ */
 export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-grid">
         <div className="hero-primary">
-          <p className="hero-kicker">Software &amp; security</p>
-          <h1 className="hero-title">
-            <span className="hero-name">{profile.name}</span>
-          </h1>
+          <p className="hero-kicker">Backend · Arquitetura · Cloud</p>
+          <div className="hero-identity">
+            <span className="hero-avatar">
+              <ThemePortrait width={72} height={72} priority />
+            </span>
+            <h1 className="hero-title">
+              <span className="hero-name">{profile.name}</span>
+            </h1>
+          </div>
           <p className="hero-tagline">
-            I&apos;m a {profile.role} at{' '}
-            <a href="https://openai.com" className="hero-highlight">
-              {profile.employer}
-            </a>
-            , working on{' '}
-            <a href="https://promptfoo.dev" className="hero-highlight">
-              Promptfoo
-            </a>{' '}
-            and{' '}
-            <a
-              href="https://openai.com/index/codex-security-now-in-research-preview/"
-              className="hero-highlight"
-            >
-              Codex Security
-            </a>
-            .
+            Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15
+            anos de experiência em backend, arquitetura de sistemas, cloud
+            computing e liderança técnica.
           </p>
 
           <p className="hero-summary">
-            I help secure AI systems and use AI to find software
-            vulnerabilities. I co-founded Promptfoo before it joined OpenAI in
-            2026.
+            Atuo na construção de soluções escaláveis, conectando engenharia,
+            produto e negócio.
           </p>
 
           <div className="hero-cta">
-            <Link href="/about" className="button">
-              About me <span aria-hidden="true">↗</span>
+            <Link href="/trabalhe-comigo/#orcamento" className="button">
+              Pedir orçamento
+            </Link>
+            <a
+              href={whatsappLink()}
+              className="button button-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+              <span className="sr-only"> (abre em nova aba)</span>
+            </a>
+          </div>
+          <div className="hero-more">
+            <Link href="/about" className="hero-resume-link">
+              Sobre mim
             </Link>
             <Link href="/resume" className="hero-resume-link">
-              View resume
+              Currículo
             </Link>
           </div>
         </div>
 
         <figure className="hero-portrait">
           <ThemePortrait width={320} height={320} priority />
-          <figcaption>{profile.currentCity}</figcaption>
+          <figcaption>{profile.location}</figcaption>
         </figure>
       </div>
     </section>
