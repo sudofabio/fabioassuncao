@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { getAllPosts } from '@/lib/posts';
 import { SITE_URL } from '@/lib/utils';
 import { getWritingItems } from '@/lib/writing';
 
@@ -11,9 +12,13 @@ describe('feed.xml route', () => {
     const xml = await response.text();
 
     expect(xml).toContain(`${SITE_URL}/writing/`);
-    expect(xml).toContain(`${SITE_URL}/writing/claude-code-outage/`);
-    expect(xml).toContain(`${SITE_URL}/writing/eurostar-chatbot-analysis/`);
-    expect(xml).toContain(`${SITE_URL}/writing/shipping-with-claude-code/`);
+    // Derived from the published posts so publishing cannot turn this red.
+    const posts = getAllPosts();
+    expect(posts.length).toBeGreaterThan(0);
+    for (const post of posts) {
+      expect(xml).toContain(`${SITE_URL}/writing/${post.slug}/`);
+      expect(xml).not.toContain(`${SITE_URL}/writing/${post.slug}<`);
+    }
   });
 
   it('keeps the feed self link file-like', async () => {

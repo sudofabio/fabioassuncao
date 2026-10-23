@@ -8,7 +8,10 @@ describe('References', () => {
     render(<References />);
 
     expect(
-      screen.getByText(/references available upon request/i),
+      screen.getByText(/referências disponíveis mediante solicitação/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /referências/i }),
     ).toBeInTheDocument();
   });
 
@@ -16,7 +19,7 @@ describe('References', () => {
     render(<References />);
 
     const link = screen.getByRole('link', {
-      name: /get in touch/i,
+      name: /fale comigo/i,
     });
     expect(link).toHaveAttribute('href', '/contact');
   });
@@ -24,7 +27,9 @@ describe('References', () => {
   it('displays as minimal inline text', () => {
     render(<References />);
 
-    const paragraph = screen.getByText(/references available upon request/i);
+    const paragraph = screen.getByText(
+      /referências disponíveis mediante solicitação/i,
+    );
     expect(paragraph.tagName).toBe('P');
   });
 });

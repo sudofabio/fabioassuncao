@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import Experience from '@/components/Resume/Experience';
 import Footer from '@/components/Template/Footer';
+import profile from '@/data/profile.json';
 import type { Position } from '@/data/resume/work';
 import { buildJsonResume } from '@/lib/resumeJson';
 import { personNode } from '@/lib/schema';
@@ -77,15 +78,47 @@ describe('the role the site says its author holds now', () => {
     const { container } = render(<Footer />);
 
     expect(container.querySelector('.footer-role')?.textContent).toBe(
-      `${title} at ${company}`,
+      `${title} · ${company}`,
     );
   });
 
+  // The Person's headline title is the profile role (shared with the hero and
+  // the share card); the employer is the one the spine leads with.
   it('is the employer the JSON-LD Person node claims', () => {
-    const { company, title } = leadOfSpine();
+    const { company } = leadOfSpine();
     const person = personNode();
 
-    expect(person.jobTitle).toBe(title);
+    expect(person.jobTitle).toBe(profile.role);
     expect((person.worksFor as Record<string, unknown>).name).toBe(company);
+  });
+
+  // While the employer is unpublished, neither surface may invent one.
+  describe('when the current role names no employer', () => {
+    function withAnonymousCurrentRole(check: () => void) {
+      const original = career[2];
+      const { name: _name, url: _url, ...anonymous } = original;
+      career[2] = anonymous;
+      try {
+        check();
+      } finally {
+        career[2] = original;
+      }
+    }
+
+    it('prints the role alone in the footer', () => {
+      withAnonymousCurrentRole(() => {
+        const { container } = render(<Footer />);
+
+        expect(container.querySelector('.footer-role')?.textContent).toBe(
+          'Principal Engineer',
+        );
+      });
+    });
+
+    it('leaves worksFor out of the JSON-LD Person node', () => {
+      withAnonymousCurrentRole(() => {
+        expect(personNode()).not.toHaveProperty('worksFor');
+      });
+    });
   });
 });

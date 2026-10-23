@@ -28,7 +28,7 @@ describe('Experience', () => {
     render(<Experience data={mockJobs} />);
 
     expect(
-      screen.getByRole('heading', { name: /experience/i }),
+      screen.getByRole('heading', { name: /experiência/i }),
     ).toBeInTheDocument();
   });
 
@@ -62,7 +62,7 @@ describe('Experience', () => {
     render(<Experience data={[]} />);
 
     expect(
-      screen.getByRole('heading', { name: /experience/i }),
+      screen.getByRole('heading', { name: /experiência/i }),
     ).toBeInTheDocument();
     // No job articles
     const articles = document.querySelectorAll('.jobs-container');
@@ -137,6 +137,60 @@ describe('Experience', () => {
 
     // 2020-01-01 and 2018-01-01 respectively, both measured to `now`, and
     // both hedged because an ongoing tenure is only a floor once built.
-    expect(durations).toEqual(['6 yr 6 mo+', '8 yr 6 mo+']);
+    expect(durations).toEqual(['6 a 6 m+', '8 a 6 m+']);
+  });
+
+  // Portuguese titles: "Estagiário" marks the early tier as "intern" did.
+  it('steps an internship down to the early tier', () => {
+    render(
+      <Experience
+        data={[
+          {
+            position: 'Estagiário de Desenvolvimento',
+            startDate: '2008-01-01',
+            endDate: '2010-01-01',
+          },
+          {
+            position: 'Engenheiro de Software',
+            startDate: '2014-01-01',
+            endDate: '2016-01-01',
+          },
+        ]}
+      />,
+    );
+
+    const early = document.querySelector('.jobs-container--early');
+    expect(early).toHaveTextContent('Estagiário de Desenvolvimento');
+    expect(document.querySelector('.jobs-container--lead')).toHaveTextContent(
+      'Engenheiro de Software',
+    );
+  });
+
+  // Roles without a published employer still order and render, keyed apart
+  // by their titles.
+  it('renders roles with no company name in timeline order', () => {
+    render(
+      <Experience
+        data={[
+          {
+            position: 'Older role',
+            startDate: '2012-01-01',
+            endDate: '2014-01-01',
+          },
+          {
+            position: 'Newer role',
+            startDate: '2016-01-01',
+            endDate: '2019-01-01',
+          },
+        ]}
+      />,
+    );
+
+    const titles = Array.from(
+      document.querySelectorAll('.job-position'),
+      (node) => node.textContent,
+    );
+    expect(titles).toEqual(['Newer role', 'Older role']);
+    expect(document.querySelector('.job-company')).toBeNull();
   });
 });

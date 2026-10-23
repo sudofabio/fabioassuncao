@@ -24,7 +24,7 @@ describe('Education', () => {
     render(<Education data={mockDegrees} />);
 
     expect(
-      screen.getByRole('heading', { name: /education/i }),
+      screen.getByRole('heading', { name: /formação/i }),
     ).toBeInTheDocument();
   });
 

@@ -3,8 +3,13 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import projects, { archive, type Project, shipped } from '../projects';
-import work from '../resume/work';
+import projects, {
+  archive,
+  type Project,
+  pendingProducts,
+  shipped,
+} from '../projects';
+import work, { type Position } from '../resume/work';
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -46,14 +51,11 @@ describe('projects data', () => {
       expect(typeof project.desc).toBe('string');
       expect(['shipped', 'archive']).toContain(project.status);
 
-      if (project.status === 'shipped') {
-        expect(typeof project.sourceWork, project.title).toBe('string');
-        expect(
-          project.sourceWork?.trim().length,
-          project.title,
-        ).toBeGreaterThan(0);
-      } else {
-        expect(project.sourceWork, project.title).toBeUndefined();
+      // Optional, but a declared backing role must name one.
+      if (project.sourceWork !== undefined) {
+        expect(project.sourceWork.trim().length, project.title).toBeGreaterThan(
+          0,
+        );
       }
     }
   });
@@ -158,61 +160,73 @@ describe('projects data', () => {
   });
 
   /**
-   * A shipped entry that names a résumé role must agree with that internal
-   * record. This is a consistency gate, not proof of external truth or link
-   * health. A project may outlive the job — Promptfoo is still being built at
-   * OpenAI — so only a declared project end date is compared.
+   * An entry that names a résumé role must agree with that internal record.
+   * This is a consistency gate, not proof of external truth or link health. A
+   * project may outlive the job, so only a declared project end date is
+   * compared. Roles are matched by their `position`, since the employer is
+   * optional until it is confirmed for publication.
    */
   describe('agreement with the résumé', () => {
-    const byName = new Map(work.map((position) => [position.name, position]));
-    const sourced = shipped.map((project) => ({
-      project,
-      position: byName.get(project.sourceWork ?? ''),
-    }));
+    function agreementProblems(
+      project: Project,
+      positions: Position[],
+    ): string[] {
+      if (project.sourceWork === undefined) return [];
 
-    it('maps every shipped entry to an existing résumé role', () => {
-      for (const { project, position } of sourced) {
-        expect(
-          position,
-          `${project.title}: ${project.sourceWork}`,
-        ).toBeDefined();
+      const position = positions.find(
+        (entry) => entry.position === project.sourceWork,
+      );
+      if (!position) return [`no résumé role "${project.sourceWork}"`];
+
+      const problems: string[] = [];
+      if (project.date !== position.startDate) problems.push('start date');
+      if (project.endDate && project.endDate !== position.endDate) {
+        problems.push('end date');
       }
+      const record = new Set(numericClaims(JSON.stringify(position)));
+      for (const figure of numericClaims(project.desc)) {
+        if (!record.has(figure)) problems.push(`figure "${figure}"`);
+      }
+      return problems;
+    }
+
+    const role: Position = {
+      position: 'Tech Lead',
+      startDate: '2022-01-01',
+      endDate: '2024-01-01',
+      summary: 'Led 12 engineers across 3 squads.',
+    };
+    const entry: Project = {
+      title: 'Platform',
+      sourceWork: 'Tech Lead',
+      date: '2022-01-01',
+      endDate: '2024-01-01',
+      desc: 'A platform built by 12 engineers.',
+      status: 'shipped',
+    };
+
+    it('accepts an entry that matches its résumé role', () => {
+      expect(agreementProblems(entry, [role])).toEqual([]);
     });
 
-    it('starts and ends when the résumé says it did', () => {
-      for (const { project, position } of sourced) {
-        expect(project.date, project.title).toBe(position?.startDate);
-        if (project.endDate) {
-          expect(project.endDate, project.title).toBe(position?.endDate);
-        }
-      }
+    it('flags a missing role, moved dates, and figures the résumé lacks', () => {
+      expect(
+        agreementProblems({ ...entry, sourceWork: 'CTO' }, [role]),
+      ).toEqual(['no résumé role "CTO"']);
+      expect(
+        agreementProblems(
+          { ...entry, date: '2021-06-01', endDate: '2025-01-01' },
+          [role],
+        ),
+      ).toEqual(['start date', 'end date']);
+      expect(
+        agreementProblems({ ...entry, desc: 'Served 40 teams.' }, [role]),
+      ).toEqual(['figure "40"']);
     });
 
-    it('keeps same-name project and résumé destinations aligned', () => {
-      for (const { project, position } of sourced) {
-        // Codex Security is backed by the OpenAI role but intentionally links
-        // to the product announcement rather than OpenAI's home page.
-        if (project.title !== project.sourceWork) continue;
-        expect(project.link, project.title).toBe(position?.url);
-      }
-    });
-
-    /**
-     * Every figure in the shipped register has to already exist in the
-     * associated résumé role. This guards against a plausible-looking metric
-     * that is absent from the repository's internal record.
-     */
-    it('quotes no figure the résumé does not already carry', () => {
-      for (const { project, position } of sourced) {
-        const record = new Set(numericClaims(JSON.stringify(position)));
-        const figures = numericClaims(project.desc);
-
-        for (const figure of figures) {
-          expect(
-            record.has(figure),
-            `${project.title}: "${figure}" is not in src/data/resume/work.ts`,
-          ).toBe(true);
-        }
+    it('holds for every entry in the register', () => {
+      for (const project of projects) {
+        expect(agreementProblems(project, work), project.title).toEqual([]);
       }
     });
 
@@ -225,36 +239,22 @@ describe('projects data', () => {
     });
   });
 
-  it('distinguishes Promptfoo project continuity from the founding role', () => {
-    const promptfoo = projects.find((project) => project.title === 'Promptfoo');
-    const role = work.find((position) => position.name === 'Promptfoo');
-
-    expect(promptfoo?.ongoing).toBe(true);
-    expect(promptfoo?.subtitle).toMatch(/through acquisition/i);
-    expect(promptfoo?.subtitle).toMatch(/continued at OpenAI/i);
-    expect(role?.endDate).toBe('2026-03-09');
+  // Today every entry is a public repository: the date and description are
+  // read from it, so each one has to point at it.
+  it('links every entry to its public GitHub repository', () => {
+    for (const project of projects) {
+      expect(project.link, project.title).toMatch(
+        /^https:\/\/github\.com\/(?:fabioassuncao|codions-archive)\/[\w.-]+$/,
+      );
+    }
   });
 
-  it('keeps reviewed destination and chronology corrections in place', () => {
-    const arthena = projects.find((project) => project.title === 'Arthena');
-    const spacePotato = projects.find(
-      (project) => project.title === 'Space Potato',
-    );
-    const catDetector = projects.find(
-      (project) => project.title === 'Cat Detector',
-    );
+  it('keeps products without a confirmed description off the page', () => {
+    const published = new Set(projects.map((project) => project.title));
 
-    expect(arthena?.link).toBe('https://www.ycombinator.com/companies/arthena');
-    expect(spacePotato?.link).toBeUndefined();
-    expect(catDetector?.tech).not.toContain('TensorFlow');
-  });
-
-  it('uses established brand and technology capitalization', () => {
-    const harvest = projects.find((project) => project.title === 'Harvest');
-    const arthena = projects.find((project) => project.title === 'Arthena');
-
-    expect(harvest?.subtitle).toContain('TechCrunch');
-    expect(harvest?.tech).toContain('Computer vision');
-    expect(arthena?.tech).toContain('Microservices');
+    expect(pendingProducts.length).toBeGreaterThan(0);
+    for (const product of pendingProducts) {
+      expect(published.has(product.title), product.title).toBe(false);
+    }
   });
 });

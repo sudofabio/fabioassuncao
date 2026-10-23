@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest';
 import writing from '../writing';
 
 describe('writing data', () => {
+  // External articles are optional; the list may be empty until one exists.
   it('exports an array of writing items', () => {
     expect(Array.isArray(writing)).toBe(true);
-    expect(writing.length).toBeGreaterThan(0);
   });
 
   it('each item has required properties', () => {

@@ -1,6 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { WHATSAPP_NUMBER } from '@/data/contact';
+import profile from '@/data/profile.json';
+
 import Hero from '../../Template/Hero';
 
 describe('Hero', () => {
@@ -11,38 +14,32 @@ describe('Hero', () => {
     expect(heroSection).toBeInTheDocument();
   });
 
-  it('displays the name as heading', () => {
+  it('displays the name as the only level-one heading', () => {
     render(<Hero />);
 
     const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent("Michael D'Angelo");
+    expect(heading).toHaveTextContent(profile.name);
   });
 
-  it('describes the current work and Promptfoo joining OpenAI', () => {
+  it('states the authority line from the speaker bio', () => {
     const { container } = render(<Hero />);
 
-    const openAiLink = screen.getByRole('link', { name: /openai/i });
-    expect(openAiLink).toHaveAttribute('href', 'https://openai.com');
-    expect(openAiLink).toHaveClass('hero-highlight');
-
-    const promptfooLink = screen.getByRole('link', { name: /promptfoo/i });
-    expect(promptfooLink).toHaveAttribute('href', 'https://promptfoo.dev');
-    expect(promptfooLink).toHaveClass('hero-highlight');
-
-    const codexSecurityLink = screen.getByRole('link', {
-      name: 'Codex Security',
-    });
-    expect(codexSecurityLink).toHaveAttribute(
-      'href',
-      'https://openai.com/index/codex-security-now-in-research-preview/',
-    );
-    expect(codexSecurityLink).toHaveClass('hero-highlight');
-
     expect(container.querySelector('.hero-tagline')).toHaveTextContent(
-      "I'm a Member of the Technical Staff at OpenAI, working on Promptfoo and Codex Security.",
+      'Desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência em backend, arquitetura de sistemas, cloud computing e liderança técnica.',
     );
-    expect(container.querySelector('.hero-summary')).toHaveTextContent(
-      'I help secure AI systems and use AI to find software vulnerabilities. I co-founded Promptfoo before it joined OpenAI in 2026.',
+  });
+
+  it('ships both portraits with the person as their accessible name', () => {
+    const { container } = render(<Hero />);
+
+    // The small one is for phones, the figure for wider screens; CSS shows one.
+    expect(container.querySelector('.hero-avatar img')).toHaveAttribute(
+      'alt',
+      profile.name,
+    );
+    expect(container.querySelector('.hero-portrait img')).toHaveAttribute(
+      'alt',
+      profile.name,
     );
   });
 
@@ -51,23 +48,39 @@ describe('Hero', () => {
 
     expect(container.querySelector('.telemetry')).not.toBeInTheDocument();
     expect(container.querySelector('.hero-chips')).not.toBeInTheDocument();
-    expect(screen.queryByText('Countries visited')).not.toBeInTheDocument();
-    expect(screen.queryByText('Computing since')).not.toBeInTheDocument();
-    expect(screen.queryByText('Based in')).not.toBeInTheDocument();
-    expect(screen.queryByText('YC Alum')).not.toBeInTheDocument();
-    expect(screen.queryByText('Stanford ICME')).not.toBeInTheDocument();
   });
 
-  it('renders one primary CTA and one quieter resume link', () => {
+  it('leads with the quote request and WhatsApp as the two calls to action', () => {
     render(<Hero />);
 
-    const aboutButton = screen.getByRole('link', { name: /about me/i });
-    expect(aboutButton).toHaveAttribute('href', '/about');
-    expect(aboutButton).toHaveClass('button');
+    const quote = screen.getByRole('link', { name: 'Pedir orçamento' });
+    // jsdom never applies `trailingSlash`, so the slash is normalised away.
+    expect(quote.getAttribute('href')).toMatch(
+      /^\/trabalhe-comigo\/?#orcamento$/,
+    );
+    expect(quote).toHaveClass('button');
+    expect(quote).not.toHaveClass('button-secondary');
 
-    const resumeButton = screen.getByRole('link', { name: /view resume/i });
-    expect(resumeButton).toHaveAttribute('href', '/resume');
-    expect(resumeButton).toHaveClass('hero-resume-link');
-    expect(resumeButton).not.toHaveClass('button');
+    const whatsapp = screen.getByRole('link', { name: /whatsapp/i });
+    expect(whatsapp.getAttribute('href')).toMatch(
+      new RegExp(`^https://wa\\.me/${WHATSAPP_NUMBER}\\?text=`),
+    );
+    expect(whatsapp).toHaveClass('button', 'button-secondary');
+    expect(whatsapp).toHaveAttribute('target', '_blank');
+    expect(whatsapp).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(whatsapp).toHaveTextContent('(abre em nova aba)');
+  });
+
+  it('keeps the about and résumé links quieter than the actions', () => {
+    render(<Hero />);
+
+    const about = screen.getByRole('link', { name: 'Sobre mim' });
+    expect(about).toHaveAttribute('href', '/about');
+    expect(about).not.toHaveClass('button');
+
+    const resume = screen.getByRole('link', { name: 'Currículo' });
+    expect(resume).toHaveAttribute('href', '/resume');
+    expect(resume).toHaveClass('hero-resume-link');
+    expect(resume).not.toHaveClass('button');
   });
 });

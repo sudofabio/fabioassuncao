@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import contact from '@/data/contact';
+import { profileLinks } from '@/data/contact';
 import profile from '@/data/profile.json';
 import courses from '@/data/resume/courses';
 import degrees from '@/data/resume/degrees';
@@ -39,6 +39,67 @@ const ISO8601 =
   /^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$/;
 
 const resume = buildJsonResume();
+
+/**
+ * Builds the document against substituted data modules. The published
+ * résumé carries no education, courses, or anchored summaries yet, so those
+ * mappings are exercised against fixtures instead of being left untested.
+ */
+async function buildWith(mocks: {
+  degrees?: unknown[];
+  courses?: unknown[];
+  work?: unknown[];
+}) {
+  vi.resetModules();
+  if (mocks.degrees) {
+    vi.doMock('@/data/resume/degrees', () => ({ default: mocks.degrees }));
+  }
+  if (mocks.courses) {
+    vi.doMock('@/data/resume/courses', () => ({ default: mocks.courses }));
+  }
+  if (mocks.work) {
+    vi.doMock('@/data/resume/work', () => ({ default: mocks.work }));
+  }
+  try {
+    const module = await import('@/lib/resumeJson');
+    return module.buildJsonResume();
+  } finally {
+    vi.doUnmock('@/data/resume/degrees');
+    vi.doUnmock('@/data/resume/courses');
+    vi.doUnmock('@/data/resume/work');
+    vi.resetModules();
+  }
+}
+
+const FIXTURE_DEGREES = [
+  {
+    school: 'Stanford University',
+    degree: 'M.S. Computational and Mathematical Engineering (ICME)',
+    link: 'https://stanford.edu',
+    year: 2016,
+  },
+  {
+    school: 'University at Buffalo',
+    degree: 'B.S. Electrical Engineering, Computer Engineering',
+    link: 'https://buffalo.edu',
+    year: 2012,
+  },
+];
+
+const FIXTURE_COURSES = [
+  {
+    title: 'Convex Optimization',
+    number: 'EE 364a',
+    link: 'https://stanford.edu/class/ee364a/',
+    university: 'Stanford University',
+  },
+  {
+    title: 'Machine Learning',
+    number: 'CS 229',
+    link: 'https://cs229.stanford.edu/',
+    university: 'Stanford University',
+  },
+];
 
 describe('toPlainText', () => {
   it('keeps anchor text and drops the markup', () => {
@@ -122,55 +183,114 @@ describe('json resume document', () => {
     });
   });
 
-  it('splits the display city into city and region without asserting a country', () => {
-    expect(resume.basics.location).toEqual({ city: 'New York', region: 'NY' });
+  // The profile states a country, not a city, so nothing is invented.
+  it('states the country as an ISO code and no city', () => {
+    expect(resume.basics.location).toEqual({
+      countryCode: profile.countryCode,
+    });
+    expect(resume.basics.location).toEqual({ countryCode: 'BR' });
   });
 
-  it('lists every non-email contact as a profile with its handle', () => {
-    const socials = contact.filter((item) => !item.link.startsWith('mailto:'));
-
-    expect(resume.basics.profiles).toHaveLength(socials.length);
+  it('lists every public profile, and no conversation channel, with its handle', () => {
+    expect(resume.basics.profiles).toHaveLength(profileLinks.length);
     expect(resume.basics.profiles).toContainEqual({
       network: 'GitHub',
-      username: 'mldangelo',
-      url: 'https://github.com/mldangelo',
+      username: 'fabioassuncao',
+      url: 'https://github.com/fabioassuncao',
     });
     expect(resume.basics.profiles).toContainEqual({
       network: 'LinkedIn',
-      username: 'michaelldangelo',
-      url: 'https://www.linkedin.com/in/michaelldangelo',
+      username: 'fabioassuncao',
+      url: 'https://www.linkedin.com/in/fabioassuncao',
     });
+    const networks = resume.basics.profiles.map((entry) => entry.network);
+    expect(networks).not.toContain('WhatsApp');
+    expect(networks).not.toContain('E-mail');
     expect(
       resume.basics.profiles.every((entry) => entry.username.length > 0),
     ).toBe(true);
   });
 
   it('carries every position in résumé order', () => {
-    expect(resume.work.map((position) => position.name)).toEqual(
-      sortPositions(work).map((position) => position.name),
+    expect(resume.work.map((position) => position.position)).toEqual(
+      sortPositions(work).map((position) => position.position),
     );
-    expect(resume.work[0]).toMatchObject({
-      name: 'OpenAI',
-      position: work[0].position,
-      url: work[0].url,
-      startDate: work[0].startDate,
-    });
+  });
+
+  // Employers are not published until confirmed, and the document must not
+  // carry empty name/url keys in their place.
+  it('omits name and url for a role with no published employer', () => {
+    for (const [index, position] of sortPositions(work).entries()) {
+      if (position.name === undefined) {
+        expect(resume.work[index]).not.toHaveProperty('name');
+      }
+      if (position.url === undefined) {
+        expect(resume.work[index]).not.toHaveProperty('url');
+      }
+    }
+  });
+
+  // A year-only record must not gain a month on its way into the document.
+  it('publishes year-only dates as YYYY', () => {
+    for (const [index, position] of sortPositions(work).entries()) {
+      if (position.datePrecision !== 'year') continue;
+      expect(resume.work[index].startDate).toBe(position.startDate.slice(0, 4));
+      if (position.endDate) {
+        expect(resume.work[index].endDate).toBe(position.endDate.slice(0, 4));
+      }
+    }
   });
 
   it('omits endDate for the current role rather than inventing one', () => {
     expect(resume.work[0]).not.toHaveProperty('endDate');
-    expect(resume.work[1].endDate).toBe('2026-03-09');
+    expect(resume.work[0].startDate).toBe('2022');
+    expect(resume.work[1]).toMatchObject({
+      startDate: '2019',
+      endDate: '2022',
+    });
   });
 
-  it('reduces summaries carrying inline anchors to plain text', () => {
-    expect(resume.work[0].summary).toBe(
-      'Building Promptfoo and Codex Security at OpenAI, with a focus on securing AI systems and applying AI to software security.',
-    );
+  it('keeps day precision and employer fields for a fully dated role', async () => {
+    const built = await buildWith({
+      work: [
+        {
+          name: 'Acme',
+          position: 'Engineer',
+          url: 'https://acme.example',
+          startDate: '2020-03-15',
+          endDate: '2023-06-30',
+        },
+      ],
+    });
 
-    const arthena = resume.work.find((position) => position.name === 'Arthena');
-    expect(arthena?.summary).toContain(
-      'backed by Anthemis, Foundation Capital, and Y Combinator',
+    expect(built.work).toEqual([
+      {
+        name: 'Acme',
+        position: 'Engineer',
+        url: 'https://acme.example',
+        startDate: '2020-03-15',
+        endDate: '2023-06-30',
+      },
+    ]);
+  });
+
+  it('reduces summaries carrying inline anchors to plain text', async () => {
+    const built = await buildWith({
+      work: [
+        {
+          position: 'Engineer',
+          startDate: '2020-01-01',
+          summary: `Building <a href='https://example.com'>the platform</a>
+    at scale, with **care**.`,
+          highlights: ['Shipped [the API](https://example.com/api).'],
+        },
+      ],
+    });
+
+    expect(built.work[0].summary).toBe(
+      'Building the platform at scale, with care.',
     );
+    expect(built.work[0].highlights).toEqual(['Shipped the API.']);
   });
 
   it('leaves no markup or uncollapsed whitespace anywhere in the prose', () => {
@@ -197,16 +317,23 @@ describe('json resume document', () => {
     }
   });
 
-  it('splits the degree string into studyType and area', () => {
+  it('carries exactly the published education', () => {
     expect(resume.education).toHaveLength(degrees.length);
-    expect(resume.education[0]).toMatchObject({
+  });
+
+  it('splits the degree string into studyType and area', async () => {
+    const education = (
+      await buildWith({ degrees: FIXTURE_DEGREES, courses: FIXTURE_COURSES })
+    ).education;
+
+    expect(education[0]).toMatchObject({
       institution: 'Stanford University',
       url: 'https://stanford.edu',
       studyType: 'M.S.',
       area: 'Computational and Mathematical Engineering (ICME)',
       endDate: '2016',
     });
-    expect(resume.education[1]).toMatchObject({
+    expect(education[1]).toMatchObject({
       institution: 'University at Buffalo',
       studyType: 'B.S.',
       area: 'Electrical Engineering, Computer Engineering',
@@ -214,14 +341,16 @@ describe('json resume document', () => {
     });
   });
 
-  it('files coursework under the school it was taken at', () => {
-    expect(resume.education[0].courses).toHaveLength(courses.length);
-    expect(resume.education[0].courses).toContain(
-      'EE 364a - Convex Optimization',
-    );
-    // Every course in the data is a Stanford course, so Buffalo carries none
+  it('files coursework under the school it was taken at', async () => {
+    const education = (
+      await buildWith({ degrees: FIXTURE_DEGREES, courses: FIXTURE_COURSES })
+    ).education;
+
+    expect(education[0].courses).toHaveLength(FIXTURE_COURSES.length);
+    expect(education[0].courses).toContain('EE 364a - Convex Optimization');
+    // Every fixture course is a Stanford course, so Buffalo carries none
     // rather than an empty array.
-    expect(resume.education[1]).not.toHaveProperty('courses');
+    expect(education[1]).not.toHaveProperty('courses');
   });
 
   it('files each course under exactly one degree', async () => {
@@ -234,34 +363,26 @@ describe('json resume document', () => {
       resume.education.flatMap((entry) => entry.courses ?? []),
     ).toHaveLength(courses.length);
 
-    vi.resetModules();
-    vi.doMock('@/data/resume/degrees', () => ({
-      default: [
-        ...degrees,
-        {
-          school: 'Stanford University Graduate School of Business',
-          degree: 'M.B.A.',
-          link: 'https://gsb.stanford.edu',
-          year: 2018,
-        },
-      ],
-    }));
+    const education = (
+      await buildWith({
+        degrees: [
+          ...FIXTURE_DEGREES,
+          {
+            school: 'Stanford University Graduate School of Business',
+            degree: 'M.B.A.',
+            link: 'https://gsb.stanford.edu',
+            year: 2018,
+          },
+        ],
+        courses: FIXTURE_COURSES,
+      })
+    ).education;
 
-    try {
-      const { buildJsonResume: buildWithSecondSchool } = await import(
-        '@/lib/resumeJson'
-      );
-      const education = buildWithSecondSchool().education;
-
-      expect(education).toHaveLength(degrees.length + 1);
-      expect(education.flatMap((entry) => entry.courses ?? [])).toHaveLength(
-        courses.length,
-      );
-      expect(education.at(-1)).not.toHaveProperty('courses');
-    } finally {
-      vi.doUnmock('@/data/resume/degrees');
-      vi.resetModules();
-    }
+    expect(education).toHaveLength(FIXTURE_DEGREES.length + 1);
+    expect(education.flatMap((entry) => entry.courses ?? [])).toHaveLength(
+      FIXTURE_COURSES.length,
+    );
+    expect(education.at(-1)).not.toHaveProperty('courses');
   });
 
   it('groups skills by category with keywords ordered by competency', () => {

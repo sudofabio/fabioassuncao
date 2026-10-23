@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import contact from '@/data/contact';
+import degrees from '@/data/resume/degrees';
+import work from '@/data/resume/work';
+import { currentPosition } from '@/lib/career';
 import type { Post } from '@/lib/posts';
 import {
   BLOG_ID,
@@ -11,9 +15,12 @@ import {
   buildGraph,
   collectionPageNode,
   HOME_URL,
+  KNOWS_ABOUT,
   PERSON_ID,
   personNode,
   profilePageNode,
+  SITE_LANGUAGE,
+  talkEventNode,
   WEBSITE_ID,
   webPageNode,
   websiteNode,
@@ -88,13 +95,15 @@ describe('personNode', () => {
     const node = personNode();
     expect(node['@type']).toBe('Person');
     expect(node['@id']).toBe(PERSON_ID);
+    // Posts and talks reference this exact id as their author.
+    expect(PERSON_ID).toBe('https://fabioassuncao.com/#person');
   });
 
   it('uses author name and split given/family names', () => {
     const node = personNode();
     expect(node.name).toBe(AUTHOR_NAME);
-    expect(node.givenName).toBe('Michael');
-    expect(node.familyName).toBe("D'Angelo");
+    expect(node.givenName).toBe('Fábio');
+    expect(node.familyName).toBe('Assunção');
   });
 
   it('exposes an ImageObject and social sameAs links', () => {
@@ -108,13 +117,48 @@ describe('personNode', () => {
     expect((node.sameAs as string[]).length).toBeGreaterThan(0);
   });
 
-  it('includes worksFor and alumniOf', () => {
+  it('lists only public profiles in sameAs, never conversation channels', () => {
+    const sameAs = personNode().sameAs as string[];
+
+    expect(sameAs).toEqual(
+      expect.arrayContaining([
+        'https://github.com/fabioassuncao',
+        'https://www.linkedin.com/in/fabioassuncao',
+        'https://x.com/fabioassuncaohq',
+        'https://www.instagram.com/fabioassuncaohq',
+        'https://www.youtube.com/@fabioassuncaohq',
+        'https://www.tiktok.com/@fabioassuncaohq',
+      ]),
+    );
+    expect(sameAs.some((url) => url.includes('wa.me'))).toBe(false);
+    expect(sameAs.some((url) => url.startsWith('mailto:'))).toBe(false);
+    // Every published profile, and nothing else.
+    expect(sameAs).toHaveLength(
+      contact.filter((item) => !['email', 'whatsapp'].includes(item.id)).length,
+    );
+  });
+
+  it('states the role, topics, public email, and country', () => {
     const node = personNode();
-    const worksFor = node.worksFor as Record<string, unknown>;
-    expect(worksFor['@type']).toBe('Organization');
-    expect(worksFor.name).toBe('OpenAI');
-    const alumniOf = node.alumniOf as Record<string, unknown>[];
-    expect(alumniOf[0]['@type']).toBe('CollegeOrUniversity');
+
+    expect(node.jobTitle).toBe('Desenvolvedor de software e Tech Lead');
+    expect(node.email).toBe('contato@fabioassuncao.com');
+    expect(node.knowsAbout).toEqual([...KNOWS_ABOUT]);
+    expect(KNOWS_ABOUT.length).toBeGreaterThanOrEqual(5);
+    expect(KNOWS_ABOUT.length).toBeLessThanOrEqual(10);
+    expect(node.address).toEqual({
+      '@type': 'PostalAddress',
+      addressCountry: 'BR',
+    });
+  });
+
+  it('publishes no employer or school the data does not name', () => {
+    const node = personNode();
+
+    expect(currentPosition(work)?.name).toBeUndefined();
+    expect(node).not.toHaveProperty('worksFor');
+    expect(degrees).toHaveLength(0);
+    expect(node).not.toHaveProperty('alumniOf');
   });
 });
 
@@ -269,5 +313,50 @@ describe('site image metadata', () => {
     );
 
     expect(SITE_IMAGE_DIMENSIONS).toEqual(readJpegDimensions(imagePath));
+  });
+});
+
+describe('talkEventNode', () => {
+  const url = `${SITE_URL}/presentations/example/`;
+  const base = {
+    url,
+    name: 'Uma palestra',
+    description: 'Resumo.',
+    date: '2026-07-10',
+    event: 'Evento',
+    venue: 'Auditório',
+    city: 'Cidade/UF',
+  };
+
+  it('is an Event performed by the Person at a Brazilian venue', () => {
+    const node = talkEventNode(base);
+
+    expect(node['@type']).toBe('Event');
+    expect(node['@id']).toBe(`${url}#event`);
+    expect(node.startDate).toBe('2026-07-10');
+    expect(node.inLanguage).toBe(SITE_LANGUAGE);
+    expect(node.performer).toEqual({ '@id': PERSON_ID });
+    expect(node.location).toEqual({
+      '@type': 'Place',
+      name: 'Auditório',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Cidade/UF',
+        addressCountry: 'BR',
+      },
+    });
+    expect(node).not.toHaveProperty('workPerformed');
+  });
+
+  it('attaches the slides as a PDF authored by the Person', () => {
+    const slidesUrl = `${SITE_URL}/presentations/example/slides.pdf`;
+    const node = talkEventNode({ ...base, slidesUrl });
+
+    expect(node.workPerformed).toMatchObject({
+      '@type': 'PresentationDigitalDocument',
+      url: slidesUrl,
+      author: { '@id': PERSON_ID },
+      encodingFormat: 'application/pdf',
+    });
   });
 });

@@ -8,56 +8,55 @@ describe('about data', () => {
     expect(aboutMarkdown.length).toBeGreaterThan(0);
   });
 
-  it('contains the intro section', () => {
-    expect(aboutMarkdown).toContain('# Intro');
-    expect(aboutMarkdown).toContain('OpenAI');
-    expect(aboutMarkdown).toContain('Promptfoo');
+  it('opens with the intro built on the speaker bio', () => {
+    expect(aboutMarkdown.startsWith('# Intro')).toBe(true);
+    expect(aboutMarkdown).toContain(
+      'Sou desenvolvedor de software, Tech Lead e empreendedor, com mais de 15 anos de experiência',
+    );
+    expect(aboutMarkdown).toContain(
+      'PHP, Go, Node.js/TypeScript, Python e Rust',
+    );
   });
 
-  it('contains the history section', () => {
-    expect(aboutMarkdown).toContain('# Some History');
-    expect(aboutMarkdown).toContain('MS-DOS');
+  it('mentions the company in one line, as a bio fact only', () => {
+    expect(aboutMarkdown.match(/Codions/g)).toHaveLength(1);
   });
 
-  it('contains the likes section', () => {
-    expect(aboutMarkdown).toContain('# I Like');
-    expect(aboutMarkdown).toContain('Running');
-    expect(aboutMarkdown).toContain('Skiing');
+  it('contains the career log since 2008', () => {
+    expect(aboutMarkdown).toContain('# Desde 2008');
+    expect(aboutMarkdown).toContain('De 2008 a 2010');
+    expect(aboutMarkdown).toContain('Desde 2022');
   });
 
-  it('contains the travel section', () => {
-    expect(aboutMarkdown).toContain('# Travel / Geography');
-    expect(aboutMarkdown).toContain('Buffalo, New York');
+  it('carries none of the upstream template author content', () => {
+    for (const upstream of [
+      // Upstream employer names, spelled indirectly so the audit search
+      // (docs/adapting-guide.md) keeps matching only the attribution.
+      ['Open', 'AI'].join(''),
+      ['Prompt', 'foo'].join(''),
+      'MS-DOS',
+      'Buffalo',
+      '# Some History',
+      '# Websites from People I Admire',
+    ]) {
+      expect(aboutMarkdown).not.toContain(upstream);
+    }
   });
 
-  it('contains the fun facts section', () => {
-    expect(aboutMarkdown).toContain('# Fun Facts');
-  });
+  it('links only to on-site routes with the canonical trailing slash', () => {
+    const links = [...aboutMarkdown.matchAll(/\]\(([^)]+)\)/g)].map(
+      (match) => match[1],
+    );
 
-  it('contains the dreams section', () => {
-    expect(aboutMarkdown).toContain('# I Dream Of');
-    expect(aboutMarkdown).toContain('Staying curious');
-  });
-
-  it('contains the admired websites section', () => {
-    expect(aboutMarkdown).toContain('# Websites from People I Admire');
-  });
-
-  it('contains valid markdown links', () => {
-    // Check for markdown link format [text](url)
-    const linkRegex = /\[.+?\]\(.+?\)/g;
-    const links = aboutMarkdown.match(linkRegex);
-
-    expect(links).not.toBeNull();
-    expect(links!.length).toBeGreaterThan(10);
+    expect(links.length).toBeGreaterThan(0);
+    for (const href of links) {
+      expect(href).toMatch(/^\/[a-z0-9/-]*\/$/);
+    }
   });
 
   it('contains properly formatted headers', () => {
-    // Check for markdown headers
-    const headerRegex = /^#+ .+$/gm;
-    const headers = aboutMarkdown.match(headerRegex);
+    const headers = aboutMarkdown.match(/^#+ .+$/gm);
 
-    expect(headers).not.toBeNull();
-    expect(headers!.length).toBeGreaterThan(5);
+    expect(headers).toEqual(['# Intro', '# Desde 2008']);
   });
 });

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import contact from '@/data/contact';
@@ -176,15 +176,21 @@ describe('print: screen chrome', () => {
 
 describe('print: resume link data', () => {
   // Job and degree links are printed as text; course links remain PDF
-  // annotations. All three need absolute destinations.
+  // annotations. All three need absolute destinations. A company link is
+  // optional while the employer is unpublished.
+  const companyLinks = work
+    .map((job) => job.url)
+    .filter((url): url is string => url !== undefined);
   const links = [
-    ...work.map((job) => job.url),
+    ...companyLinks,
     ...degrees.map((degree) => degree.link),
     ...courses.map((course) => course.link),
   ];
 
   it('gives every company, school and course an absolute http(s) URL', () => {
-    expect(links.length).toBe(work.length + degrees.length + courses.length);
+    expect(links.length).toBe(
+      companyLinks.length + degrees.length + courses.length,
+    );
     for (const link of links) {
       const url = new URL(link);
 
@@ -201,51 +207,55 @@ describe('print: resume link data', () => {
     }
   });
 
-  it.each([
-    ['Arthena', 'https://www.ycombinator.com/companies/arthena'],
-    [
-      'Planetary Resources',
-      'https://en.wikipedia.org/wiki/Planetary_Resources',
-    ],
-  ])('uses a stable destination for retired company %s', (name, expected) => {
-    expect(work.find((position) => position.name === name)?.url).toBe(expected);
-  });
+  // Only an identifying link that is actually rendered gets printed; a role
+  // with no published employer must not leave an empty `.job-company` anchor
+  // for the reveal rule to print as a bare URL.
+  it('renders a company anchor only for roles with a published employer', () => {
+    const { container } = render(<ResumePage />);
 
-  it.each([
-    [
-      'CME 302',
-      'Numerical Linear Algebra',
-      'https://bulletin.stanford.edu/courses/1057521',
-    ],
-    [
-      'CME 306',
-      'Computational Methods of Applied Mathematics',
-      'https://bulletin.stanford.edu/courses/1174062',
-    ],
-    [
-      'CME 308',
-      'Stochastic Methods in Engineering',
-      'https://web.stanford.edu/class/cme308/',
-    ],
-    [
-      'CS 265',
-      'Randomized Algorithms and Probabilistic Analysis',
-      'https://web.stanford.edu/class/cs265/',
-    ],
-  ])('keeps %s aligned with Stanford records', (number, title, link) => {
-    expect(courses.find((course) => course.number === number)).toMatchObject({
-      title,
-      link,
-    });
-  });
-
-  it('uses canonical HTTPS company URLs where the site publishes one', () => {
-    expect(work.find((position) => position.name === 'Smile ID')?.url).toBe(
-      'https://smile.id',
+    expect(container.querySelectorAll('a.job-company')).toHaveLength(
+      work.filter((job) => job.name && job.url).length,
     );
+    for (const anchor of container.querySelectorAll('a.job-company')) {
+      expect(anchor.textContent?.trim()).not.toBe('');
+    }
+  });
+
+  it('uses HTTPS for every company URL the site publishes', () => {
+    for (const url of companyLinks) {
+      expect(new URL(url).protocol).toBe('https:');
+    }
+  });
+});
+
+describe('print: sections without data', () => {
+  // Empty education or coursework is left out of the page and of its section
+  // index, rather than printed as a heading with nothing under it.
+  it('omits empty sections and their index links', () => {
+    const { container } = render(<ResumePage />);
+    const hrefs = [...container.querySelectorAll('.resume-nav a')].map((a) =>
+      a.getAttribute('href'),
+    );
+
+    expect(container.querySelector('#education') !== null).toBe(
+      degrees.length > 0,
+    );
+    expect(hrefs.includes('#education')).toBe(degrees.length > 0);
+    expect(container.querySelector('#courses') !== null).toBe(
+      courses.length > 0,
+    );
+    expect(hrefs.includes('#courses')).toBe(courses.length > 0);
+    expect(hrefs).toEqual(
+      expect.arrayContaining(['#experience', '#skills', '#references']),
+    );
+  });
+
+  it('titles the page in Portuguese', () => {
+    render(<ResumePage />);
+
     expect(
-      work.find((position) => position.name === 'Skeptical Investments')?.url,
-    ).toBe('https://skepticalinvestments.biz');
+      screen.getByRole('heading', { level: 1, name: 'Currículo' }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -264,11 +274,11 @@ describe('print: contact block', () => {
   it('carries location, site, email, GitHub and LinkedIn', () => {
     const text = contactBlock().textContent ?? '';
 
-    expect(text).toContain(profile.currentCity);
+    expect(text).toContain(profile.location);
     expect(text).toContain(profile.email);
-    expect(text).toContain('mldangelo.com');
-    expect(text).toContain('github.com/mldangelo');
-    expect(text).toContain('linkedin.com/in/');
+    expect(text).toContain('fabioassuncao.com');
+    expect(text).toContain('github.com/fabioassuncao');
+    expect(text).toContain('linkedin.com/in/fabioassuncao');
   });
 
   it('links to the same destinations the footer does', () => {

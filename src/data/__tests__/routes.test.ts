@@ -41,6 +41,9 @@ describe('routes', () => {
     expect(paths).toContain('/resume');
     expect(paths).toContain('/projects');
     expect(paths).toContain('/contact');
+    expect(paths).toContain('/presentations');
+    expect(paths).toContain('/trabalhe-comigo');
+    expect(paths).toContain('/links');
   });
 
   it('has unique paths', () => {
@@ -70,7 +73,8 @@ describe('routes', () => {
       .filter((route) => route.primary === false)
       .map((route) => route.path);
 
-    expect(secondaryPaths).toEqual(['/stats']);
+    // The bio page is reached from social profiles, not from the header.
+    expect(secondaryPaths).toEqual(['/links']);
   });
 
   /**
@@ -88,6 +92,8 @@ describe('routes', () => {
       '/resume',
       '/projects',
       '/writing',
+      '/presentations',
+      '/trabalhe-comigo',
       '/contact',
     ]);
   });

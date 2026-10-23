@@ -14,15 +14,31 @@ describe('work data', () => {
 
   it('each position has required properties', () => {
     for (const job of work) {
-      expect(job).toHaveProperty('name');
       expect(job).toHaveProperty('position');
-      expect(job).toHaveProperty('url');
       expect(job).toHaveProperty('startDate');
 
-      expect(typeof job.name).toBe('string');
       expect(typeof job.position).toBe('string');
-      expect(typeof job.url).toBe('string');
+      expect(job.position.trim().length).toBeGreaterThan(0);
       expect(typeof job.startDate).toBe('string');
+    }
+  });
+
+  // The employer is optional until it is confirmed for publication, but a
+  // link must always have a name to hang on.
+  it('never publishes a company link without a company name', () => {
+    for (const job of work) {
+      if (job.url !== undefined) {
+        expect(typeof job.name).toBe('string');
+      }
+    }
+  });
+
+  it('stores year-only records as the first day of the year', () => {
+    for (const job of work) {
+      if (job.datePrecision === 'year') {
+        expect(job.startDate.slice(4)).toBe('-01-01');
+        if (job.endDate) expect(job.endDate.slice(4)).toBe('-01-01');
+      }
     }
   });
 
@@ -40,7 +56,7 @@ describe('work data', () => {
     const urlRegex = /^https?:\/\/.+/;
 
     for (const job of work) {
-      expect(job.url).toMatch(urlRegex);
+      if (job.url !== undefined) expect(job.url).toMatch(urlRegex);
     }
   });
 
@@ -75,9 +91,11 @@ describe('work data', () => {
     expect(uniqueYears.size).toBeGreaterThan(1);
   });
 
-  it('company names are non-empty', () => {
+  it('company names are non-empty when present', () => {
     for (const job of work) {
-      expect(job.name.trim().length).toBeGreaterThan(0);
+      if (job.name !== undefined) {
+        expect(job.name.trim().length).toBeGreaterThan(0);
+      }
     }
   });
 

@@ -30,7 +30,7 @@ describe('resume JSON affordance', () => {
 
     const row = container.querySelector('.resume-header-row');
     expect(row).not.toBeNull();
-    expect(row?.querySelector('h1')).toHaveTextContent('Resume');
+    expect(row?.querySelector('h1')).toHaveTextContent('Currículo');
     expect(row?.contains(link)).toBe(true);
   });
 });

@@ -9,17 +9,21 @@ const stripTrailingSlash = (href: string | null | undefined) =>
   href?.replace(/\/$/, '');
 
 describe('writing information architecture', () => {
-  it('surfaces the three newest dated items on the homepage', () => {
+  it('surfaces up to the three newest dated items on the homepage', () => {
     const expected = getWritingItems()
       .filter((item) => item.date)
       .slice(0, 3);
 
-    const { container } = render(<HomePage />);
-    const section = screen.getByRole('region', { name: 'Notes & essays' });
-    const cards = container.querySelectorAll('.home-writing-item');
-    const viewAll = within(section).getByRole('link', { name: 'All writing' });
+    render(<HomePage />);
+    const section = screen.getByRole('region', { name: 'Artigos recentes' });
+    // Talks and projects share the card styling, so count within the section.
+    const cards = section.querySelectorAll('.home-writing-item');
+    const viewAll = within(section).getByRole('link', {
+      name: /todos os artigos/i,
+    });
 
-    expect(cards).toHaveLength(3);
+    expect(expected.length).toBeGreaterThan(0);
+    expect(cards).toHaveLength(expected.length);
     expect(
       [...cards].map((card) => card.querySelector('h3')?.textContent),
     ).toEqual(expected.map((item) => item.title));
@@ -29,20 +33,25 @@ describe('writing information architecture', () => {
   });
 
   it('groups owned essays, external articles, and guides under real headings', () => {
+    const items = getWritingItems();
     const { container } = render(<WritingPage />);
 
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Essays on this site' }),
+      screen.getByRole('heading', { level: 2, name: 'Neste site' }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: 'Selected writing elsewhere',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: 'Guides' }),
-    ).toBeInTheDocument();
+    // An empty group is left out rather than shipped as a bare heading.
+    const groups = [
+      ['Em outros lugares', items.some((item) => item.isExternal && item.date)],
+      ['Guias', items.some((item) => item.isExternal && !item.date)],
+    ] as const;
+    for (const [name, hasItems] of groups) {
+      const heading = screen.queryByRole('heading', { level: 2, name });
+      if (hasItems) {
+        expect(heading).toBeInTheDocument();
+      } else {
+        expect(heading).not.toBeInTheDocument();
+      }
+    }
 
     expect(container.querySelectorAll('.writing-item h3')).toHaveLength(
       getWritingItems().length,
@@ -82,8 +91,22 @@ describe('writing information architecture', () => {
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       expect(link.querySelector('.sr-only')).toHaveTextContent(
-        'opens in a new tab',
+        'abre em nova aba',
       );
     });
+  });
+
+  it('follows writing with talks and highlighted projects on the homepage', () => {
+    render(<HomePage />);
+
+    const talks = screen.getByRole('region', { name: 'Palestras' });
+    expect(
+      within(talks).getByRole('link', {
+        name: /Além do código: Inteligência artificial e o novo desenvolvedor/,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: 'Projetos em destaque' }),
+    ).toBeInTheDocument();
   });
 });

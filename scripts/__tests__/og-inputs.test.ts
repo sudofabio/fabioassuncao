@@ -130,7 +130,7 @@ describe('share card inputs', () => {
   });
 
   it('formats a date without drifting a day west of Greenwich', () => {
-    expect(formatCardDate('2026-01-08')).toBe('January 8, 2026');
+    expect(formatCardDate('2026-01-08')).toBe('8 de janeiro de 2026');
   });
 
   it('carries the title and description of its post', () => {
@@ -144,9 +144,9 @@ describe('share card inputs', () => {
   it('measures a readout for every card', () => {
     for (const card of cards) {
       expect(card.readout.map((cell) => cell.label)).toEqual([
-        'Words',
-        'Unique external links',
-        'Reading time',
+        'Palavras',
+        'Links externos',
+        'Tempo de leitura',
       ]);
       for (const cell of card.readout) {
         expect(cell.value).toMatch(/\d/);

@@ -3,9 +3,10 @@ import { describe, expect, it } from 'vitest';
 import degrees from '../resume/degrees';
 
 describe('degrees data', () => {
+  // Empty until the education history is supplied; the résumé then omits the
+  // section rather than rendering an empty heading.
   it('exports an array of degrees', () => {
     expect(Array.isArray(degrees)).toBe(true);
-    expect(degrees.length).toBeGreaterThan(0);
   });
 
   it('each degree has required properties', () => {

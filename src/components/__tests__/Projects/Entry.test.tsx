@@ -55,9 +55,9 @@ describe('Entry', () => {
     render(<Entry data={{ ...base, ongoing: true }} />);
 
     const dates = document.querySelector('.project-dates');
-    expect(dates).toHaveTextContent('Jul 2024');
+    expect(dates).toHaveTextContent('jul 2024');
     expect(dates?.querySelector('.daterange-present')).toHaveTextContent(
-      'Present',
+      'Atual',
     );
     expect(document.querySelector('.project-entry--live')).toBeInTheDocument();
   });
@@ -66,8 +66,8 @@ describe('Entry', () => {
     render(<Entry data={{ ...base, endDate: '2026-03-09' }} />);
 
     const dates = document.querySelector('.project-dates');
-    expect(dates).toHaveTextContent('Jul 2024');
-    expect(dates).toHaveTextContent('Mar 2026');
+    expect(dates).toHaveTextContent('jul 2024');
+    expect(dates).toHaveTextContent('mar 2026');
     expect(dates?.querySelector('.daterange-present')).not.toBeInTheDocument();
     expect(
       document.querySelector('.project-entry--live'),
@@ -77,7 +77,7 @@ describe('Entry', () => {
   it('speaks the range rather than running the two dates together', () => {
     render(<Entry data={{ ...base, endDate: '2026-03-09' }} />);
 
-    expect(screen.getByText('to')).toHaveClass('sr-only');
+    expect(screen.getByText('até')).toHaveClass('sr-only');
     expect(document.querySelector('.daterange-sep')).toHaveAttribute(
       'aria-hidden',
       'true',

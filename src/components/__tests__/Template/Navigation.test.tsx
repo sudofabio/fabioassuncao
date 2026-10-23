@@ -32,7 +32,7 @@ describe('Navigation', () => {
   it('renders the logo link to home', () => {
     render(<Navigation />);
     const logo = screen.getByRole('link', {
-      name: /michael d'angelo.*home/i,
+      name: /fábio assunção.*início/i,
     });
     expect(logo).toHaveAttribute('href', '/');
   });
@@ -41,20 +41,29 @@ describe('Navigation', () => {
     render(<Navigation />);
 
     expect(
-      screen.getByRole('navigation', { name: 'Primary' }),
+      screen.getByRole('navigation', { name: 'Principal' }),
     ).toBeInTheDocument();
   });
 
   it('renders only primary navigation routes', () => {
     render(<Navigation />);
 
-    expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /resume/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /writing/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /projects/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /^sobre$/i })).toBeInTheDocument();
     expect(
-      screen.queryByRole('link', { name: /stats/i }),
+      screen.getByRole('link', { name: /currículo/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /artigos/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /contato/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /projetos/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /palestras/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /trabalhe comigo/i }),
+    ).toBeInTheDocument();
+    // The bio page is a destination for social links, not navigation.
+    expect(
+      screen.queryByRole('link', { name: /^links$/i }),
     ).not.toBeInTheDocument();
   });
 
@@ -63,7 +72,7 @@ describe('Navigation', () => {
     render(<Navigation />);
 
     // About link should not be active
-    const aboutLink = screen.getByRole('link', { name: /about/i });
+    const aboutLink = screen.getByRole('link', { name: /^sobre$/i });
     expect(aboutLink).not.toHaveClass('active');
   });
 
@@ -71,7 +80,7 @@ describe('Navigation', () => {
     mockPathname.mockReturnValue('/about');
     render(<Navigation />);
 
-    const aboutLink = screen.getByRole('link', { name: /about/i });
+    const aboutLink = screen.getByRole('link', { name: /^sobre$/i });
     expect(aboutLink).toHaveClass('active');
     expect(aboutLink).toHaveAttribute('aria-current', 'page');
   });
@@ -80,7 +89,7 @@ describe('Navigation', () => {
     mockPathname.mockReturnValue('/resume/skills');
     render(<Navigation />);
 
-    const resumeLink = screen.getByRole('link', { name: /resume/i });
+    const resumeLink = screen.getByRole('link', { name: /currículo/i });
     expect(resumeLink).toHaveClass('active');
   });
 

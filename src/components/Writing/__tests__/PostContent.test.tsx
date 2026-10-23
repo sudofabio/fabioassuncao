@@ -5,11 +5,26 @@ import { describe, expect, it } from 'vitest';
 
 import { createHeadingId } from '@/lib/anchors';
 import { readPostImageSizes } from '@/lib/imageSize';
-import { getAllPosts, getPostBySlug } from '@/lib/posts';
+import { getAllPosts } from '@/lib/posts';
 
 import PostContent from '../PostContent';
 
 const OG_SIZE = { '/og.png': { width: 1200, height: 630 } };
+
+/**
+ * The heading set of a formerly published upstream post, kept as a fixture:
+ * these are the headings on which the renderer's slugifier and
+ * `createHeadingId` disagreed, so they pin both the canonical ids and the
+ * legacy aliases independently of what this site publishes.
+ */
+const LEGACY_HEADINGS_FIXTURE = [
+  '## Context',
+  '## On using `--dangerously-skip-permissions`',
+  '## Browser automation: `--chrome` for interaction, Playwright MCP for screenshots',
+  '## Plan Mode + writing plans to files',
+  '## CLAUDE.md + AGENTS.md',
+  '',
+].join('\n\n');
 
 function headingIds(html: string): string[] {
   return Array.from(html.matchAll(/<h[1-6][^>]*\bid="([^"]+)"/g), (m) => m[1]);
@@ -109,17 +124,12 @@ describe('PostContent figures', () => {
     expect(html).not.toContain('<figcaption');
   });
 
-  it('renders the published contributions qualification as a figure caption', () => {
-    const post = getPostBySlug('shipping-with-claude-code');
-    if (!post) {
-      throw new Error('expected shipping-with-claude-code to be published');
-    }
+  it('renders a single-quoted image title as a figure caption', () => {
+    const content =
+      "[![8,482 GitHub contributions](/og.png 'GitHub counts commits, pull requests, reviews, and issue activity here; I use the total as a rough proxy for output.')](https://github.com/)\n";
 
     const html = renderToStaticMarkup(
-      <PostContent
-        content={post.content}
-        imageSizes={readPostImageSizes(post.content)}
-      />,
+      <PostContent content={content} imageSizes={OG_SIZE} />,
     );
 
     expect(html).toContain(
@@ -443,17 +453,9 @@ describe('PostContent heading anchors', () => {
     }
   });
 
-  it('renders the real post whose headings the two schemes disagreed about', () => {
-    const post = getPostBySlug('shipping-with-claude-code');
-    if (!post) {
-      throw new Error('expected shipping-with-claude-code to be published');
-    }
-
+  it('renders the headings the two schemes disagreed about', () => {
     const html = renderToStaticMarkup(
-      <PostContent
-        content={post.content}
-        imageSizes={readPostImageSizes(post.content)}
-      />,
+      <PostContent content={LEGACY_HEADINGS_FIXTURE} />,
     );
 
     expect(headingIds(html)).toContain('on-using-dangerously-skip-permissions');
@@ -464,16 +466,8 @@ describe('PostContent heading anchors', () => {
   });
 
   it('keeps the previously published ids resolving as hidden aliases', () => {
-    const post = getPostBySlug('shipping-with-claude-code');
-    if (!post) {
-      throw new Error('expected shipping-with-claude-code to be published');
-    }
-
     const html = renderToStaticMarkup(
-      <PostContent
-        content={post.content}
-        imageSizes={readPostImageSizes(post.content)}
-      />,
+      <PostContent content={LEGACY_HEADINGS_FIXTURE} />,
     );
 
     expect(aliasIds(html).sort()).toEqual(

@@ -11,7 +11,7 @@ describe('isActiveRoute', () => {
 
   it('does not match a route-name prefix', () => {
     expect(isActiveRoute('/aboutness', '/about')).toBe(false);
-    expect(isActiveRoute('/stats-old', '/stats')).toBe(false);
+    expect(isActiveRoute('/writing-old', '/writing')).toBe(false);
   });
 
   it('only marks the homepage for the root route', () => {

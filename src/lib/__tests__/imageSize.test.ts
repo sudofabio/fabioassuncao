@@ -124,12 +124,14 @@ describe('readImageSize', () => {
     });
   });
 
-  it('reads the WebP encoding used by article assets', () => {
-    expect(
-      readImageSize(
-        '/images/writing/codex-desktop-app-post/codex-dark-mode-review.webp',
-      ),
-    ).toEqual({ width: 1166, height: 656 });
+  // Anchored to an image the site actually renders (the portrait), so the
+  // fixture cannot outlive the asset. WebP parsing is covered by the synthetic
+  // encodings above.
+  it('reads a committed JPEG the site renders from public/', () => {
+    expect(readImageSize('/images/me.jpg')).toEqual({
+      width: 460,
+      height: 460,
+    });
   });
 
   it.each([

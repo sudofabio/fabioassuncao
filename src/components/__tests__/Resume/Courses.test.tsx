@@ -30,7 +30,7 @@ describe('Courses', () => {
     render(<Courses data={mockCourses} />);
 
     expect(
-      screen.getByRole('heading', { name: /selected courses/i }),
+      screen.getByRole('heading', { name: /^cursos$/i }),
     ).toBeInTheDocument();
   });
 

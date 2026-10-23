@@ -11,20 +11,34 @@ describe('skills data', () => {
   it('each skill has required properties', () => {
     for (const skill of skills) {
       expect(skill).toHaveProperty('title');
-      expect(skill).toHaveProperty('competency');
       expect(skill).toHaveProperty('category');
 
       expect(typeof skill.title).toBe('string');
-      expect(typeof skill.competency).toBe('number');
+      expect(skill.title.trim().length).toBeGreaterThan(0);
+      expect(['number', 'undefined']).toContain(typeof skill.competency);
       expect(Array.isArray(skill.category)).toBe(true);
     }
   });
 
-  it('competency values are between 1 and 5', () => {
+  it('competency values, when declared, are integers between 1 and 5', () => {
     for (const skill of skills) {
+      if (skill.competency === undefined) continue;
+      expect(Number.isInteger(skill.competency)).toBe(true);
       expect(skill.competency).toBeGreaterThanOrEqual(1);
       expect(skill.competency).toBeLessThanOrEqual(5);
     }
+  });
+
+  // A partial set of levels would make the tier legend describe some tags
+  // and silently not others.
+  it('declares a level for every skill or for none', () => {
+    const declared = skills.filter((skill) => skill.competency !== undefined);
+    expect([0, skills.length]).toContain(declared.length);
+  });
+
+  it('has unique skill titles', () => {
+    const titles = skills.map((skill) => skill.title);
+    expect(new Set(titles).size).toBe(titles.length);
   });
 
   it('each skill has at least one category', () => {

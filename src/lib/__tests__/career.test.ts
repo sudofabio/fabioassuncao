@@ -25,7 +25,7 @@ function position(overrides: Partial<Position> = {}): Position {
 }
 
 function byName(positions: Position[]): string[] {
-  return positions.map((entry) => entry.name);
+  return positions.map((entry) => entry.name ?? '');
 }
 
 describe('sortPositions', () => {
@@ -184,16 +184,16 @@ describe('monthsBetween', () => {
 
 describe('formatDuration', () => {
   it.each([
-    [-5, '<1 mo', 'less than 1 month'],
-    [0, '<1 mo', 'less than 1 month'],
-    [1, '1 mo', '1 month'],
-    [11, '11 mo', '11 months'],
-    [12, '1 yr', '1 year'],
-    [13, '1 yr 1 mo', '1 year 1 month'],
-    [20, '1 yr 8 mo', '1 year 8 months'],
-    [26, '2 yr 2 mo', '2 years 2 months'],
-    [95, '7 yr 11 mo', '7 years 11 months'],
-    [96, '8 yr', '8 years'],
+    [-5, '<1 m', 'menos de 1 mês'],
+    [0, '<1 m', 'menos de 1 mês'],
+    [1, '1 m', '1 mês'],
+    [11, '11 m', '11 meses'],
+    [12, '1 a', '1 ano'],
+    [13, '1 a 1 m', '1 ano 1 mês'],
+    [20, '1 a 8 m', '1 ano 8 meses'],
+    [26, '2 a 2 m', '2 anos 2 meses'],
+    [95, '7 a 11 m', '7 anos 11 meses'],
+    [96, '8 a', '8 anos'],
   ])('renders %i months as "%s" and "%s"', (months, short, long) => {
     expect(formatDuration(months)).toBe(short);
     expect(formatDuration(months, true)).toBe(long);
@@ -201,6 +201,11 @@ describe('formatDuration', () => {
 });
 
 describe('careerSpanYears', () => {
+  it('measures the published career from its earliest role', () => {
+    // The timeline opens in 2008; at the pinned instant that is 18 whole years.
+    expect(careerSpanYears(work, NOW)).toBe(18);
+  });
+
   it('reads the earliest start regardless of array order', () => {
     const positions = [
       position({ startDate: '2020-01-01' }),

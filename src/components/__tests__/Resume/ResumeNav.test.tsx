@@ -14,23 +14,23 @@ describe('ResumeNav', () => {
   it('renders links to all resume sections', () => {
     render(<ResumeNav />);
 
-    expect(screen.getByRole('link', { name: /experience/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /experiência/i })).toHaveAttribute(
       'href',
       '#experience',
     );
-    expect(screen.getByRole('link', { name: /education/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /formação/i })).toHaveAttribute(
       'href',
       '#education',
     );
-    expect(screen.getByRole('link', { name: /skills/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /competências/i })).toHaveAttribute(
       'href',
       '#skills',
     );
-    expect(screen.getByRole('link', { name: /courses/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /cursos/i })).toHaveAttribute(
       'href',
       '#courses',
     );
-    expect(screen.getByRole('link', { name: /references/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /referências/i })).toHaveAttribute(
       'href',
       '#references',
     );
@@ -53,7 +53,26 @@ describe('ResumeNav', () => {
   it('experience link is active by default', () => {
     render(<ResumeNav />);
 
-    const experienceLink = screen.getByRole('link', { name: /experience/i });
+    const experienceLink = screen.getByRole('link', { name: /experiência/i });
     expect(experienceLink).toHaveClass('active');
+  });
+
+  it('names its landmark in Portuguese', () => {
+    render(<ResumeNav />);
+
+    expect(
+      screen.getByRole('navigation', { name: 'Seções do currículo' }),
+    ).toBeInTheDocument();
+  });
+
+  // Sections the page leaves out (empty education, no courses) must not be
+  // offered as in-page links that point at nothing.
+  it('omits the sections the page does not render', () => {
+    render(<ResumeNav omit={['education', 'courses']} />);
+
+    const hrefs = screen
+      .getAllByRole('link')
+      .map((link) => link.getAttribute('href'));
+    expect(hrefs).toEqual(['#experience', '#skills', '#references']);
   });
 });

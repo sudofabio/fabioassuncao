@@ -39,14 +39,14 @@ describe('Skills', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
 
     expect(
-      screen.getByRole('heading', { name: /skills/i }),
+      screen.getByRole('heading', { name: /competências/i }),
     ).toBeInTheDocument();
   });
 
-  it('renders category filter buttons including All', () => {
+  it('renders category filter buttons including Todas', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
 
-    expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Todas' })).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Languages' }),
     ).toBeInTheDocument();
@@ -97,19 +97,19 @@ describe('Skills', () => {
     );
   });
 
-  it('marks All as pressed on first paint, when everything is showing', () => {
+  it('marks Todas as pressed on first paint, when everything is showing', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
 
-    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Todas' })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
   });
 
-  it('keeps All pressed after it is clicked', () => {
+  it('keeps Todas pressed after it is clicked', () => {
     render(<Skills skills={mockSkills} categories={mockCategories} />);
 
-    const allButton = screen.getByRole('button', { name: 'All' });
+    const allButton = screen.getByRole('button', { name: 'Todas' });
     fireEvent.click(screen.getByRole('button', { name: 'Languages' }));
     fireEvent.click(allButton);
 
@@ -128,7 +128,7 @@ describe('Skills', () => {
     fireEvent.click(mlButton);
 
     expect(screen.getAllByText('React').some(isShown)).toBe(true);
-    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Todas' })).toHaveAttribute(
       'aria-pressed',
       'true',
     );
@@ -159,8 +159,40 @@ describe('Skills', () => {
 
     expect(container.querySelectorAll('.skill-tier-legend')).toHaveLength(1);
     expect(container.querySelector('.skill-tier-legend')).toHaveTextContent(
-      /Knowledge\s*Deep\s*·\s*Working\s*·\s*Familiar/,
+      /Domínio\s*Profundo\s*·\s*Prático\s*·\s*Familiar/,
     );
+  });
+
+  // Without declared levels the legend would explain tiers nothing carries.
+  it('omits the tier legend when no skill declares a level', () => {
+    const { container } = render(
+      <Skills
+        skills={mockSkills.map(({ competency: _c, ...skill }) => skill)}
+        categories={mockCategories}
+      />,
+    );
+
+    expect(container.querySelector('.skill-tier-legend')).toBeNull();
+    expect(container.querySelectorAll('.skill-tag')).toHaveLength(8);
+  });
+
+  it('orders skills without levels by title', () => {
+    render(
+      <Skills
+        skills={[
+          { title: 'Rust', category: ['Languages'] },
+          { title: 'Go', category: ['Languages'] },
+          { title: 'PHP', category: ['Languages'] },
+        ]}
+        categories={[{ name: 'Languages' }]}
+      />,
+    );
+
+    const names = Array.from(
+      document.querySelectorAll('.skill-tag-name'),
+      (el) => el.textContent,
+    );
+    expect(names).toEqual(['Go', 'PHP', 'Rust']);
   });
 
   // `aria-pressed` reports the control, not the outcome, and pressing a filter
@@ -175,7 +207,7 @@ describe('Skills', () => {
       const tags = container.querySelectorAll('.skill-tag');
       expect(tags).toHaveLength(8);
       expect(screen.getByRole('status')).toHaveTextContent(
-        'Showing all 5 skills.',
+        'Mostrando todas as 5 competências.',
       );
     });
 
@@ -192,7 +224,7 @@ describe('Skills', () => {
       const shown = tags.filter(isShown);
       expect(shown).toHaveLength(3);
       expect(screen.getByRole('status')).toHaveTextContent(
-        'Showing 3 of 5 skills in Languages.',
+        'Mostrando 3 de 5 competências em Languages.',
       );
     });
 
@@ -205,7 +237,7 @@ describe('Skills', () => {
       );
 
       expect(screen.getByRole('status')).toHaveTextContent(
-        'Showing all 1 skill.',
+        'Mostrando 1 competência.',
       );
     });
   });

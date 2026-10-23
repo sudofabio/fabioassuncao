@@ -15,79 +15,85 @@ import {
 } from '@/lib/utils';
 import { metadata as aboutMetadata } from '../about/page';
 import { metadata as contactMetadata } from '../contact/page';
+import { metadata as linksMetadata } from '../links/page';
 import { metadata as notFoundMetadata } from '../not-found';
+import { generateMetadata as generateTalkMetadata } from '../presentations/[slug]/page';
+import { metadata as presentationsMetadata } from '../presentations/page';
 import { metadata as projectsMetadata } from '../projects/page';
 import { metadata as resumeMetadata } from '../resume/page';
-import { metadata as statsMetadata } from '../stats/page';
+import { metadata as workWithMeMetadata } from '../trabalhe-comigo/page';
 import { generateMetadata as generatePostMetadata } from '../writing/[slug]/page';
 import { metadata as writingMetadata } from '../writing/page';
+
+const TALK_SLUG =
+  'alem-do-codigo-inteligencia-artificial-e-o-novo-desenvolvedor';
+const talkMetadata = () =>
+  generateTalkMetadata({ params: Promise.resolve({ slug: TALK_SLUG }) });
+
+/** Every page with a stable URL, and the canonical it must declare. */
+const PAGES = [
+  ['about', aboutMetadata, `${SITE_URL}/about/`],
+  ['contact', contactMetadata, `${SITE_URL}/contact/`],
+  ['archive', projectsMetadata, `${SITE_URL}/projects/`],
+  ['resume', resumeMetadata, `${SITE_URL}/resume/`],
+  ['writing', writingMetadata, `${SITE_URL}/writing/`],
+  ['links', linksMetadata, `${SITE_URL}/links/`],
+  ['trabalhe-comigo', workWithMeMetadata, `${SITE_URL}/trabalhe-comigo/`],
+  ['presentations', presentationsMetadata, `${SITE_URL}/presentations/`],
+] as const;
+
+const PAGES_WITHOUT_URL = PAGES.map(
+  ([name, metadata]) => [name, metadata] as const,
+);
 
 describe('page metadata', () => {
   it('builds the contact description from the shared profile email', () => {
     expect(contactMetadata.description).toContain(profile.email);
   });
 
-  it.each([
-    ['about', aboutMetadata, `${SITE_URL}/about/`],
-    ['contact', contactMetadata, `${SITE_URL}/contact/`],
-    ['archive', projectsMetadata, `${SITE_URL}/projects/`],
-    ['resume', resumeMetadata, `${SITE_URL}/resume/`],
-    ['stats', statsMetadata, `${SITE_URL}/stats/`],
-    ['writing', writingMetadata, `${SITE_URL}/writing/`],
-  ])('sets page-specific open graph metadata for %s', (_, metadata, url) => {
-    expect(metadata.openGraph?.url).toBe(url);
-    expect(metadata.openGraph?.description).toBe(metadata.description);
-    expect(metadata.openGraph?.title).toBe(
-      `${metadata.title} | ${AUTHOR_NAME}`,
-    );
-  });
+  it.each(PAGES)(
+    'sets page-specific open graph metadata for %s',
+    (_, metadata, url) => {
+      expect(metadata.openGraph?.url).toBe(url);
+      expect(metadata.openGraph?.description).toBe(metadata.description);
+      expect(metadata.openGraph?.title).toBe(
+        `${metadata.title} | ${AUTHOR_NAME}`,
+      );
+    },
+  );
 
-  it.each([
-    ['about', aboutMetadata],
-    ['contact', contactMetadata],
-    ['archive', projectsMetadata],
-    ['resume', resumeMetadata],
-    ['stats', statsMetadata],
-    ['writing', writingMetadata],
-  ])('sets page-specific twitter metadata for %s', (_, metadata) => {
-    expect(metadata.twitter?.description).toBe(metadata.description);
-    expect(metadata.twitter?.title).toBe(`${metadata.title} | ${AUTHOR_NAME}`);
-  });
+  it.each(PAGES_WITHOUT_URL)(
+    'sets page-specific twitter metadata for %s',
+    (_, metadata) => {
+      expect(metadata.twitter?.description).toBe(metadata.description);
+      expect(metadata.twitter?.title).toBe(
+        `${metadata.title} | ${AUTHOR_NAME}`,
+      );
+    },
+  );
 
   /**
    * A route-level `openGraph` object replaces the inherited one entirely, so
    * every page that declares one must repeat the share image. Blog posts
    * shipped without an og:image for exactly this reason.
    */
-  it.each([
-    ['about', aboutMetadata],
-    ['contact', contactMetadata],
-    ['archive', projectsMetadata],
-    ['resume', resumeMetadata],
-    ['stats', statsMetadata],
-    ['writing', writingMetadata],
-    ['404', notFoundMetadata],
-  ])('declares the share card on %s', (_, metadata) => {
-    const ogImages = metadata.openGraph?.images;
-    expect(JSON.stringify(ogImages)).toContain(SHARE_IMAGE_PATH);
-    expect(JSON.stringify(metadata.twitter?.images)).toContain(
-      SHARE_IMAGE_PATH,
-    );
-  });
+  it.each([...PAGES_WITHOUT_URL, ['404', notFoundMetadata] as const])(
+    'declares the share card on %s',
+    (_, metadata) => {
+      const ogImages = metadata.openGraph?.images;
+      expect(JSON.stringify(ogImages)).toContain(SHARE_IMAGE_PATH);
+      expect(JSON.stringify(metadata.twitter?.images)).toContain(
+        SHARE_IMAGE_PATH,
+      );
+    },
+  );
 
   /**
    * `alternates` carries the canonical, and like `openGraph` it is replaced
    * rather than merged — the writing index lost its canonical by declaring
    * RSS types on top of it.
    */
-  it.each([
-    ['about', aboutMetadata, `${SITE_URL}/about/`],
-    ['contact', contactMetadata, `${SITE_URL}/contact/`],
-    ['archive', projectsMetadata, `${SITE_URL}/projects/`],
-    ['resume', resumeMetadata, `${SITE_URL}/resume/`],
-    ['stats', statsMetadata, `${SITE_URL}/stats/`],
-    ['writing', writingMetadata, `${SITE_URL}/writing/`],
-  ])('declares a canonical url for %s', (_, metadata, url) => {
+  it.each(PAGES)('declares a canonical url for %s', (_, metadata, url) => {
     expect(metadata.alternates?.canonical).toBe(url);
   });
 
@@ -162,7 +168,7 @@ describe('page metadata', () => {
     });
 
     expect(metadata.openGraph?.siteName).toBe(sharedOpenGraph?.siteName);
-    expect(metadata.openGraph).toMatchObject({ locale: 'en_US' });
+    expect(metadata.openGraph).toMatchObject({ locale: 'pt_BR' });
     expect(metadata.twitter).toMatchObject({
       card: 'summary_large_image',
       site: TWITTER_HANDLE,
@@ -190,5 +196,35 @@ describe('page metadata', () => {
     expect(writingMetadata.alternates?.types?.['application/rss+xml']).toBe(
       '/feed.xml',
     );
+  });
+
+  it('gives the talk page the same complete share metadata', async () => {
+    const metadata = await talkMetadata();
+    const url = `${SITE_URL}/presentations/${TALK_SLUG}/`;
+
+    expect(metadata.alternates?.canonical).toBe(url);
+    expect(metadata.openGraph?.url).toBe(url);
+    expect(metadata.openGraph?.description).toBe(metadata.description);
+    expect(metadata.openGraph?.title).toBe(
+      `${metadata.title} | ${AUTHOR_NAME}`,
+    );
+    expect(metadata.twitter?.description).toBe(metadata.description);
+    expect(metadata.twitter?.title).toBe(`${metadata.title} | ${AUTHOR_NAME}`);
+    expect(JSON.stringify(metadata.openGraph?.images)).toContain(
+      SHARE_IMAGE_PATH,
+    );
+    expect(JSON.stringify(metadata.twitter?.images)).toContain(
+      SHARE_IMAGE_PATH,
+    );
+  });
+
+  it('describes the talk with its event and venue', async () => {
+    const metadata = await talkMetadata();
+
+    expect(metadata.title).toBe(
+      'Além do código: Inteligência artificial e o novo desenvolvedor',
+    );
+    expect(metadata.description).toContain('10º Talk — Vale do Pindaré Tech');
+    expect(metadata.description).toContain('IFMA Campus Santa Inês');
   });
 });

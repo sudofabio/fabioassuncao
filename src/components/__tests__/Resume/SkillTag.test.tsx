@@ -24,8 +24,10 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag') as HTMLElement;
     expect(tag).toHaveClass('skill-tag--deep');
-    expect(tag.querySelector('.sr-only')).toHaveTextContent(', deep knowledge');
-    expect(tag.textContent).toBe('Python, deep knowledge');
+    expect(tag.querySelector('.sr-only')).toHaveTextContent(
+      ', domínio profundo',
+    );
+    expect(tag.textContent).toBe('Python, domínio profundo');
     expect(tag.querySelector('.skill-tag-name')?.textContent).toBe('Python');
   });
 
@@ -40,9 +42,7 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag');
     expect(tag).toHaveClass('skill-tag--working');
-    expect(tag?.querySelector('.sr-only')).toHaveTextContent(
-      'working knowledge',
-    );
+    expect(tag?.querySelector('.sr-only')).toHaveTextContent('domínio prático');
   });
 
   it('applies the familiar tier class for competency 3 or below', () => {
@@ -52,6 +52,17 @@ describe('SkillTag', () => {
 
     const tag = document.querySelector('.skill-tag');
     expect(tag).toHaveClass('skill-tag--familiar');
-    expect(tag?.querySelector('.sr-only')).toHaveTextContent('familiarity');
+    expect(tag?.querySelector('.sr-only')).toHaveTextContent('familiaridade');
+  });
+
+  // No declared level means no tier: the tag must not imply a proficiency
+  // nobody stated, visually or to a screen reader.
+  it('renders a plain tag when no competency is declared', () => {
+    render(<SkillTag data={{ title: 'Go', category: ['Backend'] }} />);
+
+    const tag = document.querySelector('.skill-tag') as HTMLElement;
+    expect(tag.className).toBe('skill-tag');
+    expect(tag.querySelector('.sr-only')).toBeNull();
+    expect(tag.textContent).toBe('Go');
   });
 });

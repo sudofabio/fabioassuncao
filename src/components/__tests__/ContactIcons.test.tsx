@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import contact from '@/data/contact';
+
 import ContactIcons from '../Contact/ContactIcons';
 
 describe('ContactIcons', () => {
@@ -16,7 +18,7 @@ describe('ContactIcons', () => {
     );
 
     // Check if email link is present
-    const emailLink = screen.getByRole('link', { name: /email/i });
+    const emailLink = screen.getByRole('link', { name: /e-mail/i });
     expect(emailLink).toBeInTheDocument();
     expect(emailLink).toHaveAttribute(
       'href',
@@ -24,17 +26,38 @@ describe('ContactIcons', () => {
     );
   });
 
-  it('has correct number of contact links', () => {
+  it('renders one link per contact entry, skipping unconfirmed ones', () => {
     render(<ContactIcons />);
     const links = screen.getAllByRole('link');
-    expect(links.length).toBeGreaterThan(0);
+    expect(links).toHaveLength(contact.length);
+    // Threads has no confirmed profile yet, so it is not published.
+    expect(
+      screen.queryByRole('link', { name: /threads/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('announces off-site links as opening in a new tab', () => {
+    render(<ContactIcons />);
+
+    for (const link of screen.getAllByRole('link')) {
+      if (link.getAttribute('href')?.startsWith('mailto:')) {
+        expect(link).not.toHaveAttribute('target');
+        expect(link.getAttribute('aria-label')).toBe('E-mail');
+      } else {
+        expect(link).toHaveAttribute('target', '_blank');
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+        expect(link.getAttribute('aria-label')).toMatch(
+          /\(abre em nova aba\)$/,
+        );
+      }
+    }
   });
 
   it('can omit email when the page already has a primary email action', () => {
     render(<ContactIcons includeEmail={false} />);
 
     expect(
-      screen.queryByRole('link', { name: /email/i }),
+      screen.queryByRole('link', { name: /e-mail/i }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /github/i })).toBeInTheDocument();
   });

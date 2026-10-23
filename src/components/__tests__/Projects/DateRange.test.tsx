@@ -12,8 +12,8 @@ describe('DateRange', () => {
     const { container: may } = render(<DateRange date="2015-05-15" />);
     const { container: november } = render(<DateRange date="2015-11-20" />);
 
-    expect(may.textContent).toBe('May 2015');
-    expect(november.textContent).toBe('Nov 2015');
+    expect(may.textContent).toBe('mai 2015');
+    expect(november.textContent).toBe('nov 2015');
   });
 
   it('renders a single date when nothing bounds it', () => {
@@ -40,7 +40,7 @@ describe('DateRange', () => {
 
     expect(container.querySelectorAll('time')).toHaveLength(1);
     expect(container.querySelector('.daterange-present')).toHaveTextContent(
-      'Present',
+      'Atual',
     );
   });
 });

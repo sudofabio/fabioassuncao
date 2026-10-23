@@ -10,9 +10,9 @@ describe('projects page', () => {
     render(<ProjectsPage />);
 
     const shippedSection = screen.getByRole('region', {
-      name: 'Selected work',
+      name: 'Em destaque',
     });
-    const archiveSection = screen.getByRole('region', { name: 'Archive' });
+    const archiveSection = screen.getByRole('region', { name: 'Anteriores' });
 
     expect(
       within(shippedSection).getAllByRole('heading', { level: 3 }),
@@ -37,9 +37,17 @@ describe('projects page', () => {
     ].map((node) => node.textContent);
 
     expect(counts).toEqual([
-      `${shipped.length} projects`,
-      `${archive.length} projects`,
+      `${shipped.length} ${shipped.length === 1 ? 'projeto' : 'projetos'}`,
+      `${archive.length} ${archive.length === 1 ? 'projeto' : 'projetos'}`,
     ]);
+  });
+
+  it('titles the page in Portuguese', () => {
+    render(<ProjectsPage />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Projetos' }),
+    ).toBeInTheDocument();
   });
 
   it('leads with the newest shipped work', () => {
@@ -90,7 +98,7 @@ describe('projects page', () => {
   it('is a primary navigation destination', () => {
     const route = routes.find((entry) => entry.path === '/projects');
 
-    expect(route?.label).toBe('Projects');
+    expect(route?.label).toBe('Projetos');
     expect(route?.primary).not.toBe(false);
   });
 });

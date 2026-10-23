@@ -26,9 +26,9 @@ import ThemeToggle from '../../Template/ThemeToggle';
  * the HTML cannot know.
  */
 const STATE_LABEL = {
-  system: 'Theme preference: system.',
-  light: 'Theme preference: light.',
-  dark: 'Theme preference: dark.',
+  system: 'Tema: sistema.',
+  light: 'Tema: claro.',
+  dark: 'Tema: escuro.',
 } as const;
 
 /**
@@ -38,14 +38,14 @@ const STATE_LABEL = {
  */
 const LABEL = {
   light: {
-    system: 'Theme preference: system. Switch to dark.',
-    dark: 'Theme preference: dark. Switch to light.',
-    light: 'Theme preference: light. Switch to system.',
+    system: 'Tema: sistema. Mudar para escuro.',
+    dark: 'Tema: escuro. Mudar para claro.',
+    light: 'Tema: claro. Mudar para sistema.',
   },
   dark: {
-    system: 'Theme preference: system. Switch to light.',
-    light: 'Theme preference: light. Switch to dark.',
-    dark: 'Theme preference: dark. Switch to system.',
+    system: 'Tema: sistema. Mudar para claro.',
+    light: 'Tema: claro. Mudar para escuro.',
+    dark: 'Tema: escuro. Mudar para sistema.',
   },
 } as const;
 

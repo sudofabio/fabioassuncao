@@ -15,7 +15,7 @@ describe('createHeadingId', () => {
     ['Some History', 'some-history'],
     ['Travel / Geography', 'travel-geography'],
     ['Research & Development', 'research-and-development'],
-    ["Michael's Notes", 'michaels-notes'],
+    ["Fábio's Notes", 'fabios-notes'],
     ['Café Crème', 'cafe-creme'],
   ])('creates stable ids for %s', (title, expected) => {
     expect(createHeadingId(title)).toBe(expected);
@@ -31,14 +31,7 @@ describe('createHeadingId', () => {
         title,
         createHeadingId(title),
       ]),
-    ).toEqual([
-      ['Some History', 'some-history'],
-      ['I Like', 'i-like'],
-      ['Travel / Geography', 'travel-geography'],
-      ['Fun Facts', 'fun-facts'],
-      ['I Dream Of', 'i-dream-of'],
-      ['Websites from People I Admire', 'websites-from-people-i-admire'],
-    ]);
+    ).toEqual([['Desde 2008', 'desde-2008']]);
   });
 });
 

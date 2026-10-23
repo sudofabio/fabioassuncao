@@ -21,7 +21,7 @@ describe('extractLogMarker', () => {
     );
 
     expect(result).toEqual({
-      age: 'Age 7',
+      age: '7 anos',
       rest: 'I discovered the mini-games hidden in Microsoft Office.',
     });
   });
@@ -30,13 +30,13 @@ describe('extractLogMarker', () => {
     expect(
       extractLogMarker('At 14 - 17, I played a lot of video games.'),
     ).toEqual({
-      age: 'Age 14–17',
+      age: '14–17 anos',
       rest: 'I played a lot of video games.',
     });
 
     expect(extractLogMarker('14 - 17, I played a lot of video games.')).toEqual(
       {
-        age: 'Age 14–17',
+        age: '14–17 anos',
         rest: 'I played a lot of video games.',
       },
     );
@@ -44,10 +44,10 @@ describe('extractLogMarker', () => {
 
   it('accepts en and em dashes in a range', () => {
     expect(extractLogMarker('At 14–17, I played games.')?.age).toBe(
-      'Age 14–17',
+      '14–17 anos',
     );
     expect(extractLogMarker('At 14—17, I played games.')?.age).toBe(
-      'Age 14–17',
+      '14–17 anos',
     );
   });
 
@@ -79,14 +79,14 @@ describe('extractLogMarker', () => {
     expect(
       extractLogMarker('When I was 12, I set the all-time high record.'),
     ).toEqual({
-      age: 'Age 12',
+      age: '12 anos',
       rest: 'I set the all-time high record.',
     });
 
     expect(
       extractLogMarker('I was 11 when I built my first Tesla Coil.'),
     ).toEqual({
-      age: 'Age 11',
+      age: '11 anos',
       rest: 'I built my first Tesla Coil.',
     });
   });
@@ -99,7 +99,7 @@ describe('extractLogMarker', () => {
       ),
     ).toEqual({
       year: '1993',
-      age: 'Age 3',
+      age: '3 anos',
       rest: 'My parents put a computer in my bedroom in 1993 when I was 3. It was an old Tandy.',
     });
 
@@ -139,7 +139,7 @@ describe('extractLogMarker', () => {
     // "6 months into" is a duration, not an age. Reading it as one invents the
     // precision the gutter exists to avoid, so the entry gets an empty gutter.
     for (const text of [
-      'I was 6 months into building Promptfoo when the acquisition closed.',
+      'I was 6 months into building the product when the acquisition closed.',
       'I was 1 of 3 founders on that team.',
       'I was 3 hours from the border.',
       'I was 50 miles out and still climbing.',
@@ -152,14 +152,14 @@ describe('extractLogMarker', () => {
   it('still reads an age stated without a comma after it', () => {
     // The measure-noun guard must not take valid phrasing down with it.
     expect(extractLogMarker('When I was 12 I set a record.')?.age).toBe(
-      'Age 12',
+      '12 anos',
     );
     expect(extractLogMarker('I was 9 and it rained all week.')?.age).toBe(
-      'Age 9',
+      '9 anos',
     );
     expect(
       extractLogMarker('At the age of 16 I drove across the country.')?.age,
-    ).toBe('Age 16');
+    ).toBe('16 anos');
   });
 
   it('does not read a model number as a year', () => {
@@ -178,17 +178,49 @@ describe('extractLogMarker', () => {
 
   it('is case-insensitive on the leading word', () => {
     expect(extractLogMarker('at 13, I went to space camp.')?.age).toBe(
-      'Age 13',
+      '13 anos',
     );
     expect(extractLogMarker('in 2019, I visited Canada.')?.year).toBe('2019');
   });
 });
 
-describe('the about page log', () => {
-  const history = sectionEntries('Some History');
+describe('extractLogMarker, pt-BR phrasing', () => {
+  it('lifts a leading year range without inventing an age', () => {
+    expect(
+      extractLogMarker(
+        'De 2008 a 2010, como estagiário, dei os primeiros passos.',
+      ),
+    ).toEqual({
+      year: '2008–2010',
+      rest: 'Como estagiário, dei os primeiros passos.',
+    });
+  });
 
-  it('annotates every history entry with only its stated marker', () => {
-    expect(history).toHaveLength(15);
+  it('lifts an open-ended "Desde" year', () => {
+    expect(
+      extractLogMarker('Desde 2022, trabalho com sistemas distribuídos.'),
+    ).toEqual({ year: '2022', rest: 'Trabalho com sistemas distribuídos.' });
+  });
+
+  it('lifts a single "Em" year', () => {
+    expect(extractLogMarker('Em 2026, apresentei uma palestra.')).toEqual({
+      year: '2026',
+      rest: 'Apresentei uma palestra.',
+    });
+  });
+
+  it('does not read a year that only appears later in the sentence', () => {
+    expect(
+      extractLogMarker('Programo há muito tempo, e em 2008 comecei.'),
+    ).toBeNull();
+  });
+});
+
+describe('the about page log', () => {
+  const history = sectionEntries('Desde 2008');
+
+  it('annotates every career entry with only its stated years', () => {
+    expect(history).toHaveLength(8);
 
     expect(
       history.map((entry) => {
@@ -196,60 +228,27 @@ describe('the about page log', () => {
         return [year, age].filter(Boolean).join(' / ');
       }),
     ).toEqual([
-      '1993 / Age 3',
-      '1995',
-      '1996',
-      'Age 7',
-      'Age 8',
-      'Age 10',
-      'Age 11',
-      'Age 12',
-      'Age 13',
-      'Age 14',
-      'Age 14–17',
-      'Age 16',
-      'Age 18',
-      'Age 19',
-      'Age 20',
+      '2008–2010',
+      '2010–2012',
+      '2012–2014',
+      '2014–2016',
+      '2016–2019',
+      '2019–2022',
+      '2022',
+      '2026',
     ]);
+  });
+
+  it('never derives an age, because no entry states one', () => {
+    expect(
+      history.every((entry) => extractLogMarker(entry)?.age === undefined),
+    ).toBe(true);
   });
 
   it('starts at the year the profile says the computing started', () => {
-    // `profile.computingSince` and the Tandy in the bedroom are the same fact;
-    // the log opened with an empty gutter while the stats page claimed 1993.
-    expect(extractLogMarker(history[0])?.year).toBe(
+    // `profile.computingSince` and the first entry are the same fact.
+    expect(extractLogMarker(history[0])?.year?.slice(0, 4)).toBe(
       String(profile.computingSince),
     );
-  });
-
-  it('keeps the seasonal qualifier in the real MegaRace entry', () => {
-    const megaRace = history.find((entry) => entry.includes('MegaRace'));
-    const marker = extractLogMarker(megaRace ?? '');
-
-    expect(marker?.year).toBe('1996');
-    expect(marker?.age).toBeUndefined();
-    expect(marker?.rest).toContain('In the summer of 1996');
-  });
-
-  it('leaves undated travel entries empty and does not derive travel ages', () => {
-    const travel = sectionEntries('Travel / Geography');
-    const undated = travel.filter((entry) => extractLogMarker(entry) === null);
-    const dated = travel
-      .map((entry) => extractLogMarker(entry))
-      .filter((marker) => marker !== null);
-
-    expect(undated).toHaveLength(3);
-    expect(dated).toHaveLength(8);
-    expect(dated.map((marker) => marker.year)).toEqual([
-      '2016',
-      '2017',
-      '2018',
-      '2019',
-      '2020',
-      '2021',
-      '2022',
-      '2023',
-    ]);
-    expect(dated.every((marker) => marker.age === undefined)).toBe(true);
   });
 });

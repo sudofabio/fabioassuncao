@@ -1,11 +1,21 @@
 import { describe, expect, it } from 'vitest';
 
 import courses from '../resume/courses';
+import degrees from '../resume/degrees';
 
 describe('courses data', () => {
+  // Empty until coursework is supplied; the résumé then omits the section.
   it('exports an array of courses', () => {
     expect(Array.isArray(courses)).toBe(true);
-    expect(courses.length).toBeGreaterThan(0);
+  });
+
+  // resumeJson.ts joins coursework to a degree by exact school name, so a
+  // course naming no listed school would silently vanish from /resume.json.
+  it('files every course under a listed school', () => {
+    const schools = new Set(degrees.map((degree) => degree.school));
+    for (const course of courses) {
+      expect(schools.has(course.university), course.title).toBe(true);
+    }
   });
 
   it('each course has required properties', () => {

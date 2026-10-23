@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import profile from '@/data/profile.json';
+import work from '@/data/resume/work';
+import { currentPosition } from '@/lib/career';
+
 import Footer from '../../Template/Footer';
 
 describe('Footer', () => {
@@ -14,10 +18,13 @@ describe('Footer', () => {
   it('displays the name and role', () => {
     render(<Footer />);
 
-    expect(screen.getByText("Michael D'Angelo")).toBeInTheDocument();
-    expect(
-      screen.getByText('Member of the Technical Staff at OpenAI'),
-    ).toBeInTheDocument();
+    expect(screen.getByText(profile.name)).toBeInTheDocument();
+    // No employer is published yet, so the role stands on its own rather
+    // than reading "… at undefined".
+    const current = currentPosition(work);
+    expect(current?.name).toBeUndefined();
+    expect(screen.getByText(current?.position ?? '')).toBeInTheDocument();
+    expect(screen.queryByText(/undefined|\bat\b/)).not.toBeInTheDocument();
   });
 
   it('does not introduce unrelated headings into the page outline', () => {
@@ -38,19 +45,23 @@ describe('Footer', () => {
   it('renders navigation links', () => {
     render(<Footer />);
 
-    expect(screen.getByRole('link', { name: /about/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^sobre$/i })).toHaveAttribute(
       'href',
       '/about',
     );
-    expect(screen.getByRole('link', { name: /resume/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /currículo/i })).toHaveAttribute(
       'href',
       '/resume',
     );
-    expect(screen.getByRole('link', { name: /projects/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /projetos/i })).toHaveAttribute(
       'href',
       '/projects',
     );
-    expect(screen.getByRole('link', { name: /contact/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /palestras/i })).toHaveAttribute(
+      'href',
+      '/presentations',
+    );
+    expect(screen.getByRole('link', { name: /^contato$/i })).toHaveAttribute(
       'href',
       '/contact',
     );
@@ -62,7 +73,19 @@ describe('Footer', () => {
     // Contact icons are rendered via ContactIcons component
     const socialSection = document.querySelector('.footer-social');
     expect(socialSection).toBeInTheDocument();
-    expect(screen.getByText('Connect')).toBeInTheDocument();
+    expect(screen.getByText('Redes')).toBeInTheDocument();
+  });
+
+  it('links the source to this repository, in a new tab', () => {
+    render(<Footer />);
+
+    const source = screen.getByRole('link', { name: /código-fonte/i });
+    expect(source).toHaveAttribute(
+      'href',
+      'https://github.com/fabioassuncao/fabioassuncao',
+    );
+    expect(source).toHaveAttribute('target', '_blank');
+    expect(source).toHaveTextContent('(abre em nova aba)');
   });
 
   it('has link to home from avatar', () => {

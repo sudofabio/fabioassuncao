@@ -43,7 +43,7 @@ describe('Cell', () => {
     render(<Cell data={mockProject} />);
 
     const date = document.querySelector('.project-dates');
-    expect(date).toHaveTextContent('Jan 2023');
+    expect(date).toHaveTextContent('jan 2023');
     expect(date?.querySelector('time')).toHaveAttribute(
       'datetime',
       '2023-01-01',
@@ -54,8 +54,8 @@ describe('Cell', () => {
     render(<Cell data={{ ...mockProject, endDate: '2024-06-01' }} />);
 
     const date = document.querySelector('.project-dates');
-    expect(date).toHaveTextContent('Jan 2023');
-    expect(date).toHaveTextContent('Jun 2024');
+    expect(date).toHaveTextContent('jan 2023');
+    expect(date).toHaveTextContent('jun 2024');
     expect(date?.querySelector('.daterange-present')).not.toBeInTheDocument();
   });
 
