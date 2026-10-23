@@ -1,3 +1,15 @@
+/* Real italic for prose, the only surface with authored italics. Declared as
+   a plain @font-face rather than through next/font: vinext registers every
+   next/font face globally and preloads it on every page, and a face that is
+   not preloaded is only fetched when an <em> or blockquote actually renders. */
+@font-face {
+  font-family: 'Inter Italic';
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-italic.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* ========================================
    WRITING PAGE STYLES
    Blog list and individual post pages
@@ -390,13 +402,13 @@
   padding-left: 1.25rem;
   margin: 1.5rem 0;
   color: var(--color-fg-light);
-  font-family: var(--font-inter-italic), var(--font-body);
+  font-family: 'Inter Italic', var(--font-body);
   font-style: italic;
 }
 
 .prose em,
 .prose i {
-  font-family: var(--font-inter-italic), var(--font-body);
+  font-family: 'Inter Italic', var(--font-body);
 }
 
 .prose code {

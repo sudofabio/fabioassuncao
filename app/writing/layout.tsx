@@ -1,9 +1,7 @@
-import { interItalic } from '../fonts';
-
 export default function WritingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={interItalic.variable}>{children}</div>;
+  return <div className="writing-layout">{children}</div>;
 }
